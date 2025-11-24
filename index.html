@@ -266,7 +266,7 @@
         const uploadedImgDisplay = document.getElementById('char-img-display');
         const characterImg = document.getElementById('character-img');
         const clearImgButton = document.getElementById('clear-img-button');
-        const defaultImageSrc = ' '//初始化图片，预设为空
+        const defaultImageSrc = ''//初始化图片，预设为空
         const dialogueBox = document.getElementById('dialogue-box');
         const textContent = document.getElementById('text-content');
         const nameTag = document.getElementById('name-tag');
@@ -353,7 +353,7 @@
             dialogueBox.style.display = 'block';
 
             //遊戲開始時，檢查是否有圖片，並顯示它
-            if (uploadedImgDisplay.src && uploadedImgDisplay.src.trim() !== defaultImageSrc) {
+            if (uploadedImgDisplay.src !== defaultImageSrc) {
                  uploadedImgDisplay.style.display = 'block';
             }
             // 嘗試播放音樂
