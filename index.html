@@ -245,7 +245,8 @@
         const maxScore = 100;
 
         // DOM 元素
-        const charImg = document.getElementById('character-img');
+        const uploadedImgDisplay = document.getElementById('char-img-display');
+        const characterImg = document.getElementById('character-img');
         const clearImgButton = document.getElementById('clear-img-button');
         const defaultImageSrc = ' '//初始化图片，预设为空
         const dialogueBox = document.getElementById('dialogue-box');
@@ -259,7 +260,7 @@
         const endDesc = document.getElementById('end-desc');
         const fileInput = document.getElementById('char-upload');
 
-        charImg.src = defaultImageSrc;
+        uploadedImgDisplay.src = defaultImageSrc;
 
         // 圖片上載邏輯
         fileInput.addEventListener('change', function(e) {
@@ -267,7 +268,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    charImg.src = e.target.result;
+                    uploadedImgDisplay.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             }
@@ -275,12 +276,10 @@
 
         clearImgButton.addEventListener('click', function() {
         // 1. 重置圖片的 src 到默認圖片
-            charImg.src = defaultImageSrc;
+            uploadedImgDisplay.src = defaultImageSrc;
 
         // 2. (重要) 清空 file input 的值
             fileInput.value = '';
-
-            console.log('圖片已清空並重置。');
         });
 
         // 劇本數據 (Excel 主題)
