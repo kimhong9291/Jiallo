@@ -121,6 +121,7 @@
             flex-direction: column;
             gap: 15px;
             width: 60%;
+            text-align: center; /* Add this to center options text */
         }
 
         .option-btn {
@@ -208,7 +209,6 @@
     <div id="game-container">
         <div class="bg-grid"></div>
         
-        <!-- 圖片上載區 -->
         <div id="upload-section">
             <label for="char-upload">上載建成照片:</label>
             <input type="file" id="char-upload" accept="image/*">
@@ -217,38 +217,30 @@
 
         <img id="char-img-display" src="" alt="建成照片">
         
-        <!-- 音樂控制 -->
         <div id="music-player">
             <audio id="bgm" loop controls style="height: 30px;">
-                <!-- 這裡放一個默認的音樂，或者留空讓用戶自己想象 -->
                 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
                 您的瀏覽器不支援音樂播放。
             </audio>
         </div>
 
-        <!-- 好感度 -->
         <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
 
-        <!-- 角色圖片 -->
         <img id="character-img" src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng" alt="林建成">
 
-        <!-- 對話框 -->
         <div id="dialogue-box">
             <div id="name-tag">林建成</div>
             <div id="text-content">...</div>
         </div>
 
-        <!-- 選項容器 -->
         <div id="options-container"></div>
 
-        <!-- 開始畫面 -->
         <div id="start-screen">
             <h1>千戀建成</h1>
             <p>「那個...你的 Excel 公式寫錯了。」</p>
             <button class="action-btn" onclick="startGame()">開始戀愛</button>
         </div>
 
-        <!-- 結束畫面 -->
         <div id="end-screen" style="display: none;">
             <h1 id="end-title">結局</h1>
             <p id="end-desc">...</p>
@@ -280,7 +272,7 @@
 
         uploadedImgDisplay.src = defaultImageSrc;
 
-        // 圖片上載邏輯
+        // 圖片上載邏輯 (修復: 選擇檔案後立即顯示)
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -288,7 +280,7 @@
                 reader.onload = function(e) {
                     uploadedImgDisplay.src = e.target.result;
                     uploadedImgDisplay.style.display = 'block'; 
-                    };
+                    };
                 reader.readAsDataURL(file);
             }
         });
@@ -301,7 +293,7 @@
             fileInput.value = '';
 
             //3. 清空時，必須將圖片元素完全隱藏
-            uploadedImgDisplay.style.display = 'none';
+            uploadedImgDisplay.style.display = 'none';
         });
 
         // 劇本數據 (Excel 主題)
@@ -337,9 +329,9 @@
                 id: 3,
                 text: "（這是最後的關鍵時刻...）\n林建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。",
                 options: [
-                    { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 99, reaction: "" }, // 99 代表結局
-                    { text: "「你的欄寬好像沒有調整好。」", score: -30, next: 99, reaction: "" },
-                    { text: "默默存檔並備份", score: 10, next: 99, reaction: "" }
+                    { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 99, reaction: "建成：「沒錯！是利用 $ROW 和 $COLUMN 參數算出來的！你竟然懂！」" }, // 99 代表結局
+                    { text: "「你的欄寬好像沒有調整好。」", score: -30, next: 99, reaction: "建成：「（臉色蒼白）...對不起，是我太粗心了。」" },
+                    { text: "默默存檔並備份", score: 10, next: 99, reaction: "建成：「你真是個優秀的數據人，永遠把資料安全放在第一位。」" }
                 ]
             }
         ];
@@ -352,14 +344,11 @@
             endScreen.style.display = 'none';
             dialogueBox.style.display = 'block';
 
-            //遊戲開始時，檢查是否有圖片，並顯示它
-            if (uploadedImgDisplay.src !== defaultImageSrc) {
-                 uploadedImgDisplay.style.display = 'block';
-            }
-            // 嘗試播放音樂
+            // 遊戲開始時，播放音樂
             const audio = document.getElementById('bgm');
             audio.volume = 0.3;
-            audio.play().catch(e => console.log("需使用者互動才能播放音樂"));
+            // 由於瀏覽器限制，這裡的 play() 需要使用者在點擊按鈕後才能成功
+            audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
 
             showScene(0);
         }
@@ -368,10 +357,19 @@
             scoreDisplay.innerText = loveScore;
         }
 
+        // 移除原有的 nextHandler 監聽器（如果有），避免重複觸發
+        let currentNextHandler = null;
+
         function showScene(index) {
             // 清空舊選項
             optionsContainer.innerHTML = '';
             
+            // 移除舊的點擊事件監聽器
+            if (currentNextHandler) {
+                dialogueBox.removeEventListener('click', currentNextHandler);
+                currentNextHandler = null;
+            }
+
             // 獲取當前場景數據
             const scene = script.find(s => s.id === index);
             
@@ -380,11 +378,11 @@
                 return;
             }
 
-            // 顯示文字 (打字機效果可選，這裡用直接顯示)
+            // 顯示文字 
             nameTag.innerText = (index === 0 && scene.text.includes("（")) ? "旁白" : "林建成";
             textContent.innerText = scene.text;
 
-            // 創建選項按鈕
+            // 創建選項按鈕 (只有選項出現時，才隱藏對話框的點擊繼續提示)
             scene.options.forEach(option => {
                 const btn = document.createElement('div');
                 btn.className = 'option-btn';
@@ -399,14 +397,20 @@
             loveScore += option.score;
             updateScore();
 
-            // 顯示反應 (暫時替換對話框內容)
-            optionsContainer.innerHTML = ''; // 隱藏選項
+            // 隱藏選項，顯示反應
+            optionsContainer.innerHTML = ''; 
             nameTag.innerText = "林建成";
-            textContent.innerText = option.reaction;
 
-            // 點擊對話框進入下一場景
+            // 在最後一個場景，reaction 可能是空的，需要額外處理
+            const reactionText = option.reaction || "（場景結束，點擊查看結局）";
+            textContent.innerText = reactionText;
+
+            // 定義下一個場景的處理函數
             const nextHandler = () => {
-                dialogueBox.removeEventListener('click', nextHandler);
+                // 移除當前的監聽器
+                dialogueBox.removeEventListener('click', currentNextHandler);
+                currentNextHandler = null; 
+
                 if (option.next === 99) {
                     showEnding();
                 } else {
@@ -414,9 +418,11 @@
                 }
             };
             
+            currentNextHandler = nextHandler; // 保存當前的處理函數
+
             // 延遲一點讓玩家看完反應再點擊
             setTimeout(() => {
-                dialogueBox.addEventListener('click', nextHandler);
+                dialogueBox.addEventListener('click', currentNextHandler);
                 // 添加一個提示文字
                 const tip = document.createElement('div');
                 tip.style.fontSize = "12px";
@@ -428,6 +434,12 @@
         }
 
         function showEnding() {
+            // 確保移除所有監聽器，防止結束畫面被點擊影響
+            if (currentNextHandler) {
+                dialogueBox.removeEventListener('click', currentNextHandler);
+                currentNextHandler = null;
+            }
+
             dialogueBox.style.display = 'none';
             optionsContainer.innerHTML = '';
             endScreen.style.display = 'flex';
@@ -451,17 +463,17 @@
         }
 
         function restartGame() {
-           // 1. 重置角色立繪的視覺特效
-            characterImg.style.filter = "none";
+            // 1. 重置角色立繪的視覺特效
+            characterImg.style.filter = "none";
             
             // 2. 隱藏所有遊戲中的元素
-            dialogueBox.style.display = 'none';
-            optionsContainer.innerHTML = '';
+            dialogueBox.style.display = 'none';
+            optionsContainer.innerHTML = '';
             uploadedImgDisplay.style.display = 'none'; // 隱藏上傳的圖片
             endScreen.style.display = 'none';
             
             // 3. 顯示開始畫面 (讓玩家可以點擊「開始戀愛」)
-            startScreen.style.display = 'flex';
+            startScreen.style.display = 'flex';
         }
     </script>
 </body>
