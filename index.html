@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>千戀建成 - Excel之戀</title>
+    <style>
+        /* 全局設定 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft JhengHei", "Yu Gothic", sans-serif;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 遊戲主容器 */
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(to bottom, #ffefef, #ffe4e1); /* 背景色：櫻花粉 */
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* 背景裝飾 (Excel 網格風格) */
+        .bg-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(#e0e0e0 1px, transparent 1px),
+                              linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        /* 圖片上載區 */
+        #upload-section {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        /* 角色立繪 */
+        #character-img {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-height: 90%; /* 立繪高度 */
+            z-index: 1;
+            transition: filter 0.3s;
+        }
+
+        /* 對話框區域 */
+        #dialogue-box {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #fff;
+            border-radius: 10px;
+            z-index: 10;
+            padding: 20px;
+            color: white;
+            display: none; /* 初始隱藏 */
+        }
+
+        #name-tag {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffb7b2;
+            margin-bottom: 10px;
+        }
+
+        #text-content {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        /* 選項區域 */
+        #options-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 60%;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ff6b6b;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.2s;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .option-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* 好感度顯示 */
+        #love-meter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #e84393;
+            border: 2px solid #e84393;
+        }
+
+        /* 開始/重來按鈕畫面 */
+        #start-screen, #end-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 240, 245, 0.95);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #d63031;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        .action-btn {
+            padding: 15px 40px;
+            font-size: 24px;
+            background-color: #e17055;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #c0392b;
+            transition: transform 0.1s;
+        }
+
+        .action-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* 音樂播放器樣式 (簡單版) */
+        #music-player {
+            position: absolute;
+            top: 10px;
+            left: 150px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div class="bg-grid"></div>
+        
+        <!-- 圖片上載區 -->
+        <div id="upload-section">
+            <label for="char-upload">上載建成照片:</label>
+            <input type="file" id="char-upload" accept="image/*">
+        </div>
+
+        <!-- 音樂控制 -->
+        <div id="music-player">
+            <audio id="bgm" loop controls style="height: 30px;">
+                <!-- 這裡放一個默認的音樂，或者留空讓用戶自己想象 -->
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+                您的瀏覽器不支援音樂播放。
+            </audio>
+        </div>
+
+        <!-- 好感度 -->
+        <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
+
+        <!-- 角色圖片 -->
+        <img id="character-img" src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng" alt="林建成">
+
+        <!-- 對話框 -->
+        <div id="dialogue-box">
+            <div id="name-tag">林建成</div>
+            <div id="text-content">...</div>
+        </div>
+
+        <!-- 選項容器 -->
+        <div id="options-container"></div>
+
+        <!-- 開始畫面 -->
+        <div id="start-screen">
+            <h1>千戀建成</h1>
+            <p>「那個...你的 Excel 公式寫錯了。」</p>
+            <button class="action-btn" onclick="startGame()">開始戀愛</button>
+        </div>
+
+        <!-- 結束畫面 -->
+        <div id="end-screen" style="display: none;">
+            <h1 id="end-title">結局</h1>
+            <p id="end-desc">...</p>
+            <button class="action-btn" onclick="restartGame()">重新開始</button>
+        </div>
+    </div>
+
+    <script>
+        // 遊戲狀態
+        let loveScore = 0;
+        let currentSceneId = 0;
+        const maxScore = 100;
+
+        // DOM 元素
+        const charImg = document.getElementById('character-img');
+        const dialogueBox = document.getElementById('dialogue-box');
+        const textContent = document.getElementById('text-content');
+        const nameTag = document.getElementById('name-tag');
+        const optionsContainer = document.getElementById('options-container');
+        const scoreDisplay = document.getElementById('score');
+        const startScreen = document.getElementById('start-screen');
+        const endScreen = document.getElementById('end-screen');
+        const endTitle = document.getElementById('end-title');
+        const endDesc = document.getElementById('end-desc');
+        const fileInput = document.getElementById('char-upload');
+
+        // 圖片上載邏輯
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    charImg.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 劇本數據 (Excel 主題)
+        const script = [
+            {
+                id: 0,
+                text: "（你在辦公室加班，突然感覺背後有一道視線。）\n林建成：「這麼晚了還在做報表？讓我看看你的格式。」",
+                options: [
+                    { text: "緊張地遮住螢幕", score: -5, next: 1, reaction: "建成皺眉：「遮遮掩掩的，肯定是用手動計算機算的吧？」" },
+                    { text: "自信地展示 VLOOKUP", score: 5, next: 1, reaction: "建成點點頭：「VLOOKUP...還可以，雖然有點舊，但基礎不錯。」" },
+                    { text: "直接展示 XLOOKUP", score: 15, next: 1, reaction: "建成眼睛一亮：「喔？懂得用 XLOOKUP？看來你不是一般人。」" }
+                ]
+            },
+            {
+                id: 1,
+                text: "林建成推了推眼鏡，指著你的 D 欄位。\n林建成：「這裡的數據量很大，你打算怎麼整理？」",
+                options: [
+                    { text: "合併儲存格 (Merge Cells)", score: -20, next: 2, reaction: "建成的臉色瞬間發黑：「合併儲存格是 Excel 的萬惡之源！以後不准這樣做！」" },
+                    { text: "使用樞紐分析表 (Pivot Table)", score: 10, next: 2, reaction: "建成露出微笑：「明智的選擇，樞紐分析表才是效率的關鍵。」" },
+                    { text: "寫 VBA 巨集自動化", score: 20, next: 2, reaction: "建成臉紅了：「VBA...？這種高階技巧...我對你刮目相看了。」" }
+                ]
+            },
+            {
+                id: 2,
+                text: "加班結束了，林建成似乎還不想走。\n林建成：「那個...如果你週末有空的話...」",
+                options: [
+                    { text: "一起去吃飯嗎？", score: 5, next: 3, reaction: "建成：「吃飯？嗯，也是可以，但我原本想說的是...」" },
+                    { text: "教我更多 Excel 技巧吧！", score: 25, next: 3, reaction: "建成激動地握住你的手：「沒問題！我準備了一套關於 Array Formula 的課程！」" },
+                    { text: "我要回家睡覺了", score: -10, next: 3, reaction: "建成：「...也是，休息是為了走更長遠的路（還有寫更多公式）。」" }
+                ]
+            },
+            {
+                id: 3,
+                text: "（這是最後的關鍵時刻...）\n林建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。",
+                options: [
+                    { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 99, reaction: "" }, // 99 代表結局
+                    { text: "「你的欄寬好像沒有調整好。」", score: -30, next: 99, reaction: "" },
+                    { text: "默默存檔並備份", score: 10, next: 99, reaction: "" }
+                ]
+            }
+        ];
+
+        function startGame() {
+            loveScore = 0;
+            currentSceneId = 0;
+            updateScore();
+            startScreen.style.display = 'none';
+            endScreen.style.display = 'none';
+            dialogueBox.style.display = 'block';
+            
+            // 嘗試播放音樂
+            const audio = document.getElementById('bgm');
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log("需使用者互動才能播放音樂"));
+
+            showScene(0);
+        }
+
+        function updateScore() {
+            scoreDisplay.innerText = loveScore;
+        }
+
+        function showScene(index) {
+            // 清空舊選項
+            optionsContainer.innerHTML = '';
+            
+            // 獲取當前場景數據
+            const scene = script.find(s => s.id === index);
+            
+            if (!scene) {
+                console.error("Scene not found");
+                return;
+            }
+
+            // 顯示文字 (打字機效果可選，這裡用直接顯示)
+            nameTag.innerText = (index === 0 && scene.text.includes("（")) ? "旁白" : "林建成";
+            textContent.innerText = scene.text;
+
+            // 創建選項按鈕
+            scene.options.forEach(option => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn';
+                btn.innerText = option.text;
+                btn.onclick = () => handleChoice(option);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleChoice(option) {
+            // 更新分數
+            loveScore += option.score;
+            updateScore();
+
+            // 顯示反應 (暫時替換對話框內容)
+            optionsContainer.innerHTML = ''; // 隱藏選項
+            nameTag.innerText = "林建成";
+            textContent.innerText = option.reaction;
+
+            // 點擊對話框進入下一場景
+            const nextHandler = () => {
+                dialogueBox.removeEventListener('click', nextHandler);
+                if (option.next === 99) {
+                    showEnding();
+                } else {
+                    showScene(option.next);
+                }
+            };
+            
+            // 延遲一點讓玩家看完反應再點擊
+            setTimeout(() => {
+                dialogueBox.addEventListener('click', nextHandler);
+                // 添加一個提示文字
+                const tip = document.createElement('div');
+                tip.style.fontSize = "12px";
+                tip.style.color = "#ccc";
+                tip.style.textAlign = "right";
+                tip.innerText = "▼ 點擊繼續";
+                textContent.appendChild(tip);
+            }, 500);
+        }
+
+        function showEnding() {
+            dialogueBox.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            endScreen.style.display = 'flex';
+
+            if (loveScore >= 60) {
+                endTitle.innerText = "True End: 永恆的巨集";
+                endTitle.style.color = "#e84393";
+                endDesc.innerText = `你們的愛情就像一個完美的 Loop，永遠不會報錯。\n最終好感度：${loveScore}`;
+                charImg.style.filter = "drop-shadow(0 0 20px gold)"; // 發光特效
+            } else if (loveScore >= 20) {
+                endTitle.innerText = "Normal End: 同事以上";
+                endTitle.style.color = "#0984e3";
+                endDesc.innerText = `你們成為了 Excel 交流會的好夥伴。\n最終好感度：${loveScore}`;
+                charImg.style.filter = "none";
+            } else {
+                endTitle.innerText = "Bad End: #REF!";
+                endTitle.style.color = "#636e72";
+                endDesc.innerText = `建成覺得跟你沒有共同語言（Excel 語言）。\n他拒絕了你的存檔請求。\n最終好感度：${loveScore}`;
+                charImg.style.filter = "grayscale(100%)"; // 變黑白
+            }
+        }
+
+        function restartGame() {
+            charImg.style.filter = "none";
+            startGame();
+        }
+    </script>
+</body>
+</html>
