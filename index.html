@@ -285,6 +285,8 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     uploadedImgDisplay.src = e.target.result;
+                    uploadedImgDisplay.style.display = 'block'; 
+                    }
                 }
                 reader.readAsDataURL(file);
             }
@@ -345,7 +347,11 @@
             startScreen.style.display = 'none';
             endScreen.style.display = 'none';
             dialogueBox.style.display = 'block';
-            
+
+            //遊戲開始時，檢查是否有圖片，並顯示它
+            if (uploadedImgDisplay.src !== defaultImageSrc) {
+                 uploadedImgDisplay.style.display = 'block';
+            }
             // 嘗試播放音樂
             const audio = document.getElementById('bgm');
             audio.volume = 0.3;
