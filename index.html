@@ -426,22 +426,22 @@
                 endTitle.innerText = "True End: 永恆的巨集";
                 endTitle.style.color = "#e84393";
                 endDesc.innerText = `你們的愛情就像一個完美的 Loop，永遠不會報錯。\n最終好感度：${loveScore}`;
-                charImg.style.filter = "drop-shadow(0 0 20px gold)"; // 發光特效
+                characterImg.style.filter = "drop-shadow(0 0 20px gold)"; // 發光特效
             } else if (loveScore >= 20) {
                 endTitle.innerText = "Normal End: 同事以上";
                 endTitle.style.color = "#0984e3";
                 endDesc.innerText = `你們成為了 Excel 交流會的好夥伴。\n最終好感度：${loveScore}`;
-                charImg.style.filter = "none";
+                characterImg.style.filter = "none";
             } else {
                 endTitle.innerText = "Bad End: #REF!";
                 endTitle.style.color = "#636e72";
                 endDesc.innerText = `建成覺得跟你沒有共同語言（Excel 語言）。\n他拒絕了你的存檔請求。\n最終好感度：${loveScore}`;
-                charImg.style.filter = "grayscale(100%)"; // 變黑白
+                characterImg.style.filter = "grayscale(100%)"; // 變黑白
             }
         }
 
         function restartGame() {
-            charImg.style.filter = "none";
+            characterImg.style.filter = "none";
             startGame();
         }
     </script>
