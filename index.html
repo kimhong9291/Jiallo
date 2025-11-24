@@ -441,8 +441,17 @@
         }
 
         function restartGame() {
-            characterImg.style.filter = "none";
-            startGame();
+           // 1. 重置角色立繪的視覺特效
+            characterImg.style.filter = "none";
+            
+            // 2. 隱藏所有遊戲中的元素
+            dialogueBox.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            uploadedImgDisplay.style.display = 'none'; // 隱藏上傳的圖片
+            endScreen.style.display = 'none';
+            
+            // 3. 顯示開始畫面 (讓玩家可以點擊「開始戀愛」)
+            startScreen.style.display = 'flex';
         }
     </script>
 </body>
