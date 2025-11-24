@@ -194,8 +194,11 @@
         <div id="upload-section">
             <label for="char-upload">上載建成照片:</label>
             <input type="file" id="char-upload" accept="image/*">
+            <button id="clearImgButton">清空圖片</button>
         </div>
 
+        <img id="char-img-display" src="" alt="建成照片">
+        
         <!-- 音樂控制 -->
         <div id="music-player">
             <audio id="bgm" loop controls style="height: 30px;">
@@ -243,6 +246,8 @@
 
         // DOM 元素
         const charImg = document.getElementById('character-img');
+        const clearImgButton = document.getElementById('clear-img-button');
+        const defaultImageSrc = ' '//初始化图片，预设为空
         const dialogueBox = document.getElementById('dialogue-box');
         const textContent = document.getElementById('text-content');
         const nameTag = document.getElementById('name-tag');
@@ -254,6 +259,8 @@
         const endDesc = document.getElementById('end-desc');
         const fileInput = document.getElementById('char-upload');
 
+        charImg.src = defaultImageSrc;
+
         // 圖片上載邏輯
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -264,6 +271,16 @@
                 }
                 reader.readAsDataURL(file);
             }
+        });
+
+        clearImgButton.addEventListener('click', function() {
+        // 1. 重置圖片的 src 到默認圖片
+            charImg.src = defaultImageSrc;
+
+        // 2. (重要) 清空 file input 的值
+            fileInput.value = '';
+
+            console.log('圖片已清空並重置。');
         });
 
         // 劇本數據 (Excel 主題)
