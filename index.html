@@ -287,17 +287,20 @@
                     uploadedImgDisplay.src = e.target.result;
                     uploadedImgDisplay.style.display = 'block'; 
                     }
-                }
                 reader.readAsDataURL(file);
+            }
             }
         });
 
         clearImgButton.addEventListener('click', function() {
-        // 1. 重置圖片的 src 到默認圖片
+            // 1. 重置圖片的 src 到默認圖片
             uploadedImgDisplay.src = defaultImageSrc;
 
-        // 2. (重要) 清空 file input 的值
+            // 2. (重要) 清空 file input 的值
             fileInput.value = '';
+
+            //3. 清空時，必須將圖片元素完全隱藏
+            uploadedImgDisplay.style.display = 'none';
         });
 
         // 劇本數據 (Excel 主題)
