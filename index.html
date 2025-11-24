@@ -249,232 +249,269 @@
     </div>
 
     <script>
-        // 遊戲狀態
-        let loveScore = 0;
-        let currentSceneId = 0;
-        const maxScore = 100;
+    // 遊戲狀態
+    let loveScore = 0;
+    let currentSceneId = 0;
+    const maxScore = 100;
 
-        // DOM 元素
-        const uploadedImgDisplay = document.getElementById('char-img-display');
-        const characterImg = document.getElementById('character-img');
-        const clearImgButton = document.getElementById('clear-img-button');
-        const defaultImageSrc = ''//初始化图片，预设为空
-        const dialogueBox = document.getElementById('dialogue-box');
-        const textContent = document.getElementById('text-content');
-        const nameTag = document.getElementById('name-tag');
-        const optionsContainer = document.getElementById('options-container');
-        const scoreDisplay = document.getElementById('score');
-        const startScreen = document.getElementById('start-screen');
-        const endScreen = document.getElementById('end-screen');
-        const endTitle = document.getElementById('end-title');
-        const endDesc = document.getElementById('end-desc');
-        const fileInput = document.getElementById('char-upload');
+    // DOM 元素
+    const uploadedImgDisplay = document.getElementById('char-img-display');
+    const characterImg = document.getElementById('character-img');
+    const clearImgButton = document.getElementById('clear-img-button');
+    const defaultImageSrc = ''//初始化图片，预设为空
+    const dialogueBox = document.getElementById('dialogue-box');
+    const textContent = document.getElementById('text-content');
+    const nameTag = document.getElementById('name-tag');
+    const optionsContainer = document.getElementById('options-container');
+    const scoreDisplay = document.getElementById('score');
+    const startScreen = document.getElementById('start-screen');
+    const endScreen = document.getElementById('end-screen');
+    const endTitle = document.getElementById('end-title');
+    const endDesc = document.getElementById('end-desc');
+    
+    // 使用 let 允許我們在 resetFileInput 函數中更新對 input 元素的引用
+    let fileInput = document.getElementById('char-upload'); 
 
+    uploadedImgDisplay.src = defaultImageSrc;
+
+    // ----------------------------------------------------
+    // 文件上傳及清空核心邏輯
+    // ----------------------------------------------------
+
+    // 1. 定義可重用的上傳處理函數
+    function handleFileUpload(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImgDisplay.src = e.target.result;
+                uploadedImgDisplay.style.display = 'block'; 
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 2. 定義可重用的清空邏輯 (核心修正：克隆替換以清除檔案名稱顯示)
+    function resetFileInput() {
+        // 獲取當前 file input 元素
+        const oldFileInput = fileInput;
+        
+        // 創建一個新的 input 元素（最可靠的清空方式）
+        const newFileInput = oldFileInput.cloneNode(true);
+        newFileInput.value = ''; // 確保值為空
+
+        // 替換舊的 input 元素
+        oldFileInput.parentNode.replaceChild(newFileInput, oldFileInput);
+        
+        // 更新 fileInput 變數為新的元素
+        fileInput = newFileInput;
+        
+        // 重新為新的 input 元素設置事件監聽器
+        fileInput.addEventListener('change', handleFileUpload);
+    }
+
+    // 初始綁定
+    fileInput.addEventListener('change', handleFileUpload);
+
+    // 清空按鈕事件
+    clearImgButton.addEventListener('click', function() {
+        // 1. 重置圖片的 src
         uploadedImgDisplay.src = defaultImageSrc;
 
-        // 圖片上載邏輯 (修復: 選擇檔案後立即顯示)
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImgDisplay.src = e.target.result;
-                    uploadedImgDisplay.style.display = 'block'; 
-                    };
-                reader.readAsDataURL(file);
-            }
+        // 2. 呼叫重置函數，清除檔案名稱
+        resetFileInput();
+
+        //3. 圖片元素完全隱藏
+        uploadedImgDisplay.style.display = 'none';
+    });
+    
+    // ----------------------------------------------------
+    // 劇本數據
+    // ----------------------------------------------------
+
+    const script = [
+        {
+            id: 0,
+            text: "（你在辦公室加班，突然感覺背後有一道視線。）\n林建成：「這麼晚了還在做報表？讓我看看你的格式。」",
+            options: [
+                { text: "緊張地遮住螢幕", score: -5, next: 1, reaction: "建成皺眉：「遮遮掩掩的，肯定是用手動計算機算的吧？」" },
+                { text: "自信地展示 VLOOKUP", score: 5, next: 1, reaction: "建成點點頭：「VLOOKUP...還可以，雖然有點舊，但基礎不錯。」" },
+                { text: "直接展示 XLOOKUP", score: 15, next: 1, reaction: "建成眼睛一亮：「喔？懂得用 XLOOKUP？看來你不是一般人。」" }
+            ]
+        },
+        {
+            id: 1,
+            text: "林建成推了推眼鏡，指著你的 D 欄位。\n林建成：「這裡的數據量很大，你打算怎麼整理？」",
+            options: [
+                { text: "合併儲存格 (Merge Cells)", score: -20, next: 2, reaction: "建成的臉色瞬間發黑：「合併儲存格是 Excel 的萬惡之源！以後不准這樣做！」" },
+                { text: "使用樞紐分析表 (Pivot Table)", score: 10, next: 2, reaction: "建成露出微笑：「明智的選擇，樞紐分析表才是效率的關鍵。」" },
+                { text: "寫 VBA 巨集自動化", score: 20, next: 2, reaction: "建成臉紅了：「VBA...？這種高階技巧...我對你刮目相看了。」" }
+            ]
+        },
+        {
+            id: 2,
+            text: "加班結束了，林建成似乎還不想走。\n林建成：「那個...如果你週末有空的話...」",
+            options: [
+                { text: "一起去吃飯嗎？", score: 5, next: 3, reaction: "建成：「吃飯？嗯，也是可以，但我原本想說的是...」" },
+                { text: "教我更多 Excel 技巧吧！", score: 25, next: 3, reaction: "建成激動地握住你的手：「沒問題！我準備了一套關於 Array Formula 的課程！」" },
+                { text: "我要回家睡覺了", score: -10, next: 3, reaction: "建成：「...也是，休息是為了走更長遠的路（還有寫更多公式）。」" }
+            ]
+        },
+        {
+            id: 3,
+            text: "（這是最後的關鍵時刻...）\n林建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。",
+            options: [
+                { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 99, reaction: "建成：「沒錯！是利用 $ROW 和 $COLUMN 參數算出來的！你竟然懂！」" }, // 99 代表結局
+                { text: "「你的欄寬好像沒有調整好。」", score: -30, next: 99, reaction: "建成：「（臉色蒼白）...對不起，是我太粗心了。」" },
+                { text: "默默存檔並備份", score: 10, next: 99, reaction: "建成：「你真是個優秀的數據人，永遠把資料安全放在第一位。」" }
+            ]
+        }
+    ];
+
+    // ----------------------------------------------------
+    // 遊戲流程控制
+    // ----------------------------------------------------
+
+    function startGame() {
+        loveScore = 0;
+        currentSceneId = 0;
+        updateScore();
+        startScreen.style.display = 'none';
+        endScreen.style.display = 'none';
+        dialogueBox.style.display = 'block';
+
+        // 遊戲開始時，播放音樂
+        const audio = document.getElementById('bgm');
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
+
+        showScene(0);
+    }
+
+    function updateScore() {
+        scoreDisplay.innerText = loveScore;
+    }
+
+    // 移除原有的 nextHandler 監聽器（如果有），避免重複觸發
+    let currentNextHandler = null;
+
+    function showScene(index) {
+        // 清空舊選項
+        optionsContainer.innerHTML = '';
+        
+        // 移除舊的點擊事件監聽器
+        if (currentNextHandler) {
+            dialogueBox.removeEventListener('click', currentNextHandler);
+            currentNextHandler = null;
+        }
+
+        // 獲取當前場景數據
+        const scene = script.find(s => s.id === index);
+        
+        if (!scene) {
+            console.error("Scene not found");
+            return;
+        }
+
+        // 顯示文字 
+        nameTag.innerText = (index === 0 && scene.text.includes("（")) ? "旁白" : "林建成";
+        textContent.innerText = scene.text;
+
+        // 創建選項按鈕
+        scene.options.forEach(option => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.innerText = option.text;
+            btn.onclick = () => handleChoice(option);
+            optionsContainer.appendChild(btn);
         });
+    }
 
-        clearImgButton.addEventListener('click', function() {
-            // 1. 重置圖片的 src 到默認圖片
-            uploadedImgDisplay.src = defaultImageSrc;
+    function handleChoice(option) {
+        // 更新分數
+        loveScore += option.score;
+        updateScore();
 
-            // 2. (重要) 清空 file input 的值
-            fileInput.value = '';
+        // 隱藏選項，顯示反應
+        optionsContainer.innerHTML = ''; 
+        nameTag.innerText = "林建成";
 
-            //3. 清空時，必須將圖片元素完全隱藏
-            uploadedImgDisplay.style.display = 'none';
-        });
+        const reactionText = option.reaction || "（場景結束，點擊查看結局）";
+        textContent.innerText = reactionText;
 
-        // 劇本數據 (Excel 主題)
-        const script = [
-            {
-                id: 0,
-                text: "（你在辦公室加班，突然感覺背後有一道視線。）\n林建成：「這麼晚了還在做報表？讓我看看你的格式。」",
-                options: [
-                    { text: "緊張地遮住螢幕", score: -5, next: 1, reaction: "建成皺眉：「遮遮掩掩的，肯定是用手動計算機算的吧？」" },
-                    { text: "自信地展示 VLOOKUP", score: 5, next: 1, reaction: "建成點點頭：「VLOOKUP...還可以，雖然有點舊，但基礎不錯。」" },
-                    { text: "直接展示 XLOOKUP", score: 15, next: 1, reaction: "建成眼睛一亮：「喔？懂得用 XLOOKUP？看來你不是一般人。」" }
-                ]
-            },
-            {
-                id: 1,
-                text: "林建成推了推眼鏡，指著你的 D 欄位。\n林建成：「這裡的數據量很大，你打算怎麼整理？」",
-                options: [
-                    { text: "合併儲存格 (Merge Cells)", score: -20, next: 2, reaction: "建成的臉色瞬間發黑：「合併儲存格是 Excel 的萬惡之源！以後不准這樣做！」" },
-                    { text: "使用樞紐分析表 (Pivot Table)", score: 10, next: 2, reaction: "建成露出微笑：「明智的選擇，樞紐分析表才是效率的關鍵。」" },
-                    { text: "寫 VBA 巨集自動化", score: 20, next: 2, reaction: "建成臉紅了：「VBA...？這種高階技巧...我對你刮目相看了。」" }
-                ]
-            },
-            {
-                id: 2,
-                text: "加班結束了，林建成似乎還不想走。\n林建成：「那個...如果你週末有空的話...」",
-                options: [
-                    { text: "一起去吃飯嗎？", score: 5, next: 3, reaction: "建成：「吃飯？嗯，也是可以，但我原本想說的是...」" },
-                    { text: "教我更多 Excel 技巧吧！", score: 25, next: 3, reaction: "建成激動地握住你的手：「沒問題！我準備了一套關於 Array Formula 的課程！」" },
-                    { text: "我要回家睡覺了", score: -10, next: 3, reaction: "建成：「...也是，休息是為了走更長遠的路（還有寫更多公式）。」" }
-                ]
-            },
-            {
-                id: 3,
-                text: "（這是最後的關鍵時刻...）\n林建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。",
-                options: [
-                    { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 99, reaction: "建成：「沒錯！是利用 $ROW 和 $COLUMN 參數算出來的！你竟然懂！」" }, // 99 代表結局
-                    { text: "「你的欄寬好像沒有調整好。」", score: -30, next: 99, reaction: "建成：「（臉色蒼白）...對不起，是我太粗心了。」" },
-                    { text: "默默存檔並備份", score: 10, next: 99, reaction: "建成：「你真是個優秀的數據人，永遠把資料安全放在第一位。」" }
-                ]
-            }
-        ];
+        // 定義下一個場景的處理函數
+        const nextHandler = () => {
+            // 移除當前的監聽器
+            dialogueBox.removeEventListener('click', currentNextHandler);
+            currentNextHandler = null; 
 
-        function startGame() {
-            loveScore = 0;
-            currentSceneId = 0;
-            updateScore();
-            startScreen.style.display = 'none';
-            endScreen.style.display = 'none';
-            dialogueBox.style.display = 'block';
-
-            // 遊戲開始時，播放音樂
-            const audio = document.getElementById('bgm');
-            audio.volume = 0.3;
-            // 由於瀏覽器限制，這裡的 play() 需要使用者在點擊按鈕後才能成功
-            audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
-
-            showScene(0);
-        }
-
-        function updateScore() {
-            scoreDisplay.innerText = loveScore;
-        }
-
-        // 移除原有的 nextHandler 監聽器（如果有），避免重複觸發
-        let currentNextHandler = null;
-
-        function showScene(index) {
-            // 清空舊選項
-            optionsContainer.innerHTML = '';
-            
-            // 移除舊的點擊事件監聽器
-            if (currentNextHandler) {
-                dialogueBox.removeEventListener('click', currentNextHandler);
-                currentNextHandler = null;
-            }
-
-            // 獲取當前場景數據
-            const scene = script.find(s => s.id === index);
-            
-            if (!scene) {
-                console.error("Scene not found");
-                return;
-            }
-
-            // 顯示文字 
-            nameTag.innerText = (index === 0 && scene.text.includes("（")) ? "旁白" : "林建成";
-            textContent.innerText = scene.text;
-
-            // 創建選項按鈕 (只有選項出現時，才隱藏對話框的點擊繼續提示)
-            scene.options.forEach(option => {
-                const btn = document.createElement('div');
-                btn.className = 'option-btn';
-                btn.innerText = option.text;
-                btn.onclick = () => handleChoice(option);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function handleChoice(option) {
-            // 更新分數
-            loveScore += option.score;
-            updateScore();
-
-            // 隱藏選項，顯示反應
-            optionsContainer.innerHTML = ''; 
-            nameTag.innerText = "林建成";
-
-            // 在最後一個場景，reaction 可能是空的，需要額外處理
-            const reactionText = option.reaction || "（場景結束，點擊查看結局）";
-            textContent.innerText = reactionText;
-
-            // 定義下一個場景的處理函數
-            const nextHandler = () => {
-                // 移除當前的監聽器
-                dialogueBox.removeEventListener('click', currentNextHandler);
-                currentNextHandler = null; 
-
-                if (option.next === 99) {
-                    showEnding();
-                } else {
-                    showScene(option.next);
-                }
-            };
-            
-            currentNextHandler = nextHandler; // 保存當前的處理函數
-
-            // 延遲一點讓玩家看完反應再點擊
-            setTimeout(() => {
-                dialogueBox.addEventListener('click', currentNextHandler);
-                // 添加一個提示文字
-                const tip = document.createElement('div');
-                tip.style.fontSize = "12px";
-                tip.style.color = "#ccc";
-                tip.style.textAlign = "right";
-                tip.innerText = "▼ 點擊繼續";
-                textContent.appendChild(tip);
-            }, 500);
-        }
-
-        function showEnding() {
-            // 確保移除所有監聽器，防止結束畫面被點擊影響
-            if (currentNextHandler) {
-                dialogueBox.removeEventListener('click', currentNextHandler);
-                currentNextHandler = null;
-            }
-
-            dialogueBox.style.display = 'none';
-            optionsContainer.innerHTML = '';
-            endScreen.style.display = 'flex';
-
-            if (loveScore >= 60) {
-                endTitle.innerText = "True End: 永恆的巨集";
-                endTitle.style.color = "#e84393";
-                endDesc.innerText = `你們的愛情就像一個完美的 Loop，永遠不會報錯。\n最終好感度：${loveScore}`;
-                characterImg.style.filter = "drop-shadow(0 0 20px gold)"; // 發光特效
-            } else if (loveScore >= 20) {
-                endTitle.innerText = "Normal End: 同事以上";
-                endTitle.style.color = "#0984e3";
-                endDesc.innerText = `你們成為了 Excel 交流會的好夥伴。\n最終好感度：${loveScore}`;
-                characterImg.style.filter = "none";
+            if (option.next === 99) {
+                showEnding();
             } else {
-                endTitle.innerText = "Bad End: #REF!";
-                endTitle.style.color = "#636e72";
-                endDesc.innerText = `建成覺得跟你沒有共同語言（Excel 語言）。\n他拒絕了你的存檔請求。\n最終好感度：${loveScore}`;
-                characterImg.style.filter = "grayscale(100%)"; // 變黑白
+                showScene(option.next);
             }
+        };
+        
+        currentNextHandler = nextHandler; // 保存當前的處理函數
+
+        // 延遲一點讓玩家看完反應再點擊
+        setTimeout(() => {
+            dialogueBox.addEventListener('click', currentNextHandler);
+            // 添加一個提示文字
+            const tip = document.createElement('div');
+            tip.style.fontSize = "12px";
+            tip.style.color = "#ccc";
+            tip.style.textAlign = "right";
+            tip.innerText = "▼ 點擊繼續";
+            textContent.appendChild(tip);
+        }, 500);
+    }
+
+    function showEnding() {
+        // 確保移除所有監聽器，防止結束畫面被點擊影響
+        if (currentNextHandler) {
+            dialogueBox.removeEventListener('click', currentNextHandler);
+            currentNextHandler = null;
         }
 
-        function restartGame() {
-            // 1. 重置角色立繪的視覺特效
+        dialogueBox.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        endScreen.style.display = 'flex';
+
+        if (loveScore >= 60) {
+            endTitle.innerText = "True End: 永恆的巨集";
+            endTitle.style.color = "#e84393";
+            endDesc.innerText = `你們的愛情就像一個完美的 Loop，永遠不會報錯。\n最終好感度：${loveScore}`;
+            characterImg.style.filter = "drop-shadow(0 0 20px gold)"; // 發光特效
+        } else if (loveScore >= 20) {
+            endTitle.innerText = "Normal End: 同事以上";
+            endTitle.style.color = "#0984e3";
+            endDesc.innerText = `你們成為了 Excel 交流會的好夥伴。\n最終好感度：${loveScore}`;
             characterImg.style.filter = "none";
-            
-            // 2. 隱藏所有遊戲中的元素
-            dialogueBox.style.display = 'none';
-            optionsContainer.innerHTML = '';
-            uploadedImgDisplay.style.display = 'none'; // 隱藏上傳的圖片
-            endScreen.style.display = 'none';
-            
-            // 3. 顯示開始畫面 (讓玩家可以點擊「開始戀愛」)
-            startScreen.style.display = 'flex';
+        } else {
+            endTitle.innerText = "Bad End: #REF!";
+            endTitle.style.color = "#636e72";
+            endDesc.innerText = `建成覺得跟你沒有共同語言（Excel 語言）。\n他拒絕了你的存檔請求。\n最終好感度：${loveScore}`;
+            characterImg.style.filter = "grayscale(100%)"; // 變黑白
         }
+    }
+
+    function restartGame() {
+        // 1. 重置角色立繪的視覺特效
+        characterImg.style.filter = "none";
+        
+        // 2. 隱藏所有遊戲中的元素
+        dialogueBox.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        uploadedImgDisplay.style.display = 'none'; // 隱藏上傳的圖片
+        endScreen.style.display = 'none';
+        
+        // 🚨 關鍵修正：重置檔案上傳欄位，清空圖片名稱！
+        resetFileInput();
+        
+        // 3. 顯示開始畫面 (讓玩家可以點擊「開始戀愛」)
+        startScreen.style.display = 'flex';
+    }
     </script>
 </body>
 </html>
