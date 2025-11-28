@@ -1,204 +1,285 @@
+/* 全局設定 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft JhengHei", "Yu Gothic", sans-serif;
+    background-color: #2c3e50;
+    /* 🌟 修正：使用絕對定位容器，讓 body 成為靜態背景 🌟 */
+    display: block; /* 改回 block */
+    position: relative; /* 確保 body 是容器 */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; 
+    /* perspective 已移除，移至 #game-container */
+}
 
-        /* 全局設定 */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft JhengHei", "Yu Gothic", sans-serif;
-            background-color: #2c3e50;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* 遊戲主容器 */
-        #game-container {
-            position: relative;
-            width: 800px;
-            height: 600px;
-            background: linear-gradient(to bottom, #ffefef, #ffe4e1);
-            /* 背景色：櫻花粉 */
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        /* 背景裝飾 (Excel 網格風格) */
-        .bg-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(#e0e0e0 1px, transparent 1px),
-                linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.5;
-            z-index: 0;
-        }
-
-        /* 圖片上載區 */
-        #upload-section {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        /* 让图片居中 */
-        #char-img-display {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 90%;
-            height: auto;
-            width: auto;
-            object-fit: contain;
-            z-index: 0;
-            display: none;
-        }
-
-        /* 角色立繪 */
-        #character-img {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            max-height: 90%;
-            z-index: 1;
-            transition: filter 0.3s;
-        }
-
-        /* 對話框區域 */
-        #dialogue-box {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #fff;
-            border-radius: 10px;
-            z-index: 10;
-            padding: 20px;
-            color: white;
-            display: none;
-            overflow: hidden;
-            box-sizing: border-box;
-            cursor: pointer;
-            /* 提示可點擊推進 */
-        }
-
-        #name-tag {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffb7b2;
-            margin-bottom: 10px;
-        }
-
-        #text-content {
-            font-size: 18px;
-            line-height: 1.5;
-            min-height: 60px;
-            /* 確保文字區塊有足夠空間 */
-        }
-
-        /* 選項區域 */
-        #options-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 60%;
-            text-align: center;
-        }
-
-        .option-btn {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #ff6b6b;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 25px;
-            transition: all 0.2s;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .option-btn:hover {
-            background: #ff6b6b;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        /* 好感度顯示 */
-        #love-meter {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            color: #e84393;
-            border: 2px solid #e84393;
-        }
-
-        /* 開始/重來按鈕畫面 */
-        #start-screen,
-        #end-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 240, 245, 0.95);
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 48px;
-            color: #d63031;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px #fff;
-        }
-
-        .action-btn {
-            padding: 15px 40px;
-            font-size: 24px;
-            background-color: #e17055;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #c0392b;
-            transition: transform 0.1s;
-        }
-
-        .action-btn:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-
-        /* 音樂播放器樣式 (簡單版) */
-        #music-player {
-            position: absolute;
-            top: 10px;
-            left: 150px;
-            z-index: 100;
-        }
+/* 遊戲主容器 */
+/* 遊戲主容器 */
+#game-container {
+    position: absolute; /* 🌟 修正：改為絕對定位 🌟 */
     
+    /* 🌟 修正：使用四邊拉伸法佔滿空間 🌟 */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    /* 移除 perspective: 1500px; */
+    
+    background: linear-gradient(to bottom, #ffefef, #ffe4e1);
+    box-shadow: none; 
+    border-radius: 0; 
+    overflow: hidden;
+
+    /* 容器翻頁動畫樣式 */
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out;
+    transform-origin: center;
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+}
+
+/* 背景裝飾 (Excel 網格風格) */
+.bg-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    /* 網格線寬保持 1px，並使用 0.5px 偏移嘗試修復渲染問題 */
+    background-image: 
+        linear-gradient(#e0e0e0 1px, transparent 1px), 
+        linear-gradient(90deg, #e0e0e0 1px, transparent 1px); 
+    
+    background-size: 3vw 3vw; 
+    background-position: 0.5px 0.5px; /* 幫助對齊 */
+    
+    opacity: 0.5;
+    z-index: 0;
+}
+/* -------------------- 菜單結構樣式 (適應化) -------------------- */
+#game-menu-wrapper {
+    position: absolute;
+    top: 2vh; 
+    right: 2vw; 
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#menu-toggle-btn {
+    padding: 1.5vh 2vw; 
+    font-size: 1.5vw; 
+    background-color: #f1c40f;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1vh; 
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#menu-toggle-btn:hover {
+    background-color: #f39c12;
+}
+
+#game-menu-content {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5vh; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    width: 25vw; 
+    text-align: left;
+}
+
+
+
+#upload-section {
+    position: static;
+    margin-bottom: 1.5vh; 
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1.2vw; 
+    z-index: auto;
+}
+
+#music-player {
+    position: static;
+    margin-top: 1.5vh; 
+    border-top: 1px solid #eee;
+    padding-top: 1.5vh; 
+    z-index: auto;
+}
+
+#music-player label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5vh; 
+}
+
+/* 1. 核心修正：預設隱藏 audio 元素（包括控制條），避免破壞佈局 🌟 */
+#music-player audio {
+     display: none; 
+}
+
+#game-menu-content[style*="display: block"] #music-player audio {
+    display: block !important; 
+    width: 100%;
+    margin-top: 0.5vh;
+}
+
+/* -------------------- 圖片和角色立繪 (適應化) -------------------- */
+
+#char-img-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 80%; 
+    max-height: 80%; 
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    z-index: 0;
+    display: none;
+}
+
+#character-img {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 90vh; 
+    z-index: 1;
+    transition: filter 0.3s;
+}
+
+/* -------------------- 對話框及內容 (適應化) -------------------- */
+
+#dialogue-box {
+    position: absolute;
+    bottom: 3vh; 
+    left: 5vw; 
+    right: 5vw; 
+    height: 25vh; 
+    background: rgba(0, 0, 0, 0.8);
+    border: 0.3vw solid #fff; 
+    border-radius: 1vw; 
+    z-index: 10;
+    padding: 2vw; 
+    color: white;
+    display: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#name-tag {
+    font-size: 2.5vw; 
+    font-weight: bold;
+    color: #ffb7b2;
+    margin-bottom: 0.5vh; 
+    margin-top: -1.5vh; 
+}
+
+#text-content {
+    font-size: 1.8vw; 
+    line-height: 1.5;
+    min-height: 10vh; 
+}
+
+/* -------------------- 選項/好感度/畫面 (適應化) -------------------- */
+
+#options-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh; 
+    width: 60vw; 
+    text-align: center;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: 0.3vw solid #ff6b6b; 
+    padding: 1.5vh; 
+    text-align: center;
+    font-size: 2vw; 
+    cursor: pointer;
+    border-radius: 5vh; 
+    transition: all 0.2s;
+    color: #333;
+    font-weight: bold;
+}
+
+.option-btn:hover {
+    background: #ff6b6b;
+    color: white;
+    transform: scale(1.05);
+}
+
+#love-meter {
+    position: absolute;
+    top: 2vh; 
+    left: 2vw; 
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1.5vh; 
+    border-radius: 20vh; 
+    font-weight: bold;
+    color: #e84393;
+    border: 0.3vw solid #e84393; 
+    font-size: 1.5vw; 
+}
+
+#start-screen,
+#end-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 240, 245, 0.95);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: 5vw; 
+    color: #d63031;
+    margin-bottom: 3vh; 
+    text-shadow: 0.2vw 0.2vw 0px #fff; 
+}
+
+.action-btn {
+    padding: 2vh 4vw; 
+    font-size: 2.5vw; 
+    background-color: #e17055;
+    color: white;
+    border: none;
+    border-radius: 5vh; 
+    cursor: pointer;
+    box-shadow: 0 0.5vh 0 #c0392b; 
+    transition: transform 0.1s;
+}
+
+.action-btn:active {
+    transform: translateY(0.5vh); 
+    box-shadow: none;
+}
+
+/* -------------------- 容器翻頁動畫樣式 (保持不變) -------------------- */
+#game-container.flip-out {
+    transform: rotateY(180deg);
+}

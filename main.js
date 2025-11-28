@@ -5,7 +5,7 @@ let loveScore = 0;
 let currentSceneId = 'scene_start';
 let currentStepIndex = 0;
 // 最佳實踐：使用 Set 來儲存 ID，因為 Set 只允許唯一值，查詢速度更快。
-let visitedScenes = new Set(); 
+let visitedScenes = new Set();
 
 // DOM 元素（預先聲明，在 DOMContentLoaded 內賦值）
 let uploadedImgDisplay;
@@ -22,6 +22,12 @@ let endScreen;
 let endTitle;
 let endDesc;
 let fileInput;
+let menuToggleButton;
+let menuContent;
+
+// 🌟 遊戲容器 (用於翻轉)
+let gameContainer;
+
 
 // ----------------------------------------------------
 // 文件上傳及清空核心邏輯
@@ -101,6 +107,7 @@ function skipTyping() {
     }
 }
 
+
 // ----------------------------------------------------
 // 遊戲流程控制
 // ----------------------------------------------------
@@ -153,7 +160,7 @@ function nextStep(event) {
     }
 }
 
-// 新增：處理多步驟反應陣列
+// 新增：處理多步驟反應陣列 (此函數邏輯不變)
 function playReactions(reactions, nextSceneId) {
     let reactionIndex = 0;
 
@@ -200,7 +207,7 @@ function playReactions(reactions, nextSceneId) {
 }
 
 
-// 輔助函數：處理反應結束後的跳轉邏輯
+// 輔助函數：處理反應結束後的跳轉邏輯 (此函數邏輯不變)
 function handleReactionEnd(nextSceneId) {
     // 移除可能存在的舊提示文字
     const oldTip = document.getElementById('next-step-tip');
@@ -213,7 +220,7 @@ function handleReactionEnd(nextSceneId) {
         if (isEnding) {
             showEnding(nextSceneId);
         } else {
-            showScene(nextSceneId);
+            showScene(nextSceneId); // 這裡呼叫 showScene 會啟動轉場
         }
     };
 
@@ -230,7 +237,8 @@ function handleReactionEnd(nextSceneId) {
 }
 
 
-// 輔助函數：顯示選項
+
+// 輔助函數：顯示選項 (此函數邏輯不變)
 function displayOptions(options) {
     optionsContainer.innerHTML = '';
     options.forEach(option => {
@@ -243,34 +251,8 @@ function displayOptions(options) {
 }
 
 
-function startGame() {
-    loveScore = 0;
-    currentSceneId = 'scene_start';
-    currentStepIndex = 0;
-    visitedScenes.clear();
-    updateScore();
-    startScreen.style.display = 'none';
-    endScreen.style.display = 'none';
-    dialogueBox.style.display = 'block';
-
-    // 確保 nextStep 監聽器在 startGame 時被添加 (這裡是正確的)
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.addEventListener('click', nextStep);
-
-    const audio = document.getElementById('bgm');
-    if (audio) {
-        audio.volume = 0.3;
-        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
-    }
-
-    showScene('scene_start');
-}
-
-function updateScore() {
-    scoreDisplay.innerText = loveScore;
-}
-
-function showScene(id) {
+// 輔助函數：實際載入場景內容 (此函數邏輯不變)
+function _loadSceneContent(id) {
     optionsContainer.innerHTML = '';
     const oldTip = document.getElementById('next-step-tip');
     if (oldTip) oldTip.remove();
@@ -288,6 +270,88 @@ function showScene(id) {
     nextStep();
 }
 
+
+/**
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
+/**
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
+/**
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
+function showScene(id) {
+    if (!gameContainer) {
+        console.warn("Game container not found. Skipping transition.");
+        _loadSceneContent(id);
+        return;
+    }
+
+    // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
+    dialogueBox.removeEventListener('click', nextStep);
+    gameContainer.classList.add('flip-out'); // 應用 CSS rotateY(180deg) 變換
+
+    // 2. 等待 Flip Out 動畫完成 (0.8s)
+    setTimeout(() => {
+        
+        // 🌟 關鍵修正點：在達到 180 度時（畫面在背面），立即清空內容
+        textContent.innerText = '';
+        nameTag.innerText = '';
+        const oldTip = document.getElementById('next-step-tip');
+        if (oldTip) oldTip.remove();
+
+        // 3. 立即開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
+        gameContainer.classList.remove('flip-out');
+
+        // 4. 等待 Flip In 動畫完成 (再過 0.8s) -> 總計 1.6s
+        setTimeout(() => {
+
+            // 5. 翻轉完成 (360度)：暫停 1 秒 (1.6s -> 2.6s)
+            setTimeout(() => {
+
+                // 6. 延遲結束：載入新場景內容 (執行 script)
+                _loadSceneContent(id);
+
+            }, 1000); // 1000ms (1秒) 暫停
+
+        }, 800); // 800ms (Flip In 動畫時間)
+
+    }, 800); // 800ms (Flip Out 動畫時間)
+}
+
+
+function startGame() {
+    loveScore = 0;
+    currentSceneId = 'scene_start';
+    currentStepIndex = 0;
+    visitedScenes.clear();
+    updateScore();
+    startScreen.style.display = 'none';
+    endScreen.style.display = 'none';
+    dialogueBox.style.display = 'block';
+
+    // 確保 nextStep 監聽器在 startGame 時被添加
+    dialogueBox.removeEventListener('click', nextStep);
+    dialogueBox.addEventListener('click', nextStep);
+
+    const audio = document.getElementById('bgm');
+    if (audio) {
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
+    }
+
+    // 這裡使用 _loadSceneContent 直接載入，因為遊戲開始不需要轉場效果
+    _loadSceneContent('scene_start');
+}
+
+function updateScore() {
+    scoreDisplay.innerText = loveScore;
+}
+
+
 function handleChoice(option) {
     // 1. 處理分數
     loveScore += option.score;
@@ -302,7 +366,7 @@ function handleChoice(option) {
         playReactions(reactionData, option.next);
     } else {
         // 是單一步驟反應：直接播放字串
-        nameTag.innerText = "林建成"; 
+        nameTag.innerText = "林建成";
 
         // 移除可能存在的舊提示文字
         const oldTip = document.getElementById('next-step-tip');
@@ -374,14 +438,19 @@ function restartGame() {
 
     // 3. 顯示開始畫面
     startScreen.style.display = 'flex';
+
+    // 確保遊戲容器沒有翻轉狀態
+    if (gameContainer) {
+        gameContainer.classList.remove('flip-out');
+    }
 };
 
 
 // ----------------------------------------------------
-// 【✨ 關鍵修正區塊：確保在 DOM 載入後才操作 DOM 元素和綁定初始事件】
+// 【✨ DOM 載入後初始化區塊】
 // ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 在 DOM 載入完成後，獲取所有 DOM 元素
+    // 1. 獲取所有 DOM 元素
     uploadedImgDisplay = document.getElementById('char-img-display');
     characterImg = document.getElementById('character-img');
     clearImgButton = document.getElementById('clear-img-button');
@@ -396,7 +465,14 @@ document.addEventListener('DOMContentLoaded', () => {
     endDesc = document.getElementById('end-desc');
     fileInput = document.getElementById('char-upload');
 
-    // 2. 綁定所有**初始**事件監聽器 (解決 TypeError)
+    menuToggleButton = document.getElementById('menu-toggle-btn');
+    menuContent = document.getElementById('game-menu-content');
+
+    // 🌟 獲取遊戲容器 (用於翻轉)
+    gameContainer = document.getElementById('game-container');
+
+
+    // 2. 綁定所有初始事件監聽器
     fileInput.addEventListener('change', handleFileUpload);
     clearImgButton.addEventListener('click', function () {
         uploadedImgDisplay.src = defaultImageSrc;
@@ -404,13 +480,25 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadedImgDisplay.style.display = 'none';
     });
     dialogueBox.addEventListener('click', skipTyping);
-    
-    // 3. 確保音量設置在DOM載入後進行
-    const audio = document.getElementById('bgm');
-    if (audio) {
-        audio.volume = 0.3;
-    }
+
+    // 🌟 新增：綁定菜單切換事件
+    menuToggleButton.addEventListener('click', toggleMenu);
+
 });
+
+// ----------------------------------------------------
+// 【✨ 菜單切換功能 ✨】
+// ----------------------------------------------------
+
+function toggleMenu() {
+    // 檢查當前的 display 狀態，並切換它
+    if (menuContent.style.display === 'flex' || menuContent.style.display === 'block') {
+        menuContent.style.display = 'none';
+    } else {
+        // 為了讓內容垂直排列，我們可以使用 'flex' 或 'block'
+        menuContent.style.display = 'block'; 
+    }
+}
 
 // ----------------------------------------------------
 // 【✨ 關鍵公開：讓 HTML 的 onclick 可以呼叫 ✨】

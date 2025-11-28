@@ -169,7 +169,7 @@ export const script = [
                     ],
                 },
                 {
-                    text: "魔法少女的魔法審判。",
+                    text: "魔法少女的魔女審判。",
                     score: -10,
                     next: '8',
                     reaction: [
