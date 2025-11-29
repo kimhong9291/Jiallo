@@ -6,6 +6,7 @@ let currentSceneId = 'scene_start';
 let currentStepIndex = 0;
 // 最佳實踐：使用 Set 來儲存 ID，因為 Set 只允許唯一值，查詢速度更快。
 let visitedScenes = new Set();
+const MAX_LOVE_SCORE=150; 
 
 // DOM 元素（預先聲明，在 DOMContentLoaded 內賦值）
 let uploadedImgDisplay;
@@ -213,7 +214,7 @@ function handleReactionEnd(nextSceneId) {
     const oldTip = document.getElementById('next-step-tip');
     if (oldTip) oldTip.remove();
 
-    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba' || nextSceneId === 'special_ending_check_塔批';
+    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba'||nextSceneId === 'ending_check_TOS'|| nextSceneId === 'special_ending_check_塔批';
 
     const handler = () => {
         dialogueBox.removeEventListener('click', handler);
@@ -347,23 +348,56 @@ function startGame() {
     _loadSceneContent('scene_start');
 }
 
+function getNextScene(next) {
+    // 範例：檢查是否是特殊判定的佔位符（你需要將選項中的 next 設為這個 ID）
+    if (next === '29') {
+        // --- 條件 A：高好感度 + 訪問過特定場景 ---
+        // 假設 'scene_chat_morning' 是觸發高好感度特殊路線的前置場景
+        if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
+            return '29_A';} 
+        else{return '29';}// 你的高好感度特殊場景 ID
+        
+        
+        // --- 條件 B：低好感度 + 未訪問過特定場景 ---
+        // 假設 'scene_break_fail' 是低好感度線路的預警場景
+        //else if (loveScore < 30 && !visitedScenes.has('scene_break_fail')) {
+            //console.log("條件 B 成立：進入特殊場景 'special_low_ref'");
+            //return 'special_low_ref'; // 你的低好感度特殊場景 ID
+        //}
+        
+        // --- 預設跳轉 ---
+        // 如果所有條件都不滿足，跳轉到腳本中選項原本設定的預設場景
+        return 'scene_default_next'; 
+    }
+
+    // 如果 nextId 不是特殊檢查標籤，直接返回它
+    return next;
+};
+
 function updateScore() {
     scoreDisplay.innerText = loveScore;
 }
 
 
+// 【🌟 修改函式：在跳轉前調用 getNextScene 進行判定 🌟】
 function handleChoice(option) {
     // 1. 處理分數
-    loveScore += option.score;
+    loveScore=Math.min(loveScore + option.score, MAX_LOVE_SCORE);;
     updateScore();
     optionsContainer.innerHTML = '';
 
-    // 2. 判斷反應類型
+    // 2. 【關鍵修改點】在播放反應前，先檢查最終的跳轉目標
+    let destinationId = option.next; 
+    
+    // 調用新的判定函式，如果 option.next 是一個檢查標籤，這裡會返回真正的目標 ID
+    destinationId = getNextScene(destinationId);
+
+    // 3. 判斷反應類型 (這裡開始的邏輯保持不變，但使用 destinationId)
     const reactionData = option.reaction;
 
     if (Array.isArray(reactionData)) {
         // 是多步驟反應：啟動反應播放流程
-        playReactions(reactionData, option.next);
+        playReactions(reactionData, destinationId); // 使用判定後的 destinationId
     } else {
         // 是單一步驟反應：直接播放字串
         nameTag.innerText = "林建成";
@@ -374,10 +408,11 @@ function handleChoice(option) {
 
         typeWriterEffect(textContent, reactionData, () => {
             // 字串反應播放完畢後，進入下一場景/結局
-            handleReactionEnd(option.next);
+            handleReactionEnd(destinationId); // 使用判定後的 destinationId
         });
     }
 }
+
 
 
 function showEnding(endingId = 'ending_check') {
@@ -400,6 +435,14 @@ function showEnding(endingId = 'ending_check') {
         endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：' + loveScore;
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
+
+    else if (endingId === 'ending_check_TOS') {
+        endTitle.innerText = "Special True End: 轉出與建成的愛情";
+        endTitle.style.color = "#0000ffff"; // 金色
+        endDesc.innerText = '後來你們開了一個叫做建成幫的幫派，神魔之塔只是起點，接下來你們的試算表將遍佈全部遊戲。\n最終好感度：' + loveScore;
+        characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
+    }
+    
     else if (endingId === 'ending_true_vba') {
         endTitle.innerText = "True End: 永恆的巨集 (VBA)";
         endTitle.style.color = "#ff7979";
