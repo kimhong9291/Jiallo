@@ -1,4 +1,6 @@
-import { script } from './script_data.js';//調用劇本
+import { main_script } from './script_data.js';//調用劇本
+import { script_tosLine } from './script_data_tos.js';
+const script = [...main_script, ...script_tosLine];
 
 // 遊戲狀態
 let loveScore = 0;
