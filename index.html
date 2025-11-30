@@ -29,10 +29,15 @@
                 <div id="music-player">
                     <label for="bgm">背景音樂</label>
                     <audio id="bgm" loop controls>
-                        <source src="./media/千恋＊万花 主題歌「恋ひ恋ふ縁」.mp4"
-                            type="audio/mp4">
+                        <source src="./media/千恋＊万花 主題歌「恋ひ恋ふ縁」.mp4" type="audio/mp4">
                         您的瀏覽器不支持 audio 元素。
                     </audio>
+                </div>
+
+                <div id="restartGame-button">
+                    <!-- 新增的中斷按鈕 -->
+                    <label for="char-upload">重新開始</label>
+                    <button id="interrupt-btn" class="menu-btn" onclick="restartGame()">中斷 (回到開始)</button>
                 </div>
             </div>
         </div>
@@ -42,7 +47,7 @@
 
             <img id="character-img" src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"
                     alt="林建成">
-            <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display" style="display: none;">
+    <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display" style="display: none;">
 
             <div id="dialogue-box">
                     <div id="name-tag">林建成</div>
