@@ -8,7 +8,9 @@ let currentSceneId = 'scene_start';
 let currentStepIndex = 0;
 // 最佳實踐：使用 Set 來儲存 ID，因為 Set 只允許唯一值，查詢速度更快。
 let visitedScenes = new Set();
-const MAX_LOVE_SCORE=150; 
+const MAX_LOVE_SCORE = 150;
+let playerName = "";
+
 
 // DOM 元素（預先聲明，在 DOMContentLoaded 內賦值）
 let uploadedImgDisplay;
@@ -27,6 +29,8 @@ let endDesc;
 let fileInput;
 let menuToggleButton;
 let menuContent;
+let playerNameInput;
+let startGameButton;
 
 // 🌟 遊戲容器 (用於翻轉)
 let gameContainer;
@@ -137,10 +141,17 @@ function nextStep(event) {
 
         nameTag.innerText = step.name;
 
+        // 🌟 修正：替換名字，並處理對話者為「你」的情況 [MODIFIED]
+        let textSource = step.text;
+        if (step.name === '你') {
+            nameTag.innerText = playerName; // 對話者名字替換為玩家名字
+        }
+        const textToDisplay = processTextForName(textSource); // <-- 應用名字替換
+
         const oldTip = document.getElementById('next-step-tip');
         if (oldTip) oldTip.remove();
 
-        typeWriterEffect(textContent, step.text, () => {
+        typeWriterEffect(textContent, textToDisplay, () => {
             // 打字結束後，檢查是否為最後一個步驟
             currentStepIndex++; // 先增加計數器，再判斷
             if (currentStepIndex === scene.steps.length) {
@@ -176,7 +187,10 @@ function playReactions(reactions, nextSceneId) {
             const oldTip = document.getElementById('next-step-tip');
             if (oldTip) oldTip.remove();
 
-            typeWriterEffect(textContent, step.text, () => {
+            /// 🌟 修正：替換名字 [MODIFIED]
+            const textToDisplay = processTextForName(step.text); // <-- 應用名字替換
+
+            typeWriterEffect(textContent, textToDisplay, () => {
                 reactionIndex++;
 
                 if (reactionIndex < reactions.length) {
@@ -216,7 +230,7 @@ function handleReactionEnd(nextSceneId) {
     const oldTip = document.getElementById('next-step-tip');
     if (oldTip) oldTip.remove();
 
-    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba'||nextSceneId === 'ending_check_TOS'|| nextSceneId === 'special_ending_check_塔批';
+    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba' || nextSceneId === 'ending_check_TOS' || nextSceneId === 'special_ending_check_塔批';
 
     const handler = () => {
         dialogueBox.removeEventListener('click', handler);
@@ -279,54 +293,70 @@ function _loadSceneContent(id) {
  * @param {string} id - 要切換到的場景 ID
  */
 /**
- * 處理場景切換，帶有容器翻頁效果
- * @param {string} id - 要切換到的場景 ID
- */
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
 /**
- * 處理場景切換，帶有容器翻頁效果
- * @param {string} id - 要切換到的場景 ID
- */
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
 function showScene(id) {
-    if (!gameContainer) {
-        console.warn("Game container not found. Skipping transition.");
-        _loadSceneContent(id);
-        return;
-    }
+    if (!gameContainer) {
+        console.warn("Game container not found. Skipping transition.");
+        _loadSceneContent(id);
+        return;
+    }
 
-    // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
-    dialogueBox.removeEventListener('click', nextStep);
-    gameContainer.classList.add('flip-out'); // 應用 CSS rotateY(180deg) 變換
+    // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
+    dialogueBox.removeEventListener('click', nextStep);
+    gameContainer.classList.add('flip-out'); // 應用 CSS rotateY(180deg) 變換
 
-    // 2. 等待 Flip Out 動畫完成 (0.8s)
-    setTimeout(() => {
-        
-        // 🌟 關鍵修正點：在達到 180 度時（畫面在背面），立即清空內容
-        textContent.innerText = '';
-        nameTag.innerText = '';
-        const oldTip = document.getElementById('next-step-tip');
-        if (oldTip) oldTip.remove();
+    // 2. 等待 Flip Out 動畫完成 (0.8s)
+    setTimeout(() => {
 
-        // 3. 立即開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
-        gameContainer.classList.remove('flip-out');
+        // 🌟 關鍵修正點：在達到 180 度時（畫面在背面），立即清空內容
+        textContent.innerText = '';
+        nameTag.innerText = '';
+        const oldTip = document.getElementById('next-step-tip');
+        if (oldTip) oldTip.remove();
 
-        // 4. 等待 Flip In 動畫完成 (再過 0.8s) -> 總計 1.6s
-        setTimeout(() => {
+        // 3. 立即開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
+        gameContainer.classList.remove('flip-out');
 
-            // 5. 翻轉完成 (360度)：暫停 1 秒 (1.6s -> 2.6s)
-            setTimeout(() => {
+        // 4. 等待 Flip In 動畫完成 (再過 0.8s) -> 總計 1.6s
+        setTimeout(() => {
 
-                // 6. 延遲結束：載入新場景內容 (執行 script)
-                _loadSceneContent(id);
+            // 5. 翻轉完成 (360度)：暫停 1 秒 (1.6s -> 2.6s)
+            setTimeout(() => {
 
-            }, 1000); // 1000ms (1秒) 暫停
+                // 6. 延遲結束：載入新場景內容 (執行 script)
+                _loadSceneContent(id);
 
-        }, 800); // 800ms (Flip In 動畫時間)
+            }, 1000); // 1000ms (1秒) 暫停
 
-    }, 800); // 800ms (Flip Out 動畫時間)
+        }, 800); // 800ms (Flip In 動畫時間)
+
+    }, 800); // 800ms (Flip Out 動畫時間)
 }
 
 
 function startGame() {
+
+    // 1. 處理玩家名字輸入 [MODIFIED]
+    // 🌟 修正：先檢查 playerNameInput 是否已經在 DOMContentLoaded 中獲取
+    if (!playerNameInput) {
+        playerNameInput = document.getElementById('player-name-input');
+    }
+    
+    let inputName = playerNameInput ? playerNameInput.value.trim() : "";
+    if (inputName) {
+        // 使用玩家輸入的名字
+        playerName = inputName;
+    } else {
+        // 使用預設名字
+        playerName = "你";
+    }
+
     loveScore = 0;
     currentSceneId = 'scene_start';
     currentStepIndex = 0;
@@ -350,30 +380,40 @@ function startGame() {
     _loadSceneContent('scene_start');
 }
 
-function getNextScene(next) {
-    // 範例：檢查是否是特殊判定的佔位符（你需要將選項中的 next 設為這個 ID）
-    if (next === '29') {
-        // --- 條件 A：高好感度 + 訪問過特定場景 ---
-        // 假設 'scene_chat_morning' 是觸發高好感度特殊路線的前置場景
-        if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
-            return '29_A';} 
-        else{return '29';}// 你的高好感度特殊場景 ID
-        
-        
-        // --- 條件 B：低好感度 + 未訪問過特定場景 ---
-        // 假設 'scene_break_fail' 是低好感度線路的預警場景
-        //else if (loveScore < 30 && !visitedScenes.has('scene_break_fail')) {
-            //console.log("條件 B 成立：進入特殊場景 'special_low_ref'");
-            //return 'special_low_ref'; // 你的低好感度特殊場景 ID
-        //}
-        
-        // --- 預設跳轉 ---
-        // 如果所有條件都不滿足，跳轉到腳本中選項原本設定的預設場景
-        return 'scene_default_next'; 
-    }
+function processTextForName(text) {
+    // 🌟 關鍵修正：將佔位符從 [玩家名字] 改為 【玩家名字】
+    if (playerName && text.includes('【玩家名字】')) {
+        // 替換劇本中的佔位符 【玩家名字】 為玩家設定的名字
+        return text.replace(/【玩家名字】/g, playerName);
+    }
+    return text;
+}
 
-    // 如果 nextId 不是特殊檢查標籤，直接返回它
-    return next;
+function getNextScene(next) {
+    // 範例：檢查是否是特殊判定的佔位符（你需要將選項中的 next 設為這個 ID）
+    if (next === '29') {
+        // --- 條件 A：高好感度 + 訪問過特定場景 ---
+        // 假設 'scene_chat_morning' 是觸發高好感度特殊路線的前置場景
+        if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
+            return '29_A';
+        }
+        else { return '29'; }// 你的高好感度特殊場景 ID
+
+
+        // --- 條件 B：低好感度 + 未訪問過特定場景 ---
+        // 假設 'scene_break_fail' 是低好感度線路的預警場景
+        //else if (loveScore < 30 && !visitedScenes.has('scene_break_fail')) {
+        //console.log("條件 B 成立：進入特殊場景 'special_low_ref'");
+        //return 'special_low_ref'; // 你的低好感度特殊場景 ID
+        //}
+
+        // --- 預設跳轉 ---
+        // 如果所有條件都不滿足，跳轉到腳本中選項原本設定的預設場景
+        return next; // 修正：這裡應該返回原本的 next，而不是一個未定義的 ID
+    }
+
+    // 如果 nextId 不是特殊檢查標籤，直接返回它
+    return next;
 };
 
 function updateScore() {
@@ -384,15 +424,15 @@ function updateScore() {
 // 【🌟 修改函式：在跳轉前調用 getNextScene 進行判定 🌟】
 function handleChoice(option) {
     // 1. 處理分數
-    loveScore=Math.min(loveScore + option.score, MAX_LOVE_SCORE);;
+    loveScore = Math.min(loveScore + option.score, MAX_LOVE_SCORE);;
     updateScore();
     optionsContainer.innerHTML = '';
 
-    // 2. 【關鍵修改點】在播放反應前，先檢查最終的跳轉目標
-    let destinationId = option.next; 
-    
-    // 調用新的判定函式，如果 option.next 是一個檢查標籤，這裡會返回真正的目標 ID
-    destinationId = getNextScene(destinationId);
+    // 2. 【關鍵修改點】在播放反應前，先檢查最終的跳轉目標
+    let destinationId = option.next;
+
+    // 調用新的判定函式，如果 option.next 是一個檢查標籤，這裡會返回真正的目標 ID
+    destinationId = getNextScene(destinationId);
 
     // 3. 判斷反應類型 (這裡開始的邏輯保持不變，但使用 destinationId)
     const reactionData = option.reaction;
@@ -408,7 +448,10 @@ function handleChoice(option) {
         const oldTip = document.getElementById('next-step-tip');
         if (oldTip) oldTip.remove();
 
-        typeWriterEffect(textContent, reactionData, () => {
+        // 🌟 新增：替換名字 [MODIFIED]
+        const reactionText = processTextForName(reactionData);
+
+        typeWriterEffect(textContent, reactionText, () => {
             // 字串反應播放完畢後，進入下一場景/結局
             handleReactionEnd(destinationId); // 使用判定後的 destinationId
         });
@@ -438,13 +481,13 @@ function showEnding(endingId = 'ending_check') {
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
 
-    else if (endingId === 'ending_check_TOS') {
+    else if (endingId === 'ending_check_TOS') {
         endTitle.innerText = "Special True End: 轉出與建成的愛情";
         endTitle.style.color = "#0000ffff"; // 金色
         endDesc.innerText = '後來你們開了一個叫做建成幫的幫派，神魔之塔只是起點，接下來你們的試算表將遍佈全部遊戲。\n最終好感度：' + loveScore;
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
-    
+
     else if (endingId === 'ending_true_vba') {
         endTitle.innerText = "True End: 永恆的巨集 (VBA)";
         endTitle.style.color = "#ff7979";
@@ -510,8 +553,12 @@ document.addEventListener('DOMContentLoaded', () => {
     endDesc = document.getElementById('end-desc');
     fileInput = document.getElementById('char-upload');
 
-    menuToggleButton = document.getElementById('menu-toggle-btn');
-    menuContent = document.getElementById('game-menu-content');
+    menuToggleButton = document.getElementById('menu-toggle-btn');
+    menuContent = document.getElementById('game-menu-content');
+
+    // 🌟 獲取名字輸入相關元素 [NEW]
+    playerNameInput = document.getElementById('player-name-input'); // <-- 修正：確保在這裡獲取
+    startGameButton = document.getElementById('start-game-btn'); // <-- 修正：確保在這裡獲取
 
     // 🌟 獲取遊戲容器 (用於翻轉)
     gameContainer = document.getElementById('game-container');
@@ -526,9 +573,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     dialogueBox.addEventListener('click', skipTyping);
 
-    // 🌟 新增：綁定菜單切換事件
-    menuToggleButton.addEventListener('click', toggleMenu);
+    // 🌟 新增：綁定菜單切換事件
+    menuToggleButton.addEventListener('click', toggleMenu);
 
+    // 🌟 修正：確保遊戲開始按鈕事件綁定在 DOMContentLoaded 後
+    if (startGameButton) {
+        startGameButton.addEventListener('click', startGame);
+    }
 });
 
 // ----------------------------------------------------
@@ -536,13 +587,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // ----------------------------------------------------
 
 function toggleMenu() {
-    // 檢查當前的 display 狀態，並切換它
-    if (menuContent.style.display === 'flex' || menuContent.style.display === 'block') {
-        menuContent.style.display = 'none';
-    } else {
-        // 為了讓內容垂直排列，我們可以使用 'flex' 或 'block'
-        menuContent.style.display = 'block'; 
-    }
+    // 檢查當前的 display 狀態，並切換它
+    if (menuContent.style.display === 'flex' || menuContent.style.display === 'block') {
+        menuContent.style.display = 'none';
+    } else {
+        // 為了讓內容垂直排列，我們可以使用 'flex' 或 'block'
+        menuContent.style.display = 'block';
+    }
 }
 
 // ----------------------------------------------------
