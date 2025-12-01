@@ -510,6 +510,6 @@ exports.handler = async (event, context) => {
             'Access-Control-Allow-Origin': '*' 
         },
         // 只回傳主線劇本
-        body: JSON.stringify(script_data.JSON), 
+        body: JSON.stringify(main_script), 
     };
 };
