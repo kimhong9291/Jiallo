@@ -434,7 +434,7 @@ function showEnding(endingId = 'ending_check') {
     if (endingId === 'special_ending_check_塔批') {
         endTitle.innerText = "Special End: 塔批的末路";
         endTitle.style.color = "#FFD700"; // 金色
-        endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：' + loveScore;
+        endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：-20130128';
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
 
