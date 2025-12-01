@@ -1,7 +1,3 @@
-import { main_script } from './script_data.js';//調用劇本
-import { script_tosLine } from './script_data_tos.js';
-const script = [...main_script, ...script_tosLine];
-
 // 遊戲狀態
 let loveScore = 0;
 let currentSceneId = 'scene_start';
@@ -34,6 +30,37 @@ let startGameButton;
 
 // 🌟 遊戲容器 (用於翻轉)
 let gameContainer;
+
+let script = []; 
+
+async function loadAndStartGame() {
+    try {
+        // 🌟 使用 Promise.all 同時發出兩個請求 🌟
+        const [mainResponse, tosResponse] = await Promise.all([
+            fetch('/.netlify/functions/script_data'),
+            fetch('/.netlify/functions/script_data_tos'), // 呼叫第一個接口
+               // 呼叫第二個接口
+        ]);
+
+        if (!mainResponse.ok || !tosResponse.ok) {
+            throw new Error('部分或全部劇本伺服器函數載入失敗');
+        }
+
+        // 獨立解析 JSON 資料
+        const mainData = await mainResponse.json();
+        const tosData = await tosResponse.json();
+        
+        // 🌟 合併所有劇本 🌟
+        script = [...mainData, ...tosData]; 
+        
+        // 開始遊戲
+        startGame(script);
+
+    } catch (error) {
+        console.error("無法載入遊戲劇本！", error);
+        alert("遊戲載入失敗，無法取得劇本資料。");
+    }
+}
 
 
 // ----------------------------------------------------
@@ -578,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 🌟 修正：確保遊戲開始按鈕事件綁定在 DOMContentLoaded 後
     if (startGameButton) {
-        startGameButton.addEventListener('click', startGame);
+        startGameButton.addEventListener('click', loadAndStartGame);
     }
 });
 

@@ -501,3 +501,15 @@ export const main_script = [
         ]
     },
 ]
+
+exports.handler = async (event, context) => {
+    return {
+        statusCode: 200,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*' 
+        },
+        // 只回傳主線劇本
+        body: JSON.stringify(script_data.JSON), 
+    };
+};
