@@ -1,4 +1,4 @@
-export const main_script = [
+const main_script = [
     // -------------------- 初始場景 (保留) --------------------
     // 「」
     {
