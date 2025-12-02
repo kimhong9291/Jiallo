@@ -392,60 +392,54 @@ function showScene(id) {
 
 function startGame() {
 
-    // 1. 處理玩家名字輸入 [MODIFIED]
-    // 🌟 修正：先檢查 playerNameInput 是否已經在 DOMContentLoaded 中獲取
+    // 1. 處理玩家名字輸入
     if (!playerNameInput) {
         playerNameInput = document.getElementById('player-name-input');
     }
     
-    let inputName = playerNameInput ? playerNameInput.value.trim() : "";
-    if (inputName) {
-        // 使用玩家輸入的名字
-        playerName = inputName;
-    } else {
-        // 使用預設名字
-        playerName = "你";
-    }
+    let inputName = playerNameInput ? playerNameInput.value.trim() : "";
+    if (inputName) {
+        playerName = inputName;
+    } else {
+        playerName = "你";
+    }
 
-    loveScore = 0;
-    currentSceneId = 'scene_start';
-    currentStepIndex = 0;
-    visitedScenes.clear();
-    updateScore();
-    startScreen.style.display = 'none';
-    endScreen.style.display = 'none';
-    dialogueBox.style.display = 'block';
+    // 2. 重置遊戲狀態 (這裡只需要重置變數，不要操作 DOM 的 display 屬性)
+    loveScore = 0;
+    currentSceneId = 'scene_start';
+    currentStepIndex = 0;
+    visitedScenes.clear();
+    updateScore();
+    endScreen.style.display = 'none'; // 確保結局畫面隱藏
 
-    // 確保 nextStep 監聽器在 startGame 時被添加
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.addEventListener('click', nextStep);
+    // 確保 nextStep 監聽器在 startGame 時被添加
+    dialogueBox.removeEventListener('click', nextStep);
+    dialogueBox.addEventListener('click', nextStep);
 
-    const audio = document.getElementById('bgm');
-    if (audio) {
-        audio.volume = 0.3;
-        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
-    }
+    // BGM 播放邏輯 (保留)
+    const audio = document.getElementById('bgm');
+    if (audio) {
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
+    }
 
-    // 🌟 【核心修改：觸發動畫並延遲主流程】 🌟
+    // 🌟 【正確流程：觸發動畫並延遲主流程】 🌟
     
-    // 讓開始畫面進入動畫狀態 (例如：熊的動畫，假設動畫持續 2 秒)
+    // 1. 讓開始畫面進入動畫狀態 (假設動畫持續 2 秒)
     startScreen.classList.add('animate-intro'); 
 
-    // 設置延遲，等待動畫結束（請根據您的動畫實際時間調整 2000ms）
-    const ANIMATION_DURATION = 2000; // 2 秒
+    const ANIMATION_DURATION = 2000; // 2 秒 (請根據您的 CSS 動畫時間調整)
 
+    // 2. 延遲執行遊戲主要流程
     setTimeout(() => {
-        // 1. 動畫結束後，隱藏開始畫面，顯示對話框容器
-        startScreen.style.display = 'none'; 
-        dialogueBox.style.display = 'block'; 
+        // 動畫結束後：
+        startScreen.style.display = 'none'; // 隱藏開始畫面
+        dialogueBox.style.display = 'block'; // 顯示對話框容器
 
-        // 2. 啟動場景載入 (這將觸發 Flip 動畫 和 Chapter Title 顯示)
+        // 啟動場景載入 (這將啟動 Flip 動畫 和 Chapter Title 顯示)
         showScene('scene_start');
         
     }, ANIMATION_DURATION);
-
-    // 這裡使用 _loadSceneContent 直接載入，因為遊戲開始不需要轉場效果
-    showScene('scene_start');
 }
 
 function processTextForName(text) {
