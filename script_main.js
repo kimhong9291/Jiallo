@@ -1,4 +1,4 @@
-const main_script_chap1 = [ //img
+main_script_chap1 = [ //img
     // -------------------- 初始場景 (保留) --------------------
     // 「」
     {   

@@ -1,4 +1,4 @@
-const script_tosLine=[
+script_tosLine=[
     {
         id: '神魔之塔1',
         steps: [

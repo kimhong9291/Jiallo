@@ -43,10 +43,8 @@ let script = [];
  */
 // main.js 中 loadAndStartGame 函式
 async function loadAndStartGame() {
-    // 🌟 將路徑修改為不包含 data/ 的路徑 (因為檔案已在根目錄) 🌟
-    // 注意：我假設您檔案的副檔名是 .json，而不是您清單中的 .js
     const SCRIPT_PATH_MAIN = './script_main.js'; 
-    const SCRIPT_PATH_TOS = './script_tos.js';   
+    const SCRIPT_PATH_TOS = './script_tos.js'; 
 
 
     try {
