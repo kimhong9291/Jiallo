@@ -553,4 +553,4 @@ exports.handler = async (event, context) => {
         // 只回傳主線劇本
         body: JSON.stringify(main_script_chap1), 
     };
-};
+}

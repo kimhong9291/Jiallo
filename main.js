@@ -41,10 +41,13 @@ let script = [];
  * 載入本地劇本檔案並啟動遊戲
  * 假設劇本檔案位於 /data/script_main.json 和 /data/script_tos.json
  */
+// main.js 中 loadAndStartGame 函式
 async function loadAndStartGame() {
-    // 🌟 核心：確認使用了正確的相對路徑 🌟
-    const SCRIPT_PATH_MAIN = './script_main.json';
-    const SCRIPT_PATH_TOS = './script_tos.json';
+    // 🌟 將路徑修改為不包含 data/ 的路徑 (因為檔案已在根目錄) 🌟
+    // 注意：我假設您檔案的副檔名是 .json，而不是您清單中的 .js
+    const SCRIPT_PATH_MAIN = './script_main.js'; 
+    const SCRIPT_PATH_TOS = './script_tos.js';   
+
 
     try {
         const [mainResponse, tosResponse] = await Promise.all([
@@ -74,6 +77,7 @@ async function loadAndStartGame() {
     } catch (error) {
         console.error("無法載入遊戲劇本！", error);
         // 提示用戶檢查文件路徑和伺服器（如果本地測試需要伺服器，如 Live Server）
+        // 🚨 注意：這裡使用了 alert()，在實際執行環境中可能需要替換為自定義模態框。
         alert(`遊戲載入失敗。請確認劇本檔案存在且路徑正確：${error.message}`);
     }
 }
@@ -137,6 +141,7 @@ function typeWriterEffect(targetElement, fullText, callback = () => { }) {
 
             let currentSpeed = typingSpeed;
             let textBefore = currentFullText.substring(0, currentTypingIndex);
+            // 嘗試檢測括號內的文字，以稍微加快速度
             if (textBefore.includes('（') && !textBefore.includes('）')) {
                 currentSpeed = 20;
             }
@@ -161,14 +166,17 @@ function skipTyping() {
 
 
 // ----------------------------------------------------
-// 遊戲流程控制 (保持不變)
+// 遊戲流程控制 
 // ----------------------------------------------------
 
 function nextStep(event) {
+    // 防止在打字時觸發下一步
     if (isTypingActive) {
+        skipTyping(); // 點擊時跳過打字，而非直接進入下一步
         return;
     }
 
+    // 如果選項容器中有選項，則等待用戶選擇
     if (optionsContainer.childElementCount > 0) return;
 
     const scene = script.find(s => s.id === currentSceneId);
@@ -180,35 +188,42 @@ function nextStep(event) {
     if (currentStepIndex < scene.steps.length) {
         const step = scene.steps[currentStepIndex];
 
+        // 設置角色圖片
         if (step.img) {
             characterImg.src = step.img;
         }
 
+        // 移除點擊事件，避免重複觸發
         dialogueBox.removeEventListener('click', nextStep);
 
+        // 設置對話框名稱
         nameTag.innerText = step.name;
 
+        // 處理玩家名字替換
         let textSource = step.text;
         if (step.name === '你') {
             nameTag.innerText = playerName;
         }
         const textToDisplay = processTextForName(textSource);
 
+        // 移除舊的提示
         const oldTip = document.getElementById('next-step-tip');
         if (oldTip) oldTip.remove();
 
+        // 啟動逐字效果
         typeWriterEffect(textContent, textToDisplay, () => {
             currentStepIndex++;
             if (currentStepIndex === scene.steps.length) {
+                // 如果是最後一步，顯示選項
                 displayOptions(scene.options);
             } else {
+                // 如果不是最後一步，重新綁定事件並顯示提示
+                // 使用 { once: true } 確保只監聽一次點擊，避免點擊事件累積
                 dialogueBox.addEventListener('click', nextStep, { once: true });
 
                 const tip = document.createElement('div');
                 tip.id = 'next-step-tip';
-                tip.style.fontSize = "12px";
-                tip.style.color = "#ccc";
-                tip.style.textAlign = "right";
+                tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
                 tip.innerText = "▼ 點擊繼續";
                 textContent.appendChild(tip);
             }
@@ -242,13 +257,12 @@ function playReactions(reactions, nextSceneId) {
                         dialogueBox.removeEventListener('click', nextReactionHandler);
                         showNextReaction();
                     };
+                    // 點擊對話框進入下一反應
                     dialogueBox.addEventListener('click', nextReactionHandler, { once: true });
 
                     const tip = document.createElement('div');
                     tip.id = 'next-step-tip';
-                    tip.style.fontSize = "12px";
-                    tip.style.color = "#ccc";
-                    tip.style.textAlign = "right";
+                    tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
                     tip.innerText = "▼ 點擊繼續反應";
                     textContent.appendChild(tip);
 
@@ -268,7 +282,8 @@ function handleReactionEnd(nextSceneId) {
     const oldTip = document.getElementById('next-step-tip');
     if (oldTip) oldTip.remove();
 
-    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba' || nextSceneId === 'ending_check_TOS' || nextSceneId === 'special_ending_check_塔批';
+    // 檢查是否是結局場景
+    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba' || nextSceneId === 'ending_check_TOS' || nextSceneId === 'special_ending_check_塔批' || nextSceneId === 'special_ending_check_TOSS';
 
     const handler = () => {
         dialogueBox.removeEventListener('click', handler);
@@ -279,13 +294,12 @@ function handleReactionEnd(nextSceneId) {
         }
     };
 
+    // 點擊進入結局或下一場景
     dialogueBox.addEventListener('click', handler, { once: true });
 
     const tip = document.createElement('div');
     tip.id = 'next-step-tip';
-    tip.style.fontSize = "12px";
-    tip.style.color = "#ccc";
-    tip.style.textAlign = "right";
+    tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
     tip.innerText = isEnding ? "▼ 點擊查看結局" : "▼ 點擊進入下一場景";
     textContent.appendChild(tip);
 }
@@ -294,7 +308,7 @@ function displayOptions(options) {
     optionsContainer.innerHTML = '';
     options.forEach(option => {
         const btn = document.createElement('div');
-        btn.className = 'option-btn';
+        btn.className = 'option-btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-3 px-6 border border-gray-400 rounded-lg shadow-md transition duration-300 cursor-pointer text-center';
         btn.innerText = option.text;
         btn.onclick = () => handleChoice(option);
         optionsContainer.appendChild(btn);
@@ -311,6 +325,7 @@ function _loadSceneContent(id) {
 
     visitedScenes.add(id);
 
+    // 重新初始化 nextStep 監聽器
     dialogueBox.removeEventListener('click', nextStep);
     dialogueBox.addEventListener('click', nextStep);
 
@@ -318,7 +333,7 @@ function _loadSceneContent(id) {
 }
 
 // ----------------------------------------------------
-// 【✨ 新增：關門動畫核心邏輯 ✨】
+// 【✨ 關門動畫核心邏輯 ✨】
 // ----------------------------------------------------
 
 function runDoorTransition(sceneId) {
@@ -335,9 +350,9 @@ function runDoorTransition(sceneId) {
     doorTransition.style.pointerEvents = 'auto';
     doorTransition.classList.add('closing');
 
-    // 2. 等待門關閉 (一半的時間，確保畫面被完全遮擋)
+    // 2. 等待門關閉 (確保畫面被完全遮擋)
     setTimeout(() => {
-        // A. 載入場景內容
+        // A. 清空並載入場景內容
         textContent.innerText = '';
         nameTag.innerText = '';
         optionsContainer.innerHTML = '';
@@ -364,7 +379,7 @@ function runDoorTransition(sceneId) {
 }
 
 // ----------------------------------------------------
-// 【✨ 替換：遊戲流程控制 - showScene (移除 3D) ✨】
+// 遊戲流程控制 - showScene 
 // ----------------------------------------------------
 
 function showScene(id) {
@@ -396,7 +411,7 @@ function showScene(id) {
 
 
 // ----------------------------------------------------
-// 【✨ 替換：遊戲流程控制 - startGame (新的開場流程) ✨】
+// 遊戲流程控制 - startGame (新的開場流程) 
 // ----------------------------------------------------
 
 function startGame() {
@@ -421,7 +436,7 @@ function startGame() {
     updateScore();
     endScreen.style.display = 'none';
 
-    // 舊的 3D 翻轉邏輯已移除
+    // 移除舊的 3D 翻轉邏輯
     if (gameContainer) {
         gameContainer.classList.remove('flip-out');
     }
@@ -433,7 +448,8 @@ function startGame() {
     const audio = document.getElementById('bgm');
     if (audio) {
         audio.volume = 0.3;
-        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
+        // 嘗試播放，但在 Chrome 等瀏覽器中可能需要使用者互動才能成功
+        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。", e));
     }
 
     // 🌟 【Start Screen 淡出 $\to$ Chapter Title $\to$ 關門 $\to$ Scene】 🌟
@@ -482,10 +498,12 @@ function getNextScene(next) {
 
 function updateScore() {
     scoreDisplay.innerText = loveScore;
+    // 額外添加 Tailwind CSS 樣式來美化分數顯示
+    scoreDisplay.className = `font-bold text-lg p-1 rounded-md transition-colors duration-300 ${loveScore >= 100 ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-700'}`;
 }
 
 function handleChoice(option) {
-    loveScore = Math.min(loveScore + option.score, MAX_LOVE_SCORE);;
+    loveScore = Math.min(loveScore + option.score, MAX_LOVE_SCORE);
     updateScore();
     optionsContainer.innerHTML = '';
 
@@ -515,8 +533,15 @@ function showEnding(endingId = 'ending_check') {
     isTypingActive = false;
     clearTimeout(typingTimeout);
 
+    // 確保所有事件監聽器被移除
     dialogueBox.removeEventListener('click', nextStep);
     dialogueBox.removeEventListener('click', skipTyping);
+    
+    // 移除所有可能存在的點擊進入下一場景的事件監聽器
+    const cloneDialogueBox = dialogueBox.cloneNode(true);
+    dialogueBox.parentNode.replaceChild(cloneDialogueBox, dialogueBox);
+    dialogueBox = cloneDialogueBox;
+    dialogueBox.addEventListener('click', skipTyping); // 重新綁定 skipTyping
 
     dialogueBox.style.display = 'none';
     optionsContainer.innerHTML = '';
@@ -620,11 +645,13 @@ document.addEventListener('DOMContentLoaded', () => {
         resetFileInput();
         uploadedImgDisplay.style.display = 'none';
     });
+    // 對話框點擊主要用於跳過打字效果
     dialogueBox.addEventListener('click', skipTyping);
 
     menuToggleButton.addEventListener('click', toggleMenu);
 
     if (startGameButton) {
+        // 點擊開始遊戲按鈕時，載入劇本並啟動遊戲
         startGameButton.addEventListener('click', loadAndStartGame);
     }
 });
@@ -634,6 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ----------------------------------------------------
 
 function toggleMenu() {
+    // 簡單的顯示/隱藏切換
     if (menuContent.style.display === 'flex' || menuContent.style.display === 'block') {
         menuContent.style.display = 'none';
     } else {
@@ -678,5 +706,7 @@ function displayChapterTitle(title) {
 // ----------------------------------------------------
 // 【✨ 關鍵公開：讓 HTML 的 onclick 可以呼叫 ✨】
 // ----------------------------------------------------
+// 將核心函數公開給全局 window 對象，以便 HTML 中的 onclick 事件能直接調用
 window.startGame = startGame;
 window.restartGame = restartGame;
+window.loadAndStartGame = loadAndStartGame;
