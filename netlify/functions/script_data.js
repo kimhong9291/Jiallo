@@ -500,6 +500,46 @@ const main_script = [
             },
         ]
     },
+
+    {
+        id: '29_Silver',
+        steps: [
+            { name: "旁白", text: "（這是最後的關鍵時刻...）" },
+            { name: "林建成", text: "林建成拿出一份試算表，上面都是滿滿的神魔之塔隊伍，就和彙整串一樣。" },
+            { name: "旁白", text: "你看見了sheet欄目有一個特殊的名字，名曰：？？之塔" },
+            { name: "旁白", text: "點開一看，那邊只有一行隊伍，但是缺少了隊長戰友，隊員格則是滿滿的建成照片，而優先度那裡也是空白的。" },
+            { name: "旁白", text: "經過許久的相處，你早已知道這張試算表對你對他而言到底是什麼。" },
+        ],
+        options: [
+            {
+                text: "「？？分別代表的是你和我嗎？」", score: 0, next: 'ending_check_TOSS',
+                reaction: [{ name: "建成", text: "「沒錯！如果我是惡魔，那你就是我的神，我們相輔相成，我們已鑄偉業。」" },
+                    { name: "建成", text: "「在神魔之塔中，這將是一個不同以往的浪漫故事。」" }
+                ]
+            },
+            {
+                text: "「空白是我的位置嗎？」", score: 0, next: 'ending_check_TOSS',
+                reaction: [{ name: "建成", text: "「隊員無論如何多強，但只有隊長才能讓他們發揚光大。」" },
+                { name: "建成", text: "「而你對我而言，是我的隊長。」" },
+                ]
+            },
+            {
+                text: "默默在[優先度]欄填寫優先度0", score: 0, next: 'ending_check_TOSS',
+                reaction:
+                    [{ name: "建成", text: "建成對此感到開心。" },
+                    { name: "建成", text: "「我見過許多的優先1,2,3。」" },
+                    { name: "建成", text: "「但我知道你一定會寫0，因為優先度0是規矩的例外。」" },
+                    { name: "建成", text: "「我和你的優先度一直都是最高的，你說對吧？」" },]
+            },
+            {
+                text: "你給我表是要你坐在我身上喘哦！？", score: 0, next: 'ending_check_TOS',
+                reaction:
+                    [{ name: "建成", text: "建成已經沉醉在這份諾言中。" },
+                    { name: "旁白", text: "至此這是第一章對第二章的喘承。" },
+                    ]
+            },
+        ]
+    },
 ]
 
 exports.handler = async (event, context) => {

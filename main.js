@@ -424,6 +424,9 @@ function getNextScene(next) {
         if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
             return '29_A';
         }
+        else if (loveScore >= 131 && visitedScenes.has('神魔之塔4') && (playerName=="白銀" || playerName=="白银")) {
+            return '29_Silver';
+        }
         else { return '29'; }// 你的高好感度特殊場景 ID
 
 
@@ -505,6 +508,12 @@ function showEnding(endingId = 'ending_check') {
         endTitle.innerText = "Special End: 塔批的末路";
         endTitle.style.color = "#FFD700"; // 金色
         endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：-20130128';
+        characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
+    }
+    else if (endingId === 'special_ending_check_TOSS') {
+        endTitle.innerText = "Special End: 幫會的崛起";
+        endTitle.style.color = "#FFD700"; // 金色
+        endDesc.innerText = '你們決定回到神魔之塔，在神劍闖江湖的合作中開啟了新的時代\n最終好感度：'+loveScore;
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
 
