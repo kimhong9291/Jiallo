@@ -29,8 +29,12 @@ body {
     overflow: hidden;
 
     /* ❌ 移除所有 3D 相關樣式 */
-    /* transform-style: preserve-3d; transition: transform 0.8s ease-in-out; transform-origin: center; */
-    transition: none; /* 移除過渡，交給門動畫處理 */
+    transition: none; 
+}
+
+/* 容器翻頁動畫樣式 (已停用，但保留 class 以防萬一) */
+#game-container.flip-out {
+    /* 這裡不再有效果 */
 }
 
 /* 背景裝飾 (Excel 網格風格) */
@@ -70,7 +74,8 @@ body {
     width: 50%;
     height: 100%;
     background-color: #34495e; /* 關門時的顏色 */
-    transition: transform 1s cubic-bezier(0.65, 0.05, 0.36, 1); /* 平滑的過渡 */
+    /* 1.0s 轉換時間，用於 JS 中的 setTimeout */
+    transition: transform 1.0s cubic-bezier(0.65, 0.05, 0.36, 1); 
 }
 
 .left-door {
@@ -79,8 +84,8 @@ body {
 }
 
 .right-door {
-    right: 0;
-    transform: translateX(0%); /* 預設在右邊 */
+    right: 50%; /* 修正：讓右門從 50% 位置開始 */
+    transform: translateX(100%); /* 預設在右邊，向右推 100% (即推到 100% 寬度外) */
 }
 
 /* 觸發關門動畫的 Class */
@@ -90,11 +95,11 @@ body {
 }
 
 #door-transition.closing .left-door {
-    transform: translateX(100%); /* 左門向右移動 50% 的畫面寬度 */
+    transform: translateX(100%); /* 左門向右移動 100% (推到 50% 寬度) */
 }
 
 #door-transition.closing .right-door {
-    transform: translateX(-100%); /* 右門向左移動 50% 的畫面寬度 */
+    transform: translateX(0%); /* 右門從右邊收回 100% (收到 50% 寬度) */
 }
 
 /* -------------------- III. Start/End Screen 樣式 -------------------- */
@@ -107,7 +112,7 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(255, 240, 245, 1);
-    z-index: 999; /* 門動畫 z-index 9999，這裡降低 */
+    z-index: 999; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -123,8 +128,10 @@ body {
 
 /* 觸發 Start Screen 動畫的類別 */
 #start-screen.animate-intro {
-    animation: introFadeOut 0.5s ease-out forwards; /* 簡化為 0.5s 淡出 */
+    animation: introFadeOut 0.5s ease-out forwards; 
 }
+
+/* ... (Start/End Screen 內部樣式，如 h1, .action-btn 保持不變) ... */
 
 h1 {
     font-size: 5vw;
@@ -178,52 +185,164 @@ h1 {
 }
 
 #menu-toggle-btn {
-    /* ... 保持不變 ... */
+    padding: 1.5vh 2vw;
+    font-size: 1.5vw;
+    background-color: #f1c40f;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1vh;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+#menu-toggle-btn:hover {
+    background-color: #f39c12;
+}
+
 #game-menu-content {
-    /* ... 保持不變 ... */
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    width: 25vw;
+    text-align: left;
 }
+
+#upload-section {
+    position: static;
+    margin-bottom: 1.5vh;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1.2vw;
+    z-index: auto;
+}
+
+#music-player {
+    position: static;
+    margin-top: 1.5vh;
+    border-top: 1px solid #eee;
+    padding-top: 1.5vh;
+    z-index: auto;
+}
+
+#music-player label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5vh;
+}
+
+/* 核心修正：預設隱藏 audio 元素 */
 #music-player audio {
-    /* ... 保持不變 ... */
+      display: none;
 }
-/* ... 菜單細節樣式保持不變 ... */
+
+#game-menu-content[style*="display: block"] #music-player audio {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.5vh;
+}
 
 
 /* -------------------- VI. 圖片和角色立繪 -------------------- */
 
 #char-img-display {
-    /* ... 保持不變 ... */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 80%;
+    max-height: 80%;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    z-index: 0;
+    display: none;
 }
 
 #character-img {
-    /* ... 保持不變 ... */
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 90vh;
+    z-index: 1;
+    transition: filter 0.3s;
 }
 
 /* -------------------- VII. 對話框及內容 -------------------- */
 
 #dialogue-box {
-    /* ... 保持不變 ... */
+    position: absolute;
+    bottom: 3vh;
+    left: 5vw;
+    right: 5vw;
+    height: 25vh;
+    background: rgba(0, 0, 0, 0.8);
+    border: 0.3vw solid #fff;
+    border-radius: 1vw;
+    z-index: 10;
+    padding: 2vw;
+    color: white;
+    display: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
 #name-tag {
-    /* ... 保持不變 ... */
+    font-size: 2.5vw;
+    font-weight: bold;
+    color: #ffb7b2;
+    margin-bottom: 0.5vh;
+    margin-top: -1.5vh;
 }
 
 #text-content {
-    /* ... 保持不變 ... */
+    font-size: 1.8vw;
+    line-height: 1.5;
+    min-height: 10vh;
 }
 
 /* -------------------- VIII. 選項/Chapter Overlay -------------------- */
 
 #options-container {
-    /* ... 保持不變 ... */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    width: 60vw;
+    text-align: center;
 }
 
 .option-btn {
-    /* ... 保持不變 ... */
+    background: rgba(255, 255, 255, 0.95);
+    border: 0.3vw solid #ff6b6b;
+    padding: 1.5vh;
+    text-align: center;
+    font-size: 2vw;
+    cursor: pointer;
+    border-radius: 5vh;
+    transition: all 0.2s;
+    color: #333;
+    font-weight: bold;
 }
 
-/* Chapter Title Overlay 樣式 (現在 Chapter Title 獨立顯示，不參與 3D 翻轉) */
+.option-btn:hover {
+    background: #ff6b6b;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Chapter Title Overlay 樣式 (現在 Chapter Title 獨立顯示，不再參與 3D 翻轉) */
 #chapter-title-overlay {
     position: absolute;
     top: 0;
@@ -232,17 +351,17 @@ h1 {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     color: white;
-    display: none; /* 預設隱藏，由 JS 控制顯示 */
+    display: flex; 
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 4vw; 
     font-weight: bold;
-    z-index: 101; /* 位於 Start Screen (999) 和 Door (9999) 之間 */
-    opacity: 1; /* 顯示時不透明 */
+    z-index: 101; 
+    opacity: 0; /* 預設為 0，由 JS 控製淡入/淡出 */
     transition: opacity 0.5s ease-in-out;
     text-align: center;
     text-shadow: 0 0 10px #fff;
     pointer-events: none;
-    /* ❌ 移除 3D 相關樣式 transform: rotateY(-180deg); */
+    /* ❌ 移除 3D 相關樣式 */
 }
