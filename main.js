@@ -31,9 +31,9 @@ let startGameButton;
 let gameContainer;
 
 // 🌟 新增：門動畫 DOM 元素
-let doorTransition; 
+let doorTransition;
 
-let script = []; 
+let script = [];
 
 
 
@@ -42,36 +42,32 @@ let script = [];
  * 假設劇本檔案位於 /data/script_main.json 和 /data/script_tos.json
  */
 async function loadAndStartGame() {
-    // 🌟 核心修改：從本地路徑載入 JSON 檔案 🌟
-    const SCRIPT_PATH_MAIN = './data/script_main.json';
-    const SCRIPT_PATH_TOS = './data/script_tos.json';
+    // 🌟 核心：確認使用了正確的相對路徑 🌟
+    const SCRIPT_PATH_MAIN = './script_main.json';
+    const SCRIPT_PATH_TOS = './script_tos.json';
 
     try {
-        // 使用 Promise.all 同時發出兩個本地文件請求
         const [mainResponse, tosResponse] = await Promise.all([
             fetch(SCRIPT_PATH_MAIN),
-            fetch(SCRIPT_PATH_TOS), 
+            fetch(SCRIPT_PATH_TOS),
         ]);
 
         if (!mainResponse.ok) {
-            // 提供更詳細的錯誤信息
+            // 這會捕獲 404 錯誤，並拋出您看到的訊息
             throw new Error(`主劇本載入失敗 (${mainResponse.status}): ${SCRIPT_PATH_MAIN}`);
-        }
-        if (!tosResponse.ok) {
-            throw new Error(`TOS劇本載入失敗 (${tosResponse.status}): ${SCRIPT_PATH_TOS}`);
         }
 
         // 獨立解析 JSON 資料
         const mainData = await mainResponse.json();
         const tosData = await tosResponse.json();
-        
+
         // 合併所有劇本 
         // 確保 mainData 和 tosData 都是陣列
         if (!Array.isArray(mainData) || !Array.isArray(tosData)) {
-             throw new Error("劇本檔案格式錯誤，預期為 JSON 陣列。");
+            throw new Error("劇本檔案格式錯誤，預期為 JSON 陣列。");
         }
-        script = [...mainData, ...tosData]; 
-        
+        script = [...mainData, ...tosData];
+
         // 開始遊戲
         startGame(script);
 
@@ -194,15 +190,15 @@ function nextStep(event) {
 
         let textSource = step.text;
         if (step.name === '你') {
-            nameTag.innerText = playerName; 
+            nameTag.innerText = playerName;
         }
-        const textToDisplay = processTextForName(textSource); 
+        const textToDisplay = processTextForName(textSource);
 
         const oldTip = document.getElementById('next-step-tip');
         if (oldTip) oldTip.remove();
 
         typeWriterEffect(textContent, textToDisplay, () => {
-            currentStepIndex++; 
+            currentStepIndex++;
             if (currentStepIndex === scene.steps.length) {
                 displayOptions(scene.options);
             } else {
@@ -236,7 +232,7 @@ function playReactions(reactions, nextSceneId) {
             const oldTip = document.getElementById('next-step-tip');
             if (oldTip) oldTip.remove();
 
-            const textToDisplay = processTextForName(step.text); 
+            const textToDisplay = processTextForName(step.text);
 
             typeWriterEffect(textContent, textToDisplay, () => {
                 reactionIndex++;
@@ -333,11 +329,11 @@ function runDoorTransition(sceneId) {
     }
 
     const DOOR_TRANSITION_TIME = 1000; // 1.0秒 (與 CSS 保持一致)
-    
+
     // 1. 關門動畫開始
     doorTransition.style.visibility = 'visible';
     doorTransition.style.pointerEvents = 'auto';
-    doorTransition.classList.add('closing'); 
+    doorTransition.classList.add('closing');
 
     // 2. 等待門關閉 (一半的時間，確保畫面被完全遮擋)
     setTimeout(() => {
@@ -347,22 +343,22 @@ function runDoorTransition(sceneId) {
         optionsContainer.innerHTML = '';
         const oldTip = document.getElementById('next-step-tip');
         if (oldTip) oldTip.remove();
-        
+
         _loadSceneContent(sceneId);
-        
+
 
         // B. 延遲後開門
         setTimeout(() => {
             // 3. 開門動畫開始
             doorTransition.classList.remove('closing');
-            
+
             // 4. 等待門完全打開後，隱藏容器
             setTimeout(() => {
                 doorTransition.style.visibility = 'hidden';
                 doorTransition.style.pointerEvents = 'none';
             }, DOOR_TRANSITION_TIME + 50);
 
-        }, 100); 
+        }, 100);
 
     }, DOOR_TRANSITION_TIME);
 }
@@ -384,13 +380,13 @@ function showScene(id) {
     if (scene.chapter) {
         // A. 顯示 Chapter 標題 (黑幕)
         displayChapterTitle(scene.chapter); // Chapter 顯示時間約 3.1 秒
-        
+
         // B. 等待 Chapter Title 結束 (大約 3.1 秒)
         setTimeout(() => {
             // C. 啟動關門轉場動畫，並載入下一場景內容
             runDoorTransition(id);
 
-        }, 3100); 
+        }, 3100);
 
     } else {
         // 【流程 B：直接關門 -> Scene】
@@ -409,7 +405,7 @@ function startGame() {
     if (!playerNameInput) {
         playerNameInput = document.getElementById('player-name-input');
     }
-    
+
     let inputName = playerNameInput ? playerNameInput.value.trim() : "";
     if (inputName) {
         playerName = inputName;
@@ -423,8 +419,8 @@ function startGame() {
     currentStepIndex = 0;
     visitedScenes.clear();
     updateScore();
-    endScreen.style.display = 'none'; 
-    
+    endScreen.style.display = 'none';
+
     // 舊的 3D 翻轉邏輯已移除
     if (gameContainer) {
         gameContainer.classList.remove('flip-out');
@@ -441,23 +437,23 @@ function startGame() {
     }
 
     // 🌟 【Start Screen 淡出 $\to$ Chapter Title $\to$ 關門 $\to$ Scene】 🌟
-    
+
     // 1. 讓開始畫面進入淡出動畫狀態 
-    startScreen.classList.add('animate-intro'); 
-    
+    startScreen.classList.add('animate-intro');
+
     // 假設開場淡出動畫持續 0.5 秒 (請根據您的 CSS 調整)
-    const INTRO_FADE_DURATION = 500; 
+    const INTRO_FADE_DURATION = 500;
 
     setTimeout(() => {
         // 動畫結束後：
-        startScreen.style.display = 'none'; 
-        dialogueBox.style.display = 'block'; 
-        
+        startScreen.style.display = 'none';
+        dialogueBox.style.display = 'block';
+
         startScreen.classList.remove('animate-intro'); // 清除 class
 
         // 2. 啟動場景載入 (這會走入 showScene 函式，並啟動 Chapter Title)
         showScene('scene_start');
-        
+
     }, INTRO_FADE_DURATION);
 }
 
@@ -474,12 +470,12 @@ function getNextScene(next) {
         if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
             return '29_A';
         }
-        else if (loveScore >= 131 && visitedScenes.has('神魔之塔4') && (playerName=="白銀" || playerName=="白银")) {
+        else if (loveScore >= 131 && visitedScenes.has('神魔之塔4') && (playerName == "白銀" || playerName == "白银")) {
             return '29_Silver';
         }
         else { return '29'; }
 
-        return next; 
+        return next;
     }
     return next;
 };
@@ -499,7 +495,7 @@ function handleChoice(option) {
     const reactionData = option.reaction;
 
     if (Array.isArray(reactionData)) {
-        playReactions(reactionData, destinationId); 
+        playReactions(reactionData, destinationId);
     } else {
         nameTag.innerText = "林建成";
 
@@ -509,7 +505,7 @@ function handleChoice(option) {
         const reactionText = processTextForName(reactionData);
 
         typeWriterEffect(textContent, reactionText, () => {
-            handleReactionEnd(destinationId); 
+            handleReactionEnd(destinationId);
         });
     }
 }
@@ -528,20 +524,20 @@ function showEnding(endingId = 'ending_check') {
 
     if (endingId === 'special_ending_check_塔批') {
         endTitle.innerText = "Special End: 塔批的末路";
-        endTitle.style.color = "#FFD700"; 
+        endTitle.style.color = "#FFD700";
         endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：-20130128';
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
     else if (endingId === 'special_ending_check_TOSS') {
         endTitle.innerText = "Special End: 幫會的崛起";
-        endTitle.style.color = "#FFD700"; 
-        endDesc.innerText = '你們決定回到神魔之塔，在神劍闖江湖的合作中開啟了新的時代\n最終好感度：'+loveScore;
+        endTitle.style.color = "#FFD700";
+        endDesc.innerText = '你們決定回到神魔之塔，在神劍闖江湖的合作中開啟了新的時代\n最終好感度：' + loveScore;
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
 
     else if (endingId === 'ending_check_TOS') {
         endTitle.innerText = "Special True End: 轉出與建成的愛情";
-        endTitle.style.color = "#0000ffff"; 
+        endTitle.style.color = "#0000ffff";
         endDesc.innerText = '後來你們開了一個叫做建成幫的幫派，神魔之塔只是起點，接下來你們的試算表將遍佈全部遊戲。\n最終好感度：' + loveScore;
         characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
     }
@@ -609,10 +605,10 @@ document.addEventListener('DOMContentLoaded', () => {
     menuContent = document.getElementById('game-menu-content');
 
     playerNameInput = document.getElementById('player-name-input');
-    startGameButton = document.getElementById('start-game-btn'); 
+    startGameButton = document.getElementById('start-game-btn');
 
     gameContainer = document.getElementById('game-container');
-    
+
     // 🌟 新增：獲取門動畫的 DOM 元素
     doorTransition = document.getElementById('door-transition');
 
@@ -671,7 +667,7 @@ function displayChapterTitle(title) {
     setTimeout(() => {
         // 3. 淡出 (Fade Out)
         overlay.style.opacity = 0;
-        
+
         // 4. 動畫結束後移除元素
         setTimeout(() => {
             overlay.style.display = 'none';
