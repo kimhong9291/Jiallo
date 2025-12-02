@@ -2,97 +2,89 @@
 <html lang="zh-Hant">
 
 <head>
-           
-       
     <meta charset="UTF-8">
-           
-       
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>千戀建成 - Excel之戀 (分批播放版)</title>
-           
-       
+    <title>千戀建成 - Excel之戀 (分批播放版)</title>
     <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
+    
     <div id="door-transition">
         <div class="door-half left-door"></div>
         <div class="door-half right-door"></div>
     </div>
 
-        <div id="game-container">
-                        <div class="bg-grid"></div>
+    <div id="game-container">
+        <div class="bg-grid"></div>
+        
+        <div id="chapter-title-overlay" style="display: none;"></div> 
 
-                <div id="game-menu-wrapper">
-                        <button id="menu-toggle-btn">⚙️ 選單</button>
+        <div id="game-menu-wrapper">
+            <button id="menu-toggle-btn">⚙️ 選單</button>
 
-                        <div id="game-menu-content">
-                                <div id="upload-section">
-                                        <label for="char-upload">上傳/替換角色圖片</label>
-                                        <input type="file" id="char-upload" accept="image/*">
-                                        <button id="clear-img-button">清除圖片</button>
-                                    </div>
+            <div id="game-menu-content">
+                <div id="upload-section">
+                    <label for="char-upload">上傳/替換角色圖片</label>
+                    <input type="file" id="char-upload" accept="image/*">
+                    <button id="clear-img-button">清除圖片</button>
+                </div>
 
-                                <div id="music-player">
-                                        <label for="bgm">背景音樂</label>
-                                        <audio id="bgm" loop controls>
-                                               
+                <div id="music-player">
+                    <label for="bgm">背景音樂</label>
+                    <audio id="bgm" loop controls>
                         <source src="./media/千恋＊万花 主題歌「恋ひ恋ふ縁」.mp4" type="audio/mp4">
-                                                您的瀏覽器不支持 audio 元素。
-                                           
+                        您的瀏覽器不支持 audio 元素。
                     </audio>
-                                    </div>
+                </div>
 
-                                <div id="restartGame-button">
-                                                            <div
-                        style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">重新開始</div>
-                                        <button id="interrupt-btn" class="menu-btn" onclick="restartGame()">中斷
-                        (回到開始)</button>
-                                    </div>
-                            </div>
-                    </div>
-
-                        <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
-
-                <img id="character-img"
-            src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"                    
-            alt="林建成">
-                <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display"
-            style="display: none;">
-
-                <div id="dialogue-box">
-                                <div id="name-tag">林建成</div>
-                                <div id="text-content">...</div>
-                            </div>
-
-                <div id="options-container"></div>
-
-                <div id="start-screen" style="display: flex;">
-                        <h1>千戀建成 - Excel之戀</h1>
-            <h3>那個...你的Excel寫錯了</h3>
-
-                        <p>請輸入你的名字 (可選，留空則使用「你」):</p>
-
-                        <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"    
-                               
-                style="margin: 10px 0; padding: 10px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 5px;">
-
-                        <button id="start-game-btn" class="option-btn"
-                style="padding: 15px 30px; font-size: 1.5em; margin-top: 20px;">
-                                開始遊戲
-                            </button>
-
-                   
+                <div id="restartGame-button">
+                    <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">重新開始</p>
+                    <button id="interrupt-btn" class="action-btn" onclick="restartGame()">
+                        中斷 (回到開始)
+                    </button>
+                </div>
+            </div>
         </div>
 
-                <div id="end-screen" style="display: none;">
-                                <h1 id="end-title">結局</h1>
-                                <p id="end-desc">...</p>
-                                <button class="action-btn" onclick="restartGame()">重新開始</button>
-                    </div>
+        <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
 
-            </div>        
-       
+        <img id="character-img"
+            src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"                    
+            alt="林建成">
+        <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display"
+            style="display: none;">
+
+        <div id="dialogue-box">
+            <div id="name-tag">林建成</div>
+            <div id="text-content">...</div>
+        </div>
+
+        <div id="options-container"></div>
+
+        <div id="start-screen" style="display: flex;">
+            <h1>千戀建成 - Excel之戀</h1>
+            <h3>那個...你的Excel寫錯了</h3>
+
+            <p>請輸入你的名字 (可選，留空則使用「你」):</p>
+
+            <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
+                style="margin: 10px 0; padding: 10px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 5px;">
+
+            <button id="start-game-btn" class="action-btn"
+                style="padding: 15px 30px; font-size: 1.5em; margin-top: 20px;">
+                開始遊戲
+            </button>
+        </div>
+
+        <div id="end-screen" style="display: none;">
+            <h1 id="end-title">結局</h1>
+            <p id="end-desc">...</p>
+            <button class="action-btn" onclick="restartGame()">重新開始</button>
+        </div>
+
+    </div>
+
     <script src="./main.js" type="module"></script>
 </body>
 
