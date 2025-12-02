@@ -258,6 +258,29 @@ body {
     text-align: center;
 }
 
+/* Chapter Title Overlay 樣式 (請新增到 styles.css) */
+#chapter-title-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 4vw; /* 使用視口寬度單位，確保響應性 */
+    font-weight: bold;
+    z-index: 100; /* 確保在所有遊戲元素之上 */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    text-align: center;
+    text-shadow: 0 0 10px #fff;
+    pointer-events: none; /* 允許點擊穿透 */
+}
+
 h1 {
     font-size: 5vw; 
     color: #d63031;

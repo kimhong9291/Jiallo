@@ -1,7 +1,8 @@
-const main_script = [
+const main_script_chap1 = [ //img
     // -------------------- 初始場景 (保留) --------------------
     // 「」
-    {
+    {   
+        chapter:"第一章：與你的初次建面",
         id: 'scene_start',
         steps: [
             { name: "旁白", text: "（你在辦公室加班，突然感覺背後有一道視線。）" },
@@ -550,6 +551,6 @@ exports.handler = async (event, context) => {
             'Access-Control-Allow-Origin': '*' 
         },
         // 只回傳主線劇本
-        body: JSON.stringify(main_script), 
+        body: JSON.stringify(main_script_chap1), 
     };
 };

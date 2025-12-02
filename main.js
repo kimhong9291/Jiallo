@@ -163,6 +163,11 @@ function nextStep(event) {
     if (currentStepIndex < scene.steps.length) {
         const step = scene.steps[currentStepIndex];
 
+        // 如果步驟中包含 'img' 屬性，則更新 characterImg 的 src
+        if (step.img) {
+            characterImg.src = step.img;
+        }
+
         // 處理多步驟反應時，避免重複綁定
         dialogueBox.removeEventListener('click', nextStep);
 
@@ -208,6 +213,12 @@ function playReactions(reactions, nextSceneId) {
     function showNextReaction() {
         if (reactionIndex < reactions.length) {
             const step = reactions[reactionIndex];
+
+            // 【✨ 新增邏輯：檢查並更新角色立繪 ✨】
+            if (step.img) {
+                characterImg.src = step.img;
+            }
+
             nameTag.innerText = step.name;
 
             // 移除上一次的提示文字
@@ -303,6 +314,19 @@ function _loadSceneContent(id) {
 
     currentSceneId = id;
     currentStepIndex = 0;
+
+    // 🌟 1. 找到場景資料 🌟
+    const scene = script.find(s => s.id === id);
+    if (!scene) {
+        console.error(`找不到場景 ID: ${id}`);
+        return;
+    }
+
+    // 🌟 2. 【新增邏輯】檢查並顯示章節標題 🌟
+    // 如果場景有定義 chapter 屬性，就顯示章節標題
+    if (scene.chapter) {
+        displayChapterTitle(scene.chapter); 
+    }
 
     // 記錄場景 ID
     visitedScenes.add(id);
@@ -630,6 +654,46 @@ function toggleMenu() {
         // 為了讓內容垂直排列，我們可以使用 'flex' 或 'block'
         menuContent.style.display = 'block';
     }
+}
+
+// ----------------------------------------------------
+// 【✨ 章節標題顯示功能 ✨】
+// ----------------------------------------------------
+/**
+ * 創建並顯示一個短暫的章節標題覆蓋層
+ * @param {string} title - 要顯示的章節標題
+ */
+function displayChapterTitle(title) {
+    if (!gameContainer) return; // 確保遊戲容器存在
+
+    const existingChapter = document.getElementById('chapter-title-overlay');
+    if (existingChapter) existingChapter.remove(); // 確保不會重複疊加
+
+    const overlay = document.createElement('div');
+    overlay.id = 'chapter-title-overlay';
+    
+    // ⚠️ 注意：這裡使用內聯樣式演示，為了覆蓋整個遊戲畫面，需要設置樣式。
+    // 建議將這些樣式移至 styles.css 以便管理。
+    
+    overlay.innerText = title;
+
+    gameContainer.appendChild(overlay);
+
+    // 1. 淡入 (Fade In)
+    setTimeout(() => {
+        overlay.style.opacity = 1;
+    }, 100);
+
+    // 2. 顯示 2.5 秒
+    setTimeout(() => {
+        // 3. 淡出 (Fade Out)
+        overlay.style.opacity = 0;
+        
+        // 4. 動畫結束後移除元素
+        setTimeout(() => {
+            overlay.remove();
+        }, 500); // 配合 CSS transition time
+    }, 2500);
 }
 
 // ----------------------------------------------------
