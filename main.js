@@ -315,19 +315,6 @@ function _loadSceneContent(id) {
     currentSceneId = id;
     currentStepIndex = 0;
 
-    // 🌟 1. 找到場景資料 🌟
-    const scene = script.find(s => s.id === id);
-    if (!scene) {
-        console.error(`找不到場景 ID: ${id}`);
-        return;
-    }
-
-    // 🌟 2. 【新增邏輯】檢查並顯示章節標題 🌟
-    // 如果場景有定義 chapter 屬性，就顯示章節標題
-    if (scene.chapter) {
-        displayChapterTitle(scene.chapter); 
-    }
-
     // 記錄場景 ID
     visitedScenes.add(id);
 
@@ -357,6 +344,13 @@ function showScene(id) {
         _loadSceneContent(id);
         return;
     }
+
+    // 【新增：提前獲取場景資料來檢查 Chapter】
+    const scene = script.find(s => s.id === id);
+    if (!scene) {
+        console.error(`找不到場景 ID: ${id}`);
+        return;
+    }
 
     // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
     dialogueBox.removeEventListener('click', nextStep);
