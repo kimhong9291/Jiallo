@@ -427,7 +427,7 @@ function startGame() {
     }
 
     // 這裡使用 _loadSceneContent 直接載入，因為遊戲開始不需要轉場效果
-    _loadSceneContent('scene_start');
+    showScene('scene_start');
 }
 
 function processTextForName(text) {
