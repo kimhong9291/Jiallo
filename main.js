@@ -410,7 +410,12 @@ function startGame() {
     currentStepIndex = 0;
     visitedScenes.clear();
     updateScore();
-    endScreen.style.display = 'none'; // 確保結局畫面隱藏
+    endScreen.style.display = 'none'; 
+    
+    // 🌟 確保容器回到 0 度，以防上次翻轉失敗（重要，避免開場畫面被翻轉）
+    if (gameContainer) {
+        gameContainer.classList.remove('flip-out');
+    }
 
     // 確保 nextStep 監聽器在 startGame 時被添加
     dialogueBox.removeEventListener('click', nextStep);
@@ -422,42 +427,25 @@ function startGame() {
         audio.volume = 0.3;
         audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
     }
+
+    // 🌟 【恢復到合書/淡出動畫流程】 🌟
     
-    // 🌟 移除舊的淡出動畫類別，確保不衝突 🌟
-    startScreen.classList.remove('animate-intro'); 
+    // 1. 讓開始畫面進入動畫狀態 (這會觸發您 CSS 中定義的合書/淡出效果)
+    startScreen.classList.add('animate-intro'); 
 
+    // 確保這裡的時間與您在 CSS 中定義的動畫總時間一致 (例如 2000ms)
+    const ANIMATION_DURATION = 2000; 
 
-    // 🌟 【新的開場流程：使用 3D 翻轉效果來隱藏 Start Screen】🌟
-    
-    // A. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
-    gameContainer.classList.add('flip-out'); 
-
-    // B. 等待 Flip Out 動畫完成 (800ms)
+    // 2. 延遲執行遊戲主要流程
     setTimeout(() => {
-        // 在畫面轉到背面時 (180度)：
+        // 動畫結束後：
+        startScreen.style.display = 'none'; // 隱藏開始畫面
+        dialogueBox.style.display = 'block'; // 顯示對話框容器
+
+        // 啟動場景載入 (這將啟動第一個場景的 Chapter Title 翻轉)
+        showScene('scene_start');
         
-        // 1. 隱藏 Start Screen (必須在此時隱藏，否則翻回來時會看到它)
-        startScreen.style.display = 'none'; 
-        
-        // 2. 顯示對話框容器
-        dialogueBox.style.display = 'block'; 
-
-        // C. 開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
-        gameContainer.classList.remove('flip-out'); 
-
-        // D. 等待 Flip In 動畫完成 (800ms)
-        setTimeout(() => {
-            // E. 載入第一個場景的內容
-            // 由於這是開場，我們直接載入內容，跳過 showScene 的額外 Chapter 翻轉邏輯。
-            // 如果 'scene_start' 場景本身不需要 Chapter Title 轉場，則使用 _loadSceneContent
-            // 如果您確定 'scene_start' 有 Chapter Title，請改回 showScene('scene_start')
-            
-            // 建議使用 showScene，讓它自行處理 Chapter Title 邏輯
-            showScene('scene_start'); 
-            
-        }, 800); // Flip In 持續時間
-
-    }, 800); // Flip Out 持續時間
+    }, ANIMATION_DURATION);
 }
 
 function processTextForName(text) {
