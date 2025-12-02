@@ -426,6 +426,24 @@ function startGame() {
         audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
     }
 
+    // 🌟 【核心修改：觸發動畫並延遲主流程】 🌟
+    
+    // 讓開始畫面進入動畫狀態 (例如：熊的動畫，假設動畫持續 2 秒)
+    startScreen.classList.add('animate-intro'); 
+
+    // 設置延遲，等待動畫結束（請根據您的動畫實際時間調整 2000ms）
+    const ANIMATION_DURATION = 2000; // 2 秒
+
+    setTimeout(() => {
+        // 1. 動畫結束後，隱藏開始畫面，顯示對話框容器
+        startScreen.style.display = 'none'; 
+        dialogueBox.style.display = 'block'; 
+
+        // 2. 啟動場景載入 (這將觸發 Flip 動畫 和 Chapter Title 顯示)
+        showScene('scene_start');
+        
+    }, ANIMATION_DURATION);
+
     // 這裡使用 _loadSceneContent 直接載入，因為遊戲開始不需要轉場效果
     showScene('scene_start');
 }
