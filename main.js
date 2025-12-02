@@ -371,13 +371,23 @@ function showScene(id) {
         // 4. 等待 Flip In 動畫完成 (再過 0.8s) -> 總計 1.6s
         setTimeout(() => {
 
-            // 5. 翻轉完成 (360度)：暫停 1 秒 (1.6s -> 2.6s)
-            setTimeout(() => {
+            if (scene.chapter) {
+                // 【場景有 Chapter：先顯示 Chapter Page】
+                displayChapterTitle(scene.chapter); // 顯示章節標題
+                
+                // 延遲 3.1 秒 ( Chapter 顯示時間約 3 秒 + 緩衝 )，然後才載入對話。
+                // 這是 Page 1 到 Page 2 的過渡
+                setTimeout(() => {
+                    _loadSceneContent(id);
+                }, 3100); 
 
-                // 6. 延遲結束：載入新場景內容 (執行 script)
-                _loadSceneContent(id);
+            } else {
+                // 【場景無 Chapter：直接載入對話，插入一個小暫停】
+                setTimeout(() => {
+                    _loadSceneContent(id);
+                }, 1000); // 1000ms (1秒) 暫停
 
-            }, 1000); // 1000ms (1秒) 暫停
+            } 
 
         }, 800); // 800ms (Flip In 動畫時間)
 
@@ -665,9 +675,6 @@ function displayChapterTitle(title) {
 
     const overlay = document.createElement('div');
     overlay.id = 'chapter-title-overlay';
-    
-    // ⚠️ 注意：這裡使用內聯樣式演示，為了覆蓋整個遊戲畫面，需要設置樣式。
-    // 建議將這些樣式移至 styles.css 以便管理。
     
     overlay.innerText = title;
 
