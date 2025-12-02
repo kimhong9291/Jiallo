@@ -1,181 +1,67 @@
-/* -------------------- I. 全局和容器設定 (移除 3D 翻轉樣式) -------------------- */
-
-/* 全局設定 */
+    /* 全局設定 */
 body {
     margin: 0;
     padding: 0;
     font-family: "Microsoft JhengHei", "Yu Gothic", sans-serif;
     background-color: #2c3e50;
-    display: block;
-    position: relative;
+    /* 🌟 修正：使用絕對定位容器，讓 body 成為靜態背景 🌟 */
+    display: block; /* 改回 block */
+    position: relative; /* 確保 body 是容器 */
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
-    /* ❌ 移除 3D 視點 perspective */
+    overflow: hidden; 
+    /* perspective 已移除，移至 #game-container */
 }
 
 /* 遊戲主容器 */
+/* 遊戲主容器 */
 #game-container {
-    position: absolute;
+    position: absolute; /* 🌟 修正：改為絕對定位 🌟 */
+
+    /* 🌟 修正：使用四邊拉伸法佔滿空間 🌟 */
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    
+
+    /* 移除 perspective: 1500px; */
+
     background: linear-gradient(to bottom, #ffefef, #ffe4e1);
-    box-shadow: none;
-    border-radius: 0;
+    box-shadow: none; 
+    border-radius: 0; 
     overflow: hidden;
 
-    /* ❌ 移除所有 3D 相關樣式 */
-    transition: none; 
+    /* 容器翻頁動畫樣式 */
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out;
+    transform-origin: center;
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
 }
-
-/* 容器翻頁動畫樣式 (已停用，但保留 class 以防萬一) */
-
 
 /* 背景裝飾 (Excel 網格風格) */
 .bg-grid {
     position: absolute;
     width: 100%;
     height: 100%;
-    
-    background-image:
-        linear-gradient(#e0e0e0 1px, transparent 1px),
-        linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
-    
-    background-size: 3vw 3vw;
-    background-position: 0.5px 0.5px;
-    
+
+    /* 網格線寬保持 1px，並使用 0.5px 偏移嘗試修復渲染問題 */
+    background-image: 
+        linear-gradient(#e0e0e0 1px, transparent 1px), 
+        linear-gradient(90deg, #e0e0e0 1px, transparent 1px); 
+
+    background-size: 3vw 3vw; 
+    background-position: 0.5px 0.5px; /* 幫助對齊 */
+
     opacity: 0.5;
     z-index: 0;
 }
-
-/* -------------------- II. 門動畫 (新增) -------------------- */
-
-#door-transition {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999; /* 確保在所有遊戲內容之上 */
-    display: flex;
-    pointer-events: none; /* 預設允許點擊穿透 */
-    visibility: hidden; /* 預設隱藏 */
-}
-
-.door-half {
-    position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    background-color: #34495e; /* 關門時的顏色 */
-    /* 1.0s 轉換時間，用於 JS 中的 setTimeout */
-    transition: transform 1.0s cubic-bezier(0.65, 0.05, 0.36, 1); 
-}
-
-.left-door {
-    left: 0;
-    transform: translateX(0%); /* 預設在左邊 */
-}
-
-.right-door {
-    right: 50%; /* 修正：讓右門從 50% 位置開始 */
-    transform: translateX(100%); /* 預設在右邊，向右推 100% (即推到 100% 寬度外) */
-}
-
-/* 觸發關門動畫的 Class */
-#door-transition.closing {
-    visibility: visible;
-    pointer-events: auto; /* 關閉時阻止點擊 */
-}
-
-#door-transition.closing .left-door {
-    transform: translateX(100%); /* 左門向右移動 100% (推到 50% 寬度) */
-}
-
-#door-transition.closing .right-door {
-    transform: translateX(0%); /* 右門從右邊收回 100% (收到 50% 寬度) */
-}
-
-/* -------------------- III. Start/End Screen 樣式 -------------------- */
-
-#start-screen,
-#end-screen {
-    top: 0;
-    left: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 240, 245, 1);
-    z-index: 999; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-/* 恢復：Start Screen 緩慢淡出 Keyframes (若需要) */
-@keyframes introFadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; visibility: hidden; }
-}
-
-/* 觸發 Start Screen 動畫的類別 */
-#start-screen.animate-intro {
-    animation: introFadeOut 0.5s ease-out forwards; 
-}
-
-/* ... (Start/End Screen 內部樣式，如 h1, .action-btn 保持不變) ... */
-
-h1 {
-    font-size: 5vw;
-    color: #d63031;
-    margin-bottom: 3vh;
-    text-shadow: 0.2vw 0.2vw 0px #fff;
-}
-
-.action-btn {
-    padding: 2vh 4vw;
-    font-size: 2.5vw;
-    background-color: #e17055;
-    color: white;
-    border: none;
-    border-radius: 5vh;
-    cursor: pointer;
-    box-shadow: 0 0.5vh 0 #c0392b;
-    transition: transform 0.1s;
-}
-
-.action-btn:active {
-    transform: translateY(0.5vh);
-    box-shadow: none;
-}
-
-/* -------------------- IV. 遊戲 HUD 和元件 -------------------- */
-
-#love-meter {
-    position: absolute;
-    top: 2vh;
-    left: 2vw;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 1.5vh;
-    border-radius: 20vh;
-    font-weight: bold;
-    color: #e84393;
-    border: 0.3vw solid #e84393;
-    font-size: 1.5vw;
-}
-
-/* -------------------- V. 菜單結構樣式 -------------------- */
+/* -------------------- 菜單結構樣式 (適應化) -------------------- */
 #game-menu-wrapper {
     position: absolute;
-    top: 2vh;
-    right: 2vw;
+    top: 2vh; 
+    right: 2vw; 
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -183,14 +69,14 @@ h1 {
 }
 
 #menu-toggle-btn {
-    padding: 1.5vh 2vw;
-    font-size: 1.5vw;
+    padding: 1.5vh 2vw; 
+    font-size: 1.5vw; 
     background-color: #f1c40f;
     color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 1vh;
+    margin-bottom: 1vh; 
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -203,58 +89,59 @@ h1 {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 1.5vh;
+    padding: 1.5vh; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none;
-    width: 25vw;
+    width: 25vw; 
     text-align: left;
 }
 
+
+
 #upload-section {
     position: static;
-    margin-bottom: 1.5vh;
+    margin-bottom: 1.5vh; 
     background: none;
     padding: 0;
     border-radius: 0;
-    font-size: 1.2vw;
+    font-size: 1.2vw; 
     z-index: auto;
 }
 
 #music-player {
     position: static;
-    margin-top: 1.5vh;
+    margin-top: 1.5vh; 
     border-top: 1px solid #eee;
-    padding-top: 1.5vh;
+    padding-top: 1.5vh; 
     z-index: auto;
 }
 
 #music-player label {
     display: block;
     font-weight: bold;
-    margin-bottom: 0.5vh;
+    margin-bottom: 0.5vh; 
 }
 
-/* 核心修正：預設隱藏 audio 元素 */
+/* 1. 核心修正：預設隱藏 audio 元素（包括控制條），避免破壞佈局 🌟 */
 #music-player audio {
-      display: none;
+     display: none; 
 }
 
 #game-menu-content[style*="display: block"] #music-player audio {
-    display: block !important;
+    display: block !important; 
     width: 100%;
     margin-top: 0.5vh;
 }
 
-
-/* -------------------- VI. 圖片和角色立繪 -------------------- */
+/* -------------------- 圖片和角色立繪 (適應化) -------------------- */
 
 #char-img-display {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 80%; 
+    max-height: 80%; 
     height: auto;
     width: auto;
     object-fit: contain;
@@ -267,24 +154,24 @@ h1 {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    max-height: 90vh;
+    max-height: 90vh; 
     z-index: 1;
     transition: filter 0.3s;
 }
 
-/* -------------------- VII. 對話框及內容 -------------------- */
+/* -------------------- 對話框及內容 (適應化) -------------------- */
 
 #dialogue-box {
     position: absolute;
-    bottom: 3vh;
-    left: 5vw;
-    right: 5vw;
-    height: 25vh;
+    bottom: 3vh; 
+    left: 5vw; 
+    right: 5vw; 
+    height: 25vh; 
     background: rgba(0, 0, 0, 0.8);
-    border: 0.3vw solid #fff;
-    border-radius: 1vw;
+    border: 0.3vw solid #fff; 
+    border-radius: 1vw; 
     z-index: 10;
-    padding: 2vw;
+    padding: 2vw; 
     color: white;
     display: none;
     overflow: hidden;
@@ -293,20 +180,20 @@ h1 {
 }
 
 #name-tag {
-    font-size: 2.5vw;
+    font-size: 2.5vw; 
     font-weight: bold;
     color: #ffb7b2;
-    margin-bottom: 0.5vh;
-    margin-top: -1.5vh;
+    margin-bottom: 0.5vh; 
+    margin-top: -1.5vh; 
 }
 
 #text-content {
-    font-size: 1.8vw;
+    font-size: 1.8vw; 
     line-height: 1.5;
-    min-height: 10vh;
+    min-height: 10vh; 
 }
 
-/* -------------------- VIII. 選項/Chapter Overlay -------------------- */
+/* -------------------- 選項/好感度/畫面 (適應化) -------------------- */
 
 #options-container {
     position: absolute;
@@ -316,19 +203,19 @@ h1 {
     z-index: 20;
     display: flex;
     flex-direction: column;
-    gap: 2vh;
-    width: 60vw;
+    gap: 2vh; 
+    width: 60vw; 
     text-align: center;
 }
 
 .option-btn {
     background: rgba(255, 255, 255, 0.95);
-    border: 0.3vw solid #ff6b6b;
-    padding: 1.5vh;
+    border: 0.3vw solid #ff6b6b; 
+    padding: 1.5vh; 
     text-align: center;
-    font-size: 2vw;
+    font-size: 2vw; 
     cursor: pointer;
-    border-radius: 5vh;
+    border-radius: 5vh; 
     transition: all 0.2s;
     color: #333;
     font-weight: bold;
@@ -340,7 +227,38 @@ h1 {
     transform: scale(1.05);
 }
 
-/* Chapter Title Overlay 樣式 (現在 Chapter Title 獨立顯示，不再參與 3D 翻轉) */
+#love-meter {
+    position: absolute;
+    top: 2vh; 
+    left: 2vw; 
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1.5vh; 
+    border-radius: 20vh; 
+    font-weight: bold;
+    color: #e84393;
+    border: 0.3vw solid #e84393; 
+    font-size: 1.5vw; 
+}
+
+#start-screen,
+#end-screen {
+    /* 🌟 關鍵修正 1：確保從父容器的 (0,0) 點開始 🌟 */
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 240, 245, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Chapter Title Overlay 樣式 (請新增到 styles.css) */
 #chapter-title-overlay {
     position: absolute;
     top: 0;
@@ -349,17 +267,44 @@ h1 {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     color: white;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 4vw; 
+    font-size: 4vw; /* 使用視口寬度單位，確保響應性 */
     font-weight: bold;
-    z-index: 101; 
-    opacity: 0; /* 預設為 0，由 JS 控製淡入/淡出 */
+    z-index: 100; /* 確保在所有遊戲元素之上 */
+    opacity: 0;
     transition: opacity 0.5s ease-in-out;
     text-align: center;
     text-shadow: 0 0 10px #fff;
-    pointer-events: none;
-    /* ❌ 移除 3D 相關樣式 */
+    pointer-events: none; /* 允許點擊穿透 */
 }
+
+h1 {
+    font-size: 5vw; 
+    color: #d63031;
+    margin-bottom: 3vh; 
+    text-shadow: 0.2vw 0.2vw 0px #fff; 
+}
+
+.action-btn {
+    padding: 2vh 4vw; 
+    font-size: 2.5vw; 
+    background-color: #e17055;
+    color: white;
+    border: none;
+    border-radius: 5vh; 
+    cursor: pointer;
+    box-shadow: 0 0.5vh 0 #c0392b; 
+    transition: transform 0.1s;
+}
+
+.action-btn:active {
+    transform: translateY(0.5vh); 
+    box-shadow: none;
+}
+
+/* -------------------- 容器翻頁動畫樣式 (保持不變) -------------------- */
+#game-container.flip-out {
+    transform: rotateY(180deg);}

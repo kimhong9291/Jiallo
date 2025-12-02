@@ -1,24 +1,24 @@
+增加章節顯示+擴充cgi功能
+339e00c
+index.html
+@@ -1,82 +1,82 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>千戀建成 - Excel之戀 (分批播放版)</title>
+
     <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-    
-    <div id="door-transition">
-        <div class="door-half left-door"></div>
-        <div class="door-half right-door"></div>
-    </div>
 
     <div id="game-container">
         <div class="bg-grid"></div>
-        
-        <div id="chapter-title-overlay" style="display: none;"></div> 
 
         <div id="game-menu-wrapper">
             <button id="menu-toggle-btn">⚙️ 選單</button>
@@ -39,21 +39,17 @@
                 </div>
 
                 <div id="restartGame-button">
-                    <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">重新開始</p>
-                    <button id="interrupt-btn" class="action-btn" onclick="restartGame()">
-                        中斷 (回到開始)
-                    </button>
+                    <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">重新開始</div>
+                    <button id="interrupt-btn" class="menu-btn" onclick="restartGame()">中斷 (回到開始)</button>
                 </div>
             </div>
         </div>
 
         <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
 
-        <img id="character-img"
-            src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"                    
+        <img id="character-img" src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"
             alt="林建成">
-        <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display"
-            style="display: none;">
+        <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display" style="display: none;">
 
         <div id="dialogue-box">
             <div id="name-tag">林建成</div>
@@ -68,13 +64,15 @@
 
             <p>請輸入你的名字 (可選，留空則使用「你」):</p>
 
-            <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
+            <input type="text" id="player-name-input" placeholder="你" maxlength="10" <input type="text"
+                id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
                 style="margin: 10px 0; padding: 10px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 5px;">
 
-            <button id="start-game-btn" class="action-btn"
+            <button id="start-game-btn" class="option-btn"
                 style="padding: 15px 30px; font-size: 1.5em; margin-top: 20px;">
                 開始遊戲
             </button>
+
         </div>
 
         <div id="end-screen" style="display: none;">
@@ -84,7 +82,6 @@
         </div>
 
     </div>
-
     <script src="./main.js" type="module"></script>
 </body>
 

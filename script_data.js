@@ -1,4 +1,4 @@
-main_script_chap1 = [ //img
+export const main_script_chap1 = [ //img
     // -------------------- 初始場景 (保留) --------------------
     // 「」
     {   
@@ -543,14 +543,3 @@ main_script_chap1 = [ //img
     },
 ]
 
-exports.handler = async (event, context) => {
-    return {
-        statusCode: 200,
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*' 
-        },
-        // 只回傳主線劇本
-        body: JSON.stringify(main_script_chap1), 
-    };
-}

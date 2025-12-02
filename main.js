@@ -1,615 +1,51 @@
-// 遊戲狀態
+// ----------------------------------------------------
+// 【I. 遊戲狀態與常量】
+// ----------------------------------------------------
+
 let loveScore = 0;
-let currentSceneId = 'scene_start';
-let currentStepIndex = 0;
-let visitedScenes = new Set();
+let currentSceneId = 'scene_start'; // 初始場景ID
+let currentStepIndex = 0;           // 場景內對話步驟索引
+let visitedScenes = new Set();      // 用於追蹤已播放過開場標題的場景
+let isTyping = false;               // 避免在打字時觸發下一步
+let isSceneActive = false;          // 避免選項點擊被誤認為下一步
 const MAX_LOVE_SCORE = 150;
-let playerName = "";
+let playerName = "你";              // 預設玩家名字
 
-
-// DOM 元素（預先聲明，在 DOMContentLoaded 內賦值）
+// DOM 元素 (預先聲明，在 DOMContentLoaded 內賦值)
 let uploadedImgDisplay;
 let characterImg;
 let clearImgButton;
-const defaultImageSrc = ''
+const defaultImageSrc = 'https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng';
 let dialogueBox;
 let textContent;
 let nameTag;
 let optionsContainer;
 let scoreDisplay;
 let startScreen;
-let endScreen;
-let endTitle;
-let endDesc;
-let fileInput;
+let gameContainer;
 let menuToggleButton;
 let menuContent;
 let playerNameInput;
 let startGameButton;
-
-// 🌟 遊戲容器
-let gameContainer;
-
-// 🌟 新增：門動畫 DOM 元素
 let doorTransition;
+let chapterTitleOverlay;
+let bgmElement;
 
+// 🌟 主劇本陣列，將在 loadScriptsAndInit 中合併
 let script = [];
+let scriptMap = new Map(); // 用於快速查找場景
 
+// ----------------------------------------------------
+// 【II. 初始化與腳本載入】
+// ----------------------------------------------------
 
+document.addEventListener('DOMContentLoaded', initGame);
 
 /**
- * 載入本地劇本檔案並啟動遊戲
- * 假設劇本檔案位於 /data/script_main.json 和 /data/script_tos.json
+ * 遊戲初始化：DOM 元素緩存、事件監聽器設定、載入腳本
  */
-// main.js 中 loadAndStartGame 函式
-async function loadAndStartGame() {
-    const SCRIPT_PATH_MAIN = './script_main.js'; 
-    const SCRIPT_PATH_TOS = './script_tos.js'; 
-
-
-    try {
-        const [mainResponse, tosResponse] = await Promise.all([
-            fetch(SCRIPT_PATH_MAIN),
-            fetch(SCRIPT_PATH_TOS),
-        ]);
-
-        if (!mainResponse.ok) {
-            // 這會捕獲 404 錯誤，並拋出您看到的訊息
-            throw new Error(`主劇本載入失敗 (${mainResponse.status}): ${SCRIPT_PATH_MAIN}`);
-        }
-
-        // 獨立解析 JSON 資料
-        const mainData = await mainResponse.json();
-        const tosData = await tosResponse.json();
-
-        // 合併所有劇本 
-        // 確保 mainData 和 tosData 都是陣列
-        if (!Array.isArray(mainData) || !Array.isArray(tosData)) {
-            throw new Error("劇本檔案格式錯誤，預期為 JSON 陣列。");
-        }
-        script = [...mainData, ...tosData];
-
-        // 開始遊戲
-        startGame(script);
-
-    } catch (error) {
-        console.error("無法載入遊戲劇本！", error);
-        // 提示用戶檢查文件路徑和伺服器（如果本地測試需要伺服器，如 Live Server）
-        // 🚨 注意：這裡使用了 alert()，在實際執行環境中可能需要替換為自定義模態框。
-        alert(`遊戲載入失敗。請確認劇本檔案存在且路徑正確：${error.message}`);
-    }
-}
-
-
-// ... (所有其他函式如 handleFileUpload, typeWriterEffect, nextStep 等保持不變) ...
-
-// ----------------------------------------------------
-// 文件上傳及清空核心邏輯 (保持不變)
-// ----------------------------------------------------
-function handleFileUpload(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            uploadedImgDisplay.src = e.target.result;
-            uploadedImgDisplay.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function resetFileInput() {
-    const oldFileInput = fileInput;
-    const newFileInput = oldFileInput.cloneNode(true);
-    newFileInput.value = '';
-    oldFileInput.parentNode.replaceChild(newFileInput, oldFileInput);
-    fileInput = newFileInput;
-    // 重新綁定事件到新的 fileInput 元素
-    fileInput.addEventListener('change', handleFileUpload);
-}
-
-// ----------------------------------------------------
-// 逐字播放核心邏輯 (保持不變)
-// ----------------------------------------------------
-
-const typingSpeed = 50; // 毫秒/字
-let typingTimeout;
-let currentFullText = "";
-let currentTargetElement = null;
-let currentCallback = null;
-let currentTypingIndex = 0;
-let isTypingActive = false;
-
-function typeWriterEffect(targetElement, fullText, callback = () => { }) {
-    if (isTypingActive) return;
-
-    currentFullText = fullText;
-    currentTargetElement = targetElement;
-    currentCallback = callback;
-    currentTypingIndex = 0;
-    targetElement.innerText = '';
-    isTypingActive = true;
-
-    function type() {
-        if (!isTypingActive) return;
-
-        if (currentTypingIndex < currentFullText.length) {
-            currentTargetElement.innerText += currentFullText.charAt(currentTypingIndex);
-            currentTypingIndex++;
-
-            let currentSpeed = typingSpeed;
-            let textBefore = currentFullText.substring(0, currentTypingIndex);
-            // 嘗試檢測括號內的文字，以稍微加快速度
-            if (textBefore.includes('（') && !textBefore.includes('）')) {
-                currentSpeed = 20;
-            }
-
-            typingTimeout = setTimeout(type, currentSpeed);
-        } else {
-            isTypingActive = false;
-            currentCallback();
-        }
-    }
-    type();
-}
-
-function skipTyping() {
-    if (isTypingActive) {
-        clearTimeout(typingTimeout);
-        currentTargetElement.innerText = currentFullText;
-        isTypingActive = false;
-        currentCallback();
-    }
-}
-
-
-// ----------------------------------------------------
-// 遊戲流程控制 
-// ----------------------------------------------------
-
-function nextStep(event) {
-    // 防止在打字時觸發下一步
-    if (isTypingActive) {
-        skipTyping(); // 點擊時跳過打字，而非直接進入下一步
-        return;
-    }
-
-    // 如果選項容器中有選項，則等待用戶選擇
-    if (optionsContainer.childElementCount > 0) return;
-
-    const scene = script.find(s => s.id === currentSceneId);
-    if (!scene) {
-        console.error(`找不到場景 ID: ${currentSceneId}`);
-        return;
-    }
-
-    if (currentStepIndex < scene.steps.length) {
-        const step = scene.steps[currentStepIndex];
-
-        // 設置角色圖片
-        if (step.img) {
-            characterImg.src = step.img;
-        }
-
-        // 移除點擊事件，避免重複觸發
-        dialogueBox.removeEventListener('click', nextStep);
-
-        // 設置對話框名稱
-        nameTag.innerText = step.name;
-
-        // 處理玩家名字替換
-        let textSource = step.text;
-        if (step.name === '你') {
-            nameTag.innerText = playerName;
-        }
-        const textToDisplay = processTextForName(textSource);
-
-        // 移除舊的提示
-        const oldTip = document.getElementById('next-step-tip');
-        if (oldTip) oldTip.remove();
-
-        // 啟動逐字效果
-        typeWriterEffect(textContent, textToDisplay, () => {
-            currentStepIndex++;
-            if (currentStepIndex === scene.steps.length) {
-                // 如果是最後一步，顯示選項
-                displayOptions(scene.options);
-            } else {
-                // 如果不是最後一步，重新綁定事件並顯示提示
-                // 使用 { once: true } 確保只監聽一次點擊，避免點擊事件累積
-                dialogueBox.addEventListener('click', nextStep, { once: true });
-
-                const tip = document.createElement('div');
-                tip.id = 'next-step-tip';
-                tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
-                tip.innerText = "▼ 點擊繼續";
-                textContent.appendChild(tip);
-            }
-        });
-    }
-}
-
-function playReactions(reactions, nextSceneId) {
-    let reactionIndex = 0;
-
-    function showNextReaction() {
-        if (reactionIndex < reactions.length) {
-            const step = reactions[reactionIndex];
-
-            if (step.img) {
-                characterImg.src = step.img;
-            }
-
-            nameTag.innerText = step.name;
-
-            const oldTip = document.getElementById('next-step-tip');
-            if (oldTip) oldTip.remove();
-
-            const textToDisplay = processTextForName(step.text);
-
-            typeWriterEffect(textContent, textToDisplay, () => {
-                reactionIndex++;
-
-                if (reactionIndex < reactions.length) {
-                    const nextReactionHandler = () => {
-                        dialogueBox.removeEventListener('click', nextReactionHandler);
-                        showNextReaction();
-                    };
-                    // 點擊對話框進入下一反應
-                    dialogueBox.addEventListener('click', nextReactionHandler, { once: true });
-
-                    const tip = document.createElement('div');
-                    tip.id = 'next-step-tip';
-                    tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
-                    tip.innerText = "▼ 點擊繼續反應";
-                    textContent.appendChild(tip);
-
-                } else {
-                    handleReactionEnd(nextSceneId);
-                }
-            });
-
-        } else {
-            handleReactionEnd(nextSceneId);
-        }
-    }
-    showNextReaction();
-}
-
-function handleReactionEnd(nextSceneId) {
-    const oldTip = document.getElementById('next-step-tip');
-    if (oldTip) oldTip.remove();
-
-    // 檢查是否是結局場景
-    const isEnding = nextSceneId === 'ending_check' || nextSceneId === 'ending_hidden_1' || nextSceneId === 'ending_true_vba' || nextSceneId === 'ending_check_TOS' || nextSceneId === 'special_ending_check_塔批' || nextSceneId === 'special_ending_check_TOSS';
-
-    const handler = () => {
-        dialogueBox.removeEventListener('click', handler);
-        if (isEnding) {
-            showEnding(nextSceneId);
-        } else {
-            showScene(nextSceneId); // 這裡呼叫 showScene 會啟動轉場
-        }
-    };
-
-    // 點擊進入結局或下一場景
-    dialogueBox.addEventListener('click', handler, { once: true });
-
-    const tip = document.createElement('div');
-    tip.id = 'next-step-tip';
-    tip.className = 'absolute bottom-2 right-4 text-xs text-gray-400 animate-pulse';
-    tip.innerText = isEnding ? "▼ 點擊查看結局" : "▼ 點擊進入下一場景";
-    textContent.appendChild(tip);
-}
-
-function displayOptions(options) {
-    optionsContainer.innerHTML = '';
-    options.forEach(option => {
-        const btn = document.createElement('div');
-        btn.className = 'option-btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-3 px-6 border border-gray-400 rounded-lg shadow-md transition duration-300 cursor-pointer text-center';
-        btn.innerText = option.text;
-        btn.onclick = () => handleChoice(option);
-        optionsContainer.appendChild(btn);
-    });
-}
-
-function _loadSceneContent(id) {
-    optionsContainer.innerHTML = '';
-    const oldTip = document.getElementById('next-step-tip');
-    if (oldTip) oldTip.remove();
-
-    currentSceneId = id;
-    currentStepIndex = 0;
-
-    visitedScenes.add(id);
-
-    // 重新初始化 nextStep 監聽器
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.addEventListener('click', nextStep);
-
-    nextStep();
-}
-
-// ----------------------------------------------------
-// 【✨ 關門動畫核心邏輯 ✨】
-// ----------------------------------------------------
-
-function runDoorTransition(sceneId) {
-    if (!doorTransition) {
-        console.warn("Door transition element not found. Skipping door animation.");
-        _loadSceneContent(sceneId);
-        return;
-    }
-
-    const DOOR_TRANSITION_TIME = 1000; // 1.0秒 (與 CSS 保持一致)
-
-    // 1. 關門動畫開始
-    doorTransition.style.visibility = 'visible';
-    doorTransition.style.pointerEvents = 'auto';
-    doorTransition.classList.add('closing');
-
-    // 2. 等待門關閉 (確保畫面被完全遮擋)
-    setTimeout(() => {
-        // A. 清空並載入場景內容
-        textContent.innerText = '';
-        nameTag.innerText = '';
-        optionsContainer.innerHTML = '';
-        const oldTip = document.getElementById('next-step-tip');
-        if (oldTip) oldTip.remove();
-
-        _loadSceneContent(sceneId);
-
-
-        // B. 延遲後開門
-        setTimeout(() => {
-            // 3. 開門動畫開始
-            doorTransition.classList.remove('closing');
-
-            // 4. 等待門完全打開後，隱藏容器
-            setTimeout(() => {
-                doorTransition.style.visibility = 'hidden';
-                doorTransition.style.pointerEvents = 'none';
-            }, DOOR_TRANSITION_TIME + 50);
-
-        }, 100);
-
-    }, DOOR_TRANSITION_TIME);
-}
-
-// ----------------------------------------------------
-// 遊戲流程控制 - showScene 
-// ----------------------------------------------------
-
-function showScene(id) {
-    const scene = script.find(s => s.id === id);
-    if (!scene) {
-        console.error(`找不到場景 ID: ${id}`);
-        return;
-    }
-
-    dialogueBox.removeEventListener('click', nextStep);
-
-    // 1. 檢查是否有 Chapter Page 需要顯示
-    if (scene.chapter) {
-        // A. 顯示 Chapter 標題 (黑幕)
-        displayChapterTitle(scene.chapter); // Chapter 顯示時間約 3.1 秒
-
-        // B. 等待 Chapter Title 結束 (大約 3.1 秒)
-        setTimeout(() => {
-            // C. 啟動關門轉場動畫，並載入下一場景內容
-            runDoorTransition(id);
-
-        }, 3100);
-
-    } else {
-        // 【流程 B：直接關門 -> Scene】
-        runDoorTransition(id);
-    }
-}
-
-
-// ----------------------------------------------------
-// 遊戲流程控制 - startGame (新的開場流程) 
-// ----------------------------------------------------
-
-function startGame() {
-
-    // 1. 處理玩家名字輸入
-    if (!playerNameInput) {
-        playerNameInput = document.getElementById('player-name-input');
-    }
-
-    let inputName = playerNameInput ? playerNameInput.value.trim() : "";
-    if (inputName) {
-        playerName = inputName;
-    } else {
-        playerName = "你";
-    }
-
-    // 2. 重置遊戲狀態 
-    loveScore = 0;
-    currentSceneId = 'scene_start';
-    currentStepIndex = 0;
-    visitedScenes.clear();
-    updateScore();
-    endScreen.style.display = 'none';
-
-    // 移除舊的 3D 翻轉邏輯
-    if (gameContainer) {
-        gameContainer.classList.remove('flip-out');
-    }
-
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.addEventListener('click', nextStep);
-
-    // BGM 播放邏輯 
-    const audio = document.getElementById('bgm');
-    if (audio) {
-        audio.volume = 0.3;
-        // 嘗試播放，但在 Chrome 等瀏覽器中可能需要使用者互動才能成功
-        audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。", e));
-    }
-
-    // 🌟 【Start Screen 淡出 $\to$ Chapter Title $\to$ 關門 $\to$ Scene】 🌟
-
-    // 1. 讓開始畫面進入淡出動畫狀態 
-    startScreen.classList.add('animate-intro');
-
-    // 假設開場淡出動畫持續 0.5 秒 (請根據您的 CSS 調整)
-    const INTRO_FADE_DURATION = 500;
-
-    setTimeout(() => {
-        // 動畫結束後：
-        startScreen.style.display = 'none';
-        dialogueBox.style.display = 'block';
-
-        startScreen.classList.remove('animate-intro'); // 清除 class
-
-        // 2. 啟動場景載入 (這會走入 showScene 函式，並啟動 Chapter Title)
-        showScene('scene_start');
-
-    }, INTRO_FADE_DURATION);
-}
-
-
-function processTextForName(text) {
-    if (playerName && text.includes('【玩家名字】')) {
-        return text.replace(/【玩家名字】/g, playerName);
-    }
-    return text;
-}
-
-function getNextScene(next) {
-    if (next === '29') {
-        if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
-            return '29_A';
-        }
-        else if (loveScore >= 131 && visitedScenes.has('神魔之塔4') && (playerName == "白銀" || playerName == "白银")) {
-            return '29_Silver';
-        }
-        else { return '29'; }
-
-        return next;
-    }
-    return next;
-};
-
-function updateScore() {
-    scoreDisplay.innerText = loveScore;
-    // 額外添加 Tailwind CSS 樣式來美化分數顯示
-    scoreDisplay.className = `font-bold text-lg p-1 rounded-md transition-colors duration-300 ${loveScore >= 100 ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-700'}`;
-}
-
-function handleChoice(option) {
-    loveScore = Math.min(loveScore + option.score, MAX_LOVE_SCORE);
-    updateScore();
-    optionsContainer.innerHTML = '';
-
-    let destinationId = option.next;
-    destinationId = getNextScene(destinationId);
-
-    const reactionData = option.reaction;
-
-    if (Array.isArray(reactionData)) {
-        playReactions(reactionData, destinationId);
-    } else {
-        nameTag.innerText = "林建成";
-
-        const oldTip = document.getElementById('next-step-tip');
-        if (oldTip) oldTip.remove();
-
-        const reactionText = processTextForName(reactionData);
-
-        typeWriterEffect(textContent, reactionText, () => {
-            handleReactionEnd(destinationId);
-        });
-    }
-}
-
-
-function showEnding(endingId = 'ending_check') {
-    isTypingActive = false;
-    clearTimeout(typingTimeout);
-
-    // 確保所有事件監聽器被移除
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.removeEventListener('click', skipTyping);
-    
-    // 移除所有可能存在的點擊進入下一場景的事件監聽器
-    const cloneDialogueBox = dialogueBox.cloneNode(true);
-    dialogueBox.parentNode.replaceChild(cloneDialogueBox, dialogueBox);
-    dialogueBox = cloneDialogueBox;
-    dialogueBox.addEventListener('click', skipTyping); // 重新綁定 skipTyping
-
-    dialogueBox.style.display = 'none';
-    optionsContainer.innerHTML = '';
-    endScreen.style.display = 'flex';
-
-    if (endingId === 'special_ending_check_塔批') {
-        endTitle.innerText = "Special End: 塔批的末路";
-        endTitle.style.color = "#FFD700";
-        endDesc.innerText = '他迷上了神魔之塔，他的excel現在只有滿滿的卡片，再也沒有空餘的地方裝下你了。\n最終好感度：-20130128';
-        characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
-    }
-    else if (endingId === 'special_ending_check_TOSS') {
-        endTitle.innerText = "Special End: 幫會的崛起";
-        endTitle.style.color = "#FFD700";
-        endDesc.innerText = '你們決定回到神魔之塔，在神劍闖江湖的合作中開啟了新的時代\n最終好感度：' + loveScore;
-        characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
-    }
-
-    else if (endingId === 'ending_check_TOS') {
-        endTitle.innerText = "Special True End: 轉出與建成的愛情";
-        endTitle.style.color = "#0000ffff";
-        endDesc.innerText = '後來你們開了一個叫做建成幫的幫派，神魔之塔只是起點，接下來你們的試算表將遍佈全部遊戲。\n最終好感度：' + loveScore;
-        characterImg.style.filter = "drop-shadow(0 0 20px #FFD700)";
-    }
-
-    else if (endingId === 'ending_true_vba') {
-        endTitle.innerText = "True End: 永恆的巨集 (VBA)";
-        endTitle.style.color = "#ff7979";
-        endDesc.innerText = `你們的愛是全自動、無需人工干預的巨集。\n最終好感度：${loveScore}`;
-        characterImg.style.filter = "drop-shadow(0 0 20px #ff7979)";
-    }
-    else if (loveScore >= 70) {
-        endTitle.innerText = "Normal End: 同事以上";
-        endTitle.style.color = "#0984e3";
-        endDesc.innerText = `你們成為了 Excel 交流會的好夥伴。\n最終好感度：${loveScore}`;
-        characterImg.style.filter = "none";
-    } else {
-        endTitle.innerText = "Bad End: #REF!";
-        endTitle.style.color = "#636e72";
-        endDesc.innerText = `建成覺得跟你沒有共同語言（Excel 語言）。\n他拒絕了你的存檔請求。\n最終好感度：${loveScore}`;
-        characterImg.style.filter = "grayscale(100%)";
-    }
-}
-
-function restartGame() {
-    characterImg.style.filter = "none";
-
-    dialogueBox.style.display = 'none';
-    optionsContainer.innerHTML = '';
-    uploadedImgDisplay.style.display = 'none';
-    endScreen.style.display = 'none';
-
-    const oldTip = document.getElementById('next-step-tip');
-    if (oldTip) oldTip.remove();
-
-    resetFileInput();
-
-    startScreen.style.display = 'flex';
-
-    if (gameContainer) {
-        gameContainer.classList.remove('flip-out');
-    }
-};
-
-
-// ----------------------------------------------------
-// 【✨ DOM 載入後初始化區塊】
-// ----------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. 獲取所有 DOM 元素
+function initGame() {
+    // 1. DOM 元素緩存
     uploadedImgDisplay = document.getElementById('char-img-display');
     characterImg = document.getElementById('character-img');
     clearImgButton = document.getElementById('clear-img-button');
@@ -619,47 +55,511 @@ document.addEventListener('DOMContentLoaded', () => {
     optionsContainer = document.getElementById('options-container');
     scoreDisplay = document.getElementById('score');
     startScreen = document.getElementById('start-screen');
-    endScreen = document.getElementById('end-screen');
-    endTitle = document.getElementById('end-title');
-    endDesc = document.getElementById('end-desc');
-    fileInput = document.getElementById('char-upload');
-
+    gameContainer = document.getElementById('game-container');
     menuToggleButton = document.getElementById('menu-toggle-btn');
     menuContent = document.getElementById('game-menu-content');
-
     playerNameInput = document.getElementById('player-name-input');
     startGameButton = document.getElementById('start-game-btn');
-
-    gameContainer = document.getElementById('game-container');
-
-    // 🌟 新增：獲取門動畫的 DOM 元素
     doorTransition = document.getElementById('door-transition');
-
-
-    // 2. 綁定所有初始事件監聽器
-    fileInput.addEventListener('change', handleFileUpload);
-    clearImgButton.addEventListener('click', function () {
-        uploadedImgDisplay.src = defaultImageSrc;
-        resetFileInput();
-        uploadedImgDisplay.style.display = 'none';
-    });
-    // 對話框點擊主要用於跳過打字效果
-    dialogueBox.addEventListener('click', skipTyping);
-
+    chapterTitleOverlay = document.getElementById('chapter-title-overlay');
+    fileInput = document.getElementById('char-upload');
+    bgmElement = document.getElementById('bgm');
+    
+    // 2. 設定事件監聽器
+    startGameButton.addEventListener('click', startGame);
     menuToggleButton.addEventListener('click', toggleMenu);
+    clearImgButton.addEventListener('click', clearImage);
+    fileInput.addEventListener('change', handleImageUpload);
+    
+    // 點擊對話框推進劇情 (選項出現時會被 disable)
+    dialogueBox.addEventListener('click', nextStep);
 
-    if (startGameButton) {
-        // 點擊開始遊戲按鈕時，載入劇本並啟動遊戲
-        startGameButton.addEventListener('click', loadAndStartGame);
+    // 3. 載入腳本並準備遊戲
+    loadScriptsAndInit();
+    
+    // 4. 嘗試載入存檔 (如果沒有則保持初始狀態)
+    loadGame();
+}
+
+/**
+ * 載入並整合劇本檔案
+ * 假設 script_main.js 和 script_tos.js 已作為全局變數載入
+ */
+function loadScriptsAndInit() {
+    // 檢查全域變數是否存在
+    if (typeof main_script_chap1 === 'undefined' || typeof script_tosLine === 'undefined') {
+        console.error("錯誤：劇本檔案 (script_main.js 或 script_tos.js) 未被正確載入。");
+        textContent.innerText = "錯誤：劇本載入失敗。請確認腳本文件已正確載入。";
+        return;
     }
-});
+
+    // 合併所有腳本
+    script = [...main_script_chap1, ...script_tosLine];
+
+    // 建立場景 ID 到場景數據的映射，方便快速查找
+    script.forEach(scene => {
+        scriptMap.set(scene.id, scene);
+    });
+
+    console.log(`劇本載入完成。共 ${script.length} 個場景。`);
+}
 
 // ----------------------------------------------------
-// 【✨ 菜單切換功能 ✨】
+// 【III. 遊戲流程控制】
 // ----------------------------------------------------
 
+/**
+ * 啟動遊戲
+ */
+function startGame() {
+    if (isTyping) return;
+    
+    // 1. 獲取玩家名稱
+    const inputName = playerNameInput.value.trim();
+    playerName = inputName === "" ? "你" : inputName;
+
+    // 2. 播放門動畫
+    doorTransition.style.display = 'flex';
+    setTimeout(() => {
+        startScreen.style.display = 'none'; // 隱藏開始畫面
+    }, 10); // 給予動畫時間
+
+    // 3. 開始播放 BGM
+    if (bgmElement) {
+        bgmElement.volume = 0.5;
+        bgmElement.play().catch(e => console.error("BGM播放失敗:", e));
+    }
+
+    // 4. 延遲開始場景，等待動畫結束
+    setTimeout(() => {
+        doorTransition.classList.add('animate-close');
+    }, 10);
+
+    setTimeout(() => {
+        doorTransition.classList.remove('animate-close');
+        doorTransition.style.display = 'none';
+        
+        gameContainer.style.opacity = 1;
+        playScene(currentSceneId); // 開始第一個場景
+        saveGame();
+    }, 1200); // 動畫時間約 1.2 秒
+}
+
+/**
+ * 播放特定 ID 的場景
+ * @param {string} sceneId - 場景的唯一 ID
+ */
+function playScene(sceneId) {
+    const scene = scriptMap.get(sceneId);
+    if (!scene) {
+        showEnding("ERROR_NOT_FOUND", `場景ID [${sceneId}] 不存在！`, loveScore);
+        return;
+    }
+
+    // 重置狀態
+    currentSceneId = sceneId;
+    currentStepIndex = 0;
+    optionsContainer.innerHTML = '';
+    isSceneActive = true;
+
+    // 顯示章節標題 (如果存在且尚未播放過)
+    if (scene.chapter && !visitedScenes.has(sceneId)) {
+        displayChapterTitle(scene.chapter);
+        visitedScenes.add(sceneId);
+        // 等待章節標題淡出後再開始對話
+        setTimeout(() => {
+            processStep(scene.steps[currentStepIndex]);
+        }, 3500); // 配合 displayChapterTitle 內動畫時間
+    } else {
+        processStep(scene.steps[currentStepIndex]);
+    }
+}
+
+/**
+ * 處理並顯示當前的對話步驟
+ * @param {object} step - 當前的對話步驟數據
+ */
+function processStep(step) {
+    if (!step) return;
+
+    // 替換名字
+    let speakerName = step.name === "旁白" ? step.name : step.name.replace("你", playerName);
+    let dialogueText = step.text.replace(/\[你的名字\]/g, playerName);
+
+    nameTag.innerText = speakerName;
+    typeText(dialogueText);
+}
+
+/**
+ * 推進到下一個對話步驟
+ */
+function nextStep() {
+    if (!isSceneActive) return; // 避免在等待打字時被點擊
+    if (isTyping) {
+        // 如果正在打字，則跳過打字動畫
+        textContent.innerText = textContent.dataset.fullText;
+        isTyping = false;
+        return;
+    }
+
+    const scene = scriptMap.get(currentSceneId);
+    if (!scene) return;
+
+    currentStepIndex++;
+
+    if (currentStepIndex < scene.steps.length) {
+        // 還有對話步驟
+        processStep(scene.steps[currentStepIndex]);
+    } else {
+        // 對話結束，顯示選項或檢查結局
+        isSceneActive = false;
+        
+        if (scene.options) {
+            displayOptions(scene.options);
+        } else if (scene.next) {
+            // 如果沒有選項，直接跳轉
+            handleOptionClick(scene.next, 0);
+        } else {
+            // 該場景沒有後續，檢查結局
+            checkEndings();
+        }
+        saveGame();
+    }
+}
+
+// ----------------------------------------------------
+// 【IV. 交互與文本顯示】
+// ----------------------------------------------------
+
+/**
+ * 顯示所有可選的選項按鈕
+ * @param {Array<object>} options - 選項陣列
+ */
+function displayOptions(options) {
+    optionsContainer.innerHTML = '';
+    optionsContainer.style.display = 'flex';
+    
+    // 點擊對話框不再推進劇情，直到選擇選項
+    dialogueBox.removeEventListener('click', nextStep);
+
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.innerText = option.text;
+        
+        button.addEventListener('click', () => {
+            // 重新啟用點擊對話框推進劇情
+            dialogueBox.addEventListener('click', nextStep);
+            
+            // 處理選項邏輯
+            optionsContainer.style.display = 'none';
+            handleOptionClick(option.next, option.score, option.reaction);
+        });
+        optionsContainer.appendChild(button);
+    });
+}
+
+/**
+ * 處理選項點擊後的邏輯
+ * @param {string} nextSceneId - 下一個場景 ID
+ * @param {number} scoreChange - 好感度變化值
+ * @param {string|Array<object>} reaction - 點擊後的反應對話
+ */
+function handleOptionClick(nextSceneId, scoreChange, reaction) {
+    updateLoveScore(scoreChange);
+    
+    // 如果有反應對話 (reaction)，則先播放 reaction
+    if (reaction) {
+        const reactionSteps = Array.isArray(reaction) 
+            ? reaction 
+            : [{ name: "旁白", text: reaction }];
+
+        // 構造一個臨時場景來播放 reaction
+        const tempSceneId = `reaction_${Date.now()}`;
+        const tempScene = {
+            id: tempSceneId,
+            steps: reactionSteps,
+            next: nextSceneId // reaction 播完後再跳轉到目標場景
+        };
+        scriptMap.set(tempSceneId, tempScene);
+        playScene(tempSceneId);
+        
+    } else {
+        // 沒有 reaction，直接跳轉
+        if (nextSceneId.startsWith('ending_check')) {
+            checkEndings(nextSceneId);
+        } else {
+            playScene(nextSceneId);
+        }
+    }
+}
+
+/**
+ * 打字機效果
+ * @param {string} fullText - 完整的文本內容
+ */
+function typeText(fullText) {
+    isTyping = true;
+    textContent.innerText = ''; // 清空文本
+    textContent.dataset.fullText = fullText; // 儲存完整文本
+    
+    let charIndex = 0;
+    const typingSpeed = 50; // 每個字符的延遲 (毫秒)
+
+    function typeChar() {
+        if (!isTyping) return; // 如果被 nextStep 提前跳過，則停止
+
+        if (charIndex < fullText.length) {
+            textContent.innerText += fullText.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeChar, typingSpeed);
+        } else {
+            isTyping = false;
+            isSceneActive = true; // 打字結束後允許點擊推進
+        }
+    }
+
+    typeChar();
+}
+
+/**
+ * 創建並顯示一個短暫的章節標題覆蓋層
+ * @param {string} title - 要顯示的章節標題
+ */
+function displayChapterTitle(title) {
+    if (!gameContainer || !chapterTitleOverlay) return;
+
+    chapterTitleOverlay.style.display = 'flex';
+    chapterTitleOverlay.innerText = title;
+    
+    // 1. 淡入 (Fade In)
+    setTimeout(() => {
+        chapterTitleOverlay.style.opacity = 1;
+    }, 10);
+
+    // 2. 顯示 3 秒
+    setTimeout(() => {
+        // 3. 淡出 (Fade Out)
+        chapterTitleOverlay.style.opacity = 0;
+
+        // 4. 動畫結束後移除元素
+        setTimeout(() => {
+            chapterTitleOverlay.style.display = 'none';
+        }, 500); // 配合 CSS transition duration
+    }, 3000);
+}
+
+
+// ----------------------------------------------------
+// 【V. 好感度與結局】
+// ----------------------------------------------------
+
+/**
+ * 更新好感度並更新顯示
+ * @param {number} change - 好感度的變化值
+ */
+function updateLoveScore(change) {
+    loveScore += change;
+    // 限制分數在 0 到 MAX_LOVE_SCORE 之間
+    loveScore = Math.max(0, Math.min(MAX_LOVE_SCORE, loveScore));
+    scoreDisplay.innerText = loveScore;
+    
+    // 根據分數調整 UI 顏色
+    const percentage = loveScore / MAX_LOVE_SCORE;
+    scoreDisplay.style.color = `hsl(0, 100%, ${60 - (percentage * 20)}%)`;
+    scoreDisplay.parentElement.style.textShadow = `0 0 10px rgba(255, 0, 0, ${percentage * 0.8})`;
+
+    saveGame();
+}
+
+/**
+ * 檢查並顯示結局
+ */
+function checkEndings(endingType) {
+    let title, description;
+
+    if (endingType === 'ending_check_NORMAL') {
+        if (loveScore >= 120) {
+            title = "🎉 完美結局：VBA之戀 (愛意滿滿)";
+            description = `你的好感度高達 ${loveScore}！林建成承認他對你的感情，並表示希望你們在職場與生活中都能成為彼此的 XLOOKUP，永遠不會找不到對方。`;
+        } else if (loveScore >= 50) {
+            title = "😊 一般結局：Power BI 之交 (友好關係)";
+            description = `你的好感度為 ${loveScore}。林建成將你視為他最好的工作夥伴，並推薦你使用 Power BI 簡化報表。你們的關係停留在專業的友誼。`;
+        } else {
+            title = "💔 悲慘結局：#REF! 錯誤 (關係破裂)";
+            description = `你的好感度只有 ${loveScore}。由於你的 Excel 格式過於混亂，林建成無法忍受，最終選擇了離職。你在他的離職單上看到了一個大大的 #REF! 錯誤。`;
+        }
+    } else if (endingType === 'ending_check_TOSS') {
+        if (loveScore >= 100) {
+            title = "🎮 隱藏結局：神魔之塔之戀 (共同登頂)";
+            description = `你和林建成因為共同迷戀神魔之塔而結緣，好感度 ${loveScore}。你們在遊戲中成了最強的拍檔，在現實中也從 Excel 轉為了戀人。你們的偉業鑄造了神魔之塔的一段傳說。`;
+        } else {
+            title = "📉 壞結局：Excel 還是遊戲？ (失去焦點)";
+            description = `你和林建成雖然一起玩遊戲，但你們的工作效率直線下降，好感度 ${loveScore}。你們最終都被主管約談，建成意識到遊戲並不能當飯吃，兩人的關係也隨之淡去。`;
+        }
+    } else {
+        // 如果是沒有指定類型的結局檢查
+        title = "🚧 遊戲結束 (未定義結局)";
+        description = `好感度: ${loveScore}。故事未完待續，或是發生了未知錯誤！`;
+    }
+
+    showEnding(title, description);
+}
+
+/**
+ * 顯示結局畫面
+ * @param {string} title - 結局標題
+ * @param {string} description - 結局描述
+ */
+function showEnding(title, description) {
+    // 禁用所有遊戲交互
+    isSceneActive = false;
+    dialogueBox.removeEventListener('click', nextStep);
+    optionsContainer.innerHTML = '';
+
+    // 創建結局畫面 DOM
+    let endScreen = document.getElementById('end-screen');
+    if (!endScreen) {
+        endScreen = document.createElement('div');
+        endScreen.id = 'end-screen';
+        endScreen.innerHTML = `
+            <h1 id="end-title" class="end-title"></h1>
+            <p id="end-desc" class="end-desc"></p>
+            <button id="restart-btn" class="end-button">重新開始</button>
+        `;
+        gameContainer.appendChild(endScreen);
+        
+        // 結局畫面的樣式 (使用嵌入式樣式，因為這裡沒有 styles.css)
+        endScreen.style.cssText = `
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.95); color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 5vh; z-index: 100; text-align: center;
+            animation: fadeIn 1.5s forwards;
+        `;
+        document.getElementById('restart-btn').style.cssText = `
+            margin-top: 3vh; padding: 1.5vh 3vh; font-size: 1.5em;
+            background: #ff6b6b; color: white; border: none;
+            border-radius: 1vh; cursor: pointer; transition: background 0.2s;
+        `;
+        document.getElementById('end-title').style.fontSize = '3em';
+        document.getElementById('end-desc').style.fontSize = '1.5em';
+        
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            localStorage.removeItem('visualNovelSave'); // 清除存檔
+            window.location.reload(); // 重新載入頁面
+        });
+    }
+
+    // 更新內容並顯示
+    document.getElementById('end-title').innerText = title;
+    document.getElementById('end-desc').innerText = description;
+    endScreen.style.display = 'flex';
+}
+
+// ----------------------------------------------------
+// 【VI. 存檔與讀檔 (使用 localStorage)】
+// ----------------------------------------------------
+
+/**
+ * 儲存遊戲進度到 localStorage
+ */
+function saveGame() {
+    const gameState = {
+        loveScore,
+        currentSceneId,
+        currentStepIndex,
+        playerName,
+        visitedScenes: Array.from(visitedScenes), // Set 轉為 Array 才能儲存
+        uploadedImgSrc: uploadedImgDisplay.src
+    };
+    try {
+        localStorage.setItem('visualNovelSave', JSON.stringify(gameState));
+        console.log("遊戲已儲存。");
+    } catch (e) {
+        console.error("儲存遊戲失敗:", e);
+    }
+}
+
+/**
+ * 從 localStorage 載入遊戲進度
+ */
+function loadGame() {
+    try {
+        const savedState = localStorage.getItem('visualNovelSave');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            
+            // 讀取狀態
+            loveScore = gameState.loveScore || 0;
+            currentSceneId = gameState.currentSceneId || 'scene_start';
+            currentStepIndex = gameState.currentStepIndex || 0;
+            playerName = gameState.playerName || "你";
+            visitedScenes = new Set(gameState.visitedScenes || []);
+            
+            // 更新 UI
+            updateLoveScore(0); // 僅更新顯示，分數不變
+            playerNameInput.value = playerName === "你" ? "" : playerName;
+            
+            // 處理圖片
+            if (gameState.uploadedImgSrc && gameState.uploadedImgSrc !== defaultImageSrc) {
+                uploadedImgDisplay.src = gameState.uploadedImgSrc;
+                uploadedImgDisplay.style.display = 'block';
+                characterImg.style.display = 'none';
+            } else {
+                uploadedImgDisplay.style.display = 'none';
+                characterImg.style.display = 'block';
+            }
+
+            // 顯示讀檔提示
+            const resumeBtn = document.createElement('button');
+            resumeBtn.innerText = "繼續上次的進度";
+            resumeBtn.id = "resume-game-btn";
+            resumeBtn.className = "start-btn";
+            resumeBtn.style.marginTop = '20px';
+            
+            const startBtn = document.getElementById('start-game-btn');
+            startBtn.parentElement.insertBefore(resumeBtn, startBtn.nextSibling);
+
+            resumeBtn.addEventListener('click', () => {
+                // 直接跳過開始畫面，進入上次的場景
+                startScreen.style.display = 'none';
+                gameContainer.style.opacity = 1;
+                
+                // 播放 BGM
+                if (bgmElement) {
+                    bgmElement.volume = 0.5;
+                    bgmElement.play().catch(e => console.error("BGM播放失敗:", e));
+                }
+                
+                // 繼續播放場景
+                const scene = scriptMap.get(currentSceneId);
+                if (scene && scene.steps[currentStepIndex]) {
+                    // 重新從上一個步驟開始
+                    currentStepIndex--; 
+                    playScene(currentSceneId); 
+                } else {
+                    // 如果索引或場景出錯，則從場景開頭開始
+                    playScene(currentSceneId);
+                }
+            });
+            
+            console.log(`遊戲已載入。上次進度：${currentSceneId}, 步驟 ${currentStepIndex}`);
+        }
+    } catch (e) {
+        console.error("讀取遊戲失敗:", e);
+        localStorage.removeItem('visualNovelSave');
+    }
+}
+
+// ----------------------------------------------------
+// 【VII. 菜單與圖片處理】
+// ----------------------------------------------------
+
+/**
+ * 切換菜單的顯示/隱藏
+ */
 function toggleMenu() {
-    // 簡單的顯示/隱藏切換
     if (menuContent.style.display === 'flex' || menuContent.style.display === 'block') {
         menuContent.style.display = 'none';
     } else {
@@ -667,44 +567,30 @@ function toggleMenu() {
     }
 }
 
-// ----------------------------------------------------
-// 【✨ 章節標題顯示功能 ✨】
-// ----------------------------------------------------
 /**
- * 創建並顯示一個短暫的章節標題覆蓋層
- * @param {string} title - 要顯示的章節標題
+ * 處理角色圖片上傳
  */
-function displayChapterTitle(title) {
-    if (!gameContainer) return;
-
-    const overlay = document.getElementById('chapter-title-overlay');
-    if (!overlay) return;
-
-    // 確保顯示
-    overlay.style.display = 'flex';
-    overlay.innerText = title;
-
-    // 1. 淡入 (Fade In)
-    setTimeout(() => {
-        overlay.style.opacity = 1;
-    }, 100);
-
-    // 2. 顯示 2.5 秒
-    setTimeout(() => {
-        // 3. 淡出 (Fade Out)
-        overlay.style.opacity = 0;
-
-        // 4. 動畫結束後移除元素
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 500); // 配合 CSS transition time
-    }, 2500);
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            uploadedImgDisplay.src = e.target.result;
+            uploadedImgDisplay.style.display = 'block';
+            characterImg.style.display = 'none'; // 隱藏預設圖片
+            saveGame();
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
-// ----------------------------------------------------
-// 【✨ 關鍵公開：讓 HTML 的 onclick 可以呼叫 ✨】
-// ----------------------------------------------------
-// 將核心函數公開給全局 window 對象，以便 HTML 中的 onclick 事件能直接調用
-window.startGame = startGame;
-window.restartGame = restartGame;
-window.loadAndStartGame = loadAndStartGame;
+/**
+ * 清除已上傳的角色圖片，恢復預設
+ */
+function clearImage() {
+    uploadedImgDisplay.src = '';
+    uploadedImgDisplay.style.display = 'none';
+    characterImg.style.display = 'block'; // 顯示預設圖片
+    fileInput.value = ''; // 重設文件輸入
+    saveGame();
+}
