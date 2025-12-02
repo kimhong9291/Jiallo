@@ -532,7 +532,7 @@ const main_script = [
                     { name: "建成", text: "「我和你的優先度一直都是最高的，你說對吧？」" },]
             },
             {
-                text: "你給我表是要你坐在我身上喘哦！？", score: 0, next: 'ending_check_TOS',
+                text: "你給我表是要你坐在我身上喘哦！？", score: 0, next: 'ending_check_TOSS',
                 reaction:
                     [{ name: "建成", text: "建成已經沉醉在這份諾言中。" },
                     { name: "旁白", text: "至此這是第一章對第二章的喘承。" },
