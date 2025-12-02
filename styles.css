@@ -241,8 +241,30 @@ body {
 
 /* 確保開始畫面容器可以接收動畫 */
 #start-screen {
+    /* 🌟 關鍵修正：確保全屏覆蓋 🌟 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* 確保在遊戲內容之上，但低於 Chapter Overlay (9999) */
+    z-index: 999; 
+    
+    /* 讓內容在畫面上居中顯示 */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    
+    /* 確保它有背景來覆蓋下面的遊戲容器 */
+    background: #ffefef; 
+    
+    /* 確保內容可以垂直排列 (如果需要) */
+    flex-direction: column; 
+    
+    /* 以下為原本的動畫屬性，請保留 */
     opacity: 1;
-    transition: opacity 0.5s ease-out; /* 用於淡出 */
+    transition: opacity 0.5s ease-out; 
 }
 
 /* 當 animate-intro 類別被添加時，觸發動畫效果 */
