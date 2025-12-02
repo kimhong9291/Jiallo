@@ -30,33 +30,19 @@ let startGameButton;
 
 // 🌟 遊戲容器 (用於翻轉)
 let gameContainer;
-import { script_tosLine } from "./script_data_tos";
-import { main_script_chap1 } from "./script_data";
+import { script_tosLine } from "./script_data_tos.js";
+import { main_script_chap1 } from "./script_data.js";
 
 let script = []; 
 
 async function loadAndStartGame() {
     try {
-        // 🌟 使用 Promise.all 同時發出兩個請求 🌟
-        const [mainResponse, tosResponse] = await Promise.all([
-            fetch('/.netlify/functions/script_data'),
-            fetch('/.netlify/functions/script_data_tos'), // 呼叫第一個接口
-               // 呼叫第二個接口
-        ]);
-
-        if (!mainResponse.ok || !tosResponse.ok) {
-            throw new Error('部分或全部劇本伺服器函數載入失敗');
-        }
-
-        // 獨立解析 JSON 資料
-        const mainData = await mainResponse.json();
-        const tosData = await tosResponse.json();
-
         // 🌟 合併所有劇本 🌟
-        script = [...mainData, ...tosData]; 
+        // 直接使用匯入的變數，假設它們都是一個劇本陣列
+        script = [...main_script_chap1, ...script_tosLine]; 
 
         // 開始遊戲
-        startGame(script);
+        startGame(); // 這裡不需要傳入 script 參數，因為 script 已經是全域變數
 
     } catch (error) {
         console.error("無法載入遊戲劇本！", error);
