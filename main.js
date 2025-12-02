@@ -35,23 +35,41 @@ let doorTransition;
 
 let script = []; 
 
+
+
+/**
+ * 載入本地劇本檔案並啟動遊戲
+ * 假設劇本檔案位於 /data/script_main.json 和 /data/script_tos.json
+ */
 async function loadAndStartGame() {
+    // 🌟 核心修改：從本地路徑載入 JSON 檔案 🌟
+    const SCRIPT_PATH_MAIN = './data/script_main.json';
+    const SCRIPT_PATH_TOS = './data/script_tos.json';
+
     try {
-        // 🌟 使用 Promise.all 同時發出兩個請求 🌟
+        // 使用 Promise.all 同時發出兩個本地文件請求
         const [mainResponse, tosResponse] = await Promise.all([
-            fetch('/.netlify/functions/script_data'),
-            fetch('/.netlify/functions/script_data_tos'), 
+            fetch(SCRIPT_PATH_MAIN),
+            fetch(SCRIPT_PATH_TOS), 
         ]);
 
-        if (!mainResponse.ok || !tosResponse.ok) {
-            throw new Error('部分或全部劇本伺服器函數載入失敗');
+        if (!mainResponse.ok) {
+            // 提供更詳細的錯誤信息
+            throw new Error(`主劇本載入失敗 (${mainResponse.status}): ${SCRIPT_PATH_MAIN}`);
+        }
+        if (!tosResponse.ok) {
+            throw new Error(`TOS劇本載入失敗 (${tosResponse.status}): ${SCRIPT_PATH_TOS}`);
         }
 
         // 獨立解析 JSON 資料
         const mainData = await mainResponse.json();
         const tosData = await tosResponse.json();
         
-        // 🌟 合併所有劇本 🌟
+        // 合併所有劇本 
+        // 確保 mainData 和 tosData 都是陣列
+        if (!Array.isArray(mainData) || !Array.isArray(tosData)) {
+             throw new Error("劇本檔案格式錯誤，預期為 JSON 陣列。");
+        }
         script = [...mainData, ...tosData]; 
         
         // 開始遊戲
@@ -59,10 +77,13 @@ async function loadAndStartGame() {
 
     } catch (error) {
         console.error("無法載入遊戲劇本！", error);
-        alert("遊戲載入失敗，無法取得劇本資料。");
+        // 提示用戶檢查文件路徑和伺服器（如果本地測試需要伺服器，如 Live Server）
+        alert(`遊戲載入失敗。請確認劇本檔案存在且路徑正確：${error.message}`);
     }
 }
 
+
+// ... (所有其他函式如 handleFileUpload, typeWriterEffect, nextStep 等保持不變) ...
 
 // ----------------------------------------------------
 // 文件上傳及清空核心邏輯 (保持不變)

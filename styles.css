@@ -33,9 +33,7 @@ body {
 }
 
 /* 容器翻頁動畫樣式 (已停用，但保留 class 以防萬一) */
-#game-container.flip-out {
-    /* 這裡不再有效果 */
-}
+
 
 /* 背景裝飾 (Excel 網格風格) */
 .bg-grid {
