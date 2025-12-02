@@ -326,74 +326,69 @@ function _loadSceneContent(id) {
 }
 
 
-/**
- * 處理場景切換，帶有容器翻頁效果
- * @param {string} id - 要切換到的場景 ID
- */
-/**
- * 處理場景切換，帶有容器翻頁效果
- * @param {string} id - 要切換到的場景 ID
- */
-/**
- * 處理場景切換，帶有容器翻頁效果
- * @param {string} id - 要切換到的場景 ID
- */
-function showScene(id) {
-    if (!gameContainer) {
-        console.warn("Game container not found. Skipping transition.");
-        _loadSceneContent(id);
-        return;
-    }
+// 替換您 main.js 中的 showScene 函式
 
-    // 【新增：提前獲取場景資料來檢查 Chapter】
+/**
+ * 處理場景切換，帶有容器翻頁效果
+ * @param {string} id - 要切換到的場景 ID
+ */
+function showScene(id) {
+    if (!gameContainer) {
+        console.warn("Game container not found. Skipping transition.");
+        _loadSceneContent(id);
+        return;
+    }
+
     const scene = script.find(s => s.id === id);
     if (!scene) {
         console.error(`找不到場景 ID: ${id}`);
         return;
     }
 
-    // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
-    dialogueBox.removeEventListener('click', nextStep);
-    gameContainer.classList.add('flip-out'); // 應用 CSS rotateY(180deg) 變換
+    // 1. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
+    dialogueBox.removeEventListener('click', nextStep);
+    gameContainer.classList.add('flip-out'); // 應用 CSS rotateY(180deg) 變換
 
-    // 2. 等待 Flip Out 動畫完成 (0.8s)
-    setTimeout(() => {
+    // 2. 等待 Flip Out 動畫完成 (0.8s)
+    setTimeout(() => {
+        // 在畫面轉到背面時 (180度)，先清空內容
+        textContent.innerText = '';
+        nameTag.innerText = '';
+        optionsContainer.innerHTML = '';
+        const oldTip = document.getElementById('next-step-tip');
+        if (oldTip) oldTip.remove();
 
-        // 🌟 關鍵修正點：在達到 180 度時（畫面在背面），立即清空內容
-        textContent.innerText = '';
-        nameTag.innerText = '';
-        const oldTip = document.getElementById('next-step-tip');
-        if (oldTip) oldTip.remove();
+        // 檢查是否有 Chapter Page 需要顯示
+        if (scene.chapter) {
+            // 【階段 A：顯示 Chapter Page (黑幕)】
+            displayChapterTitle(scene.chapter); // 顯示 Chapter 標題 (帶有 Fade In/Out 效果)
 
-        // 3. 立即開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
-        gameContainer.classList.remove('flip-out');
+            // 設置一個延遲，等待 Chapter Page 播放完畢 (約 3.1 秒)
+            setTimeout(() => {
+                // 【階段 B：開始翻轉回來】
+                gameContainer.classList.remove('flip-out'); // Flip In
 
-        // 4. 等待 Flip In 動畫完成 (再過 0.8s) -> 總計 1.6s
-        setTimeout(() => {
-
-            if (scene.chapter) {
-                // 【場景有 Chapter：先顯示 Chapter Page】
-                displayChapterTitle(scene.chapter); // 顯示章節標題
-                
-                // 延遲 3.1 秒 ( Chapter 顯示時間約 3 秒 + 緩衝 )，然後才載入對話。
-                // 這是 Page 1 到 Page 2 的過渡
+                // 等待 Flip In 動畫完成 (0.8s)
                 setTimeout(() => {
+                    // 【階段 C：載入真正的場景內容】
                     _loadSceneContent(id);
-                }, 3100); 
+                }, 800);
 
-            } else {
-                // 【場景無 Chapter：直接載入對話，插入一個小暫停】
-                setTimeout(() => {
-                    _loadSceneContent(id);
-                }, 1000); // 1000ms (1秒) 暫停
+            }, 3100); // 3100ms 是 Chapter Page 顯示時間 + 緩衝
 
-            } 
+        } else {
+            // 【無 Chapter Page：直接翻轉回來】
+            gameContainer.classList.remove('flip-out');
 
-        }, 800); // 800ms (Flip In 動畫時間)
+            // 等待 Flip In 動畫完成 (0.8s)
+            setTimeout(() => {
+                // 載入場景內容 (插入一個小暫停)
+                _loadSceneContent(id);
+            }, 800);
+        }
 
-    }, 800); // 800ms (Flip Out 動畫時間)
+    }, 800); // 800ms (Flip Out 動畫時間)
 }
-
 
 function startGame() {
 
