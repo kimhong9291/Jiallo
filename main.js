@@ -404,7 +404,7 @@ function startGame() {
         playerName = "你";
     }
 
-    // 2. 重置遊戲狀態 (這裡只需要重置變數，不要操作 DOM 的 display 屬性)
+    // 2. 重置遊戲狀態 
     loveScore = 0;
     currentSceneId = 'scene_start';
     currentStepIndex = 0;
@@ -422,24 +422,42 @@ function startGame() {
         audio.volume = 0.3;
         audio.play().catch(e => console.log("需使用者互動才能播放音樂或被阻止。"));
     }
-
-    // 🌟 【正確流程：觸發動畫並延遲主流程】 🌟
     
-    // 1. 讓開始畫面進入動畫狀態 (假設動畫持續 2 秒)
-    startScreen.classList.add('animate-intro'); 
+    // 🌟 移除舊的淡出動畫類別，確保不衝突 🌟
+    startScreen.classList.remove('animate-intro'); 
 
-    const ANIMATION_DURATION = 2000; // 2 秒 (請根據您的 CSS 動畫時間調整)
 
-    // 2. 延遲執行遊戲主要流程
+    // 🌟 【新的開場流程：使用 3D 翻轉效果來隱藏 Start Screen】🌟
+    
+    // A. 開始翻轉出去 (Flip Out: 0度 -> 180度, 0.8s)
+    gameContainer.classList.add('flip-out'); 
+
+    // B. 等待 Flip Out 動畫完成 (800ms)
     setTimeout(() => {
-        // 動畫結束後：
-        startScreen.style.display = 'none'; // 隱藏開始畫面
-        dialogueBox.style.display = 'block'; // 顯示對話框容器
-
-        // 啟動場景載入 (這將啟動 Flip 動畫 和 Chapter Title 顯示)
-        showScene('scene_start');
+        // 在畫面轉到背面時 (180度)：
         
-    }, ANIMATION_DURATION);
+        // 1. 隱藏 Start Screen (必須在此時隱藏，否則翻回來時會看到它)
+        startScreen.style.display = 'none'; 
+        
+        // 2. 顯示對話框容器
+        dialogueBox.style.display = 'block'; 
+
+        // C. 開始翻轉回來 (Flip In: 180度 -> 0度, 0.8s)
+        gameContainer.classList.remove('flip-out'); 
+
+        // D. 等待 Flip In 動畫完成 (800ms)
+        setTimeout(() => {
+            // E. 載入第一個場景的內容
+            // 由於這是開場，我們直接載入內容，跳過 showScene 的額外 Chapter 翻轉邏輯。
+            // 如果 'scene_start' 場景本身不需要 Chapter Title 轉場，則使用 _loadSceneContent
+            // 如果您確定 'scene_start' 有 Chapter Title，請改回 showScene('scene_start')
+            
+            // 建議使用 showScene，讓它自行處理 Chapter Title 邏輯
+            showScene('scene_start'); 
+            
+        }, 800); // Flip In 持續時間
+
+    }, 800); // Flip Out 持續時間
 }
 
 function processTextForName(text) {
