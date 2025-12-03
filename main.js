@@ -607,17 +607,6 @@ function restartGame() {
     }
 };
 
-function getGameState() {
-    return {
-        loveScore: loveScore,
-        currentSceneId: currentSceneId,
-        currentStepIndex: currentStepIndex,
-        playedChapters: Array.from(playedChapters), // Set 轉為 Array
-        visitedScenes: Array.from(visitedScenes),   // Set 轉為 Array
-        playerName: playerName,
-        // 確保這裡包含所有需要儲存的狀態
-    };
-}
 
 /**
  * 將遊戲狀態儲存到 LocalStorage
