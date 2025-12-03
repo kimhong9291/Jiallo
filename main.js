@@ -3,9 +3,11 @@ let loveScore = 0;
 let currentSceneId = 'scene_start';
 let currentStepIndex = 0;
 // 最佳實踐：使用 Set 來儲存 ID，因為 Set 只允許唯一值，查詢速度更快。
+let playedChapters = new Set();
 let visitedScenes = new Set();
-const MAX_LOVE_SCORE = 150;
+const MAX_LOVE_SCORE = 131;
 let playerName = "";
+const SAVE_KEY = 'excelLoveSave_slot1';
 
 
 // DOM 元素（預先聲明，在 DOMContentLoaded 內賦值）
@@ -27,6 +29,18 @@ let menuToggleButton;
 let menuContent;
 let playerNameInput;
 let startGameButton;
+
+function getGameState() {
+    return {
+        loveScore: loveScore,
+        currentSceneId: currentSceneId,
+        currentStepIndex: currentStepIndex,
+        playedChapters: Array.from(playedChapters), // Set 轉為 Array
+        visitedScenes: Array.from(visitedScenes),   // Set 轉為 Array
+        playerName: playerName,
+        // 確保這裡包含所有需要儲存的狀態
+    };
+}
 
 // 🌟 遊戲容器 (用於翻轉)
 let gameContainer;
@@ -310,20 +324,31 @@ function _loadSceneContent(id) {
         return;
     }
 
-    // 🌟 2. 【新增邏輯】檢查並顯示章節標題 🌟
-    // 如果場景有定義 chapter 屬性，就顯示章節標題
-    if (scene.chapter) {
-        displayChapterTitle(scene.chapter); 
+    function startSceneContent() {
+        // 記錄場景 ID
+        visitedScenes.add(id);
+
+        // 確保 nextStep 監聽器在 showScene 時被添加
+        dialogueBox.removeEventListener('click', nextStep);
+        dialogueBox.addEventListener('click', nextStep);
+
+        nextStep(); // 開始顯示第一個對話步驟
     }
+    // --------------------------------------------------------
 
-    // 記錄場景 ID
-    visitedScenes.add(id);
+    // 🌟 2. 檢查是否需要播放章節動畫 🌟
+    if (scene.chapter && !playedChapters.has(scene.chapter)) {
+        
+        const chapterTitle = scene.chapter;
+        playedChapters.add(chapterTitle); // 紀錄已播放
 
-    // 確保 nextStep 監聽器在 showScene 時被添加
-    dialogueBox.removeEventListener('click', nextStep);
-    dialogueBox.addEventListener('click', nextStep);
+        // 播放章節動畫，並將 startSceneContent 作為回調傳入
+        displayChapterTitle(chapterTitle, startSceneContent);
 
-    nextStep();
+    } else {
+        // 不需要播放章節動畫，直接載入場景內容
+        startSceneContent();
+    }
 }
 
 
@@ -401,6 +426,7 @@ function startGame() {
     currentStepIndex = 0;
     visitedScenes.clear();
     updateScore();
+    playedChapters.clear();
     startScreen.style.display = 'none';
     endScreen.style.display = 'none';
     dialogueBox.style.display = 'block';
@@ -430,16 +456,16 @@ function processTextForName(text) {
 
 function getNextScene(next) {
     // 範例：檢查是否是特殊判定的佔位符（你需要將選項中的 next 設為這個 ID）
-    if (next === '29') {
+    if (next === '131') {
         // --- 條件 A：高好感度 + 訪問過特定場景 ---
         // 假設 'scene_chat_morning' 是觸發高好感度特殊路線的前置場景
         if (loveScore >= 131 && visitedScenes.has('神魔之塔2') && !visitedScenes.has('神魔之塔3')) {
-            return '29_A';
+            return '131_A';
         }
         else if (loveScore >= 131 && visitedScenes.has('神魔之塔4') && (playerName=="白銀" || playerName=="白银")) {
-            return '29_Silver';
+            return '131_Silver';
         }
-        else { return '29'; }// 你的高好感度特殊場景 ID
+        else { return '131'; }// 你的高好感度特殊場景 ID
 
 
         // --- 條件 B：低好感度 + 未訪問過特定場景 ---
@@ -581,6 +607,125 @@ function restartGame() {
     }
 };
 
+function getGameState() {
+    return {
+        loveScore: loveScore,
+        currentSceneId: currentSceneId,
+        currentStepIndex: currentStepIndex,
+        playedChapters: Array.from(playedChapters), // Set 轉為 Array
+        visitedScenes: Array.from(visitedScenes),   // Set 轉為 Array
+        playerName: playerName,
+        // 確保這裡包含所有需要儲存的狀態
+    };
+}
+
+/**
+ * 將遊戲狀態儲存到 LocalStorage
+ */
+function saveGame() {
+    try {
+        const gameState = getGameState();
+        const jsonState = JSON.stringify(gameState);
+        localStorage.setItem(SAVE_KEY, jsonState);
+        alert("✅ 遊戲已存檔！");
+        console.log("遊戲狀態已儲存:", gameState);
+    } catch (e) {
+        console.error("存檔失敗:", e);
+        alert("❌ 存檔失敗，請檢查瀏覽器設定。");
+    }
+}
+
+/**
+ * 從 LocalStorage 載入遊戲狀態
+ */
+function loadGame() {
+    const savedState = localStorage.getItem(SAVE_KEY);
+    
+    if (!savedState) {
+        alert("❌ 找不到存檔！");
+        return false;
+    }
+    
+    try {
+        const loadedState = JSON.parse(savedState);
+        
+        // 1. 載入基本狀態變數
+        loveScore = loadedState.loveScore || 0;
+        currentSceneId = loadedState.currentSceneId || 'scene_start';
+        currentStepIndex = loadedState.currentStepIndex || 0;
+        playerName = loadedState.playerName || "你";
+
+        // 2. 載入 Set 類型的變數 (從 Array 轉回 Set)
+        playedChapters = new Set(loadedState.playedChapters || []);
+        visitedScenes = new Set(loadedState.visitedScenes || []);
+        
+        // 3. 更新畫面元素
+        updateScore();
+        startScreen.style.display = 'none';
+        endScreen.style.display = 'none';
+        dialogueBox.style.display = 'block';
+
+        // 4. 開始載入場景
+        // 注意：我們不能使用 showScene (帶有轉場動畫)，因為讀檔應該是立即的。
+        // 我們直接呼叫 _loadSceneContent 並手動設置 currentStepIndex
+        
+        // 確保先移除舊的監聽器
+        dialogueBox.removeEventListener('click', nextStep);
+
+        // 如果場景是第一次被訪問（剛讀檔），我們直接開始顯示當前的對話步驟
+        _loadSceneContent(currentSceneId); 
+
+        // 讀檔後，由於 _loadSceneContent 會從 currentStepIndex=0 開始執行，
+        // 我們需要手動推進到存檔時的步驟。
+        // **注意：由於 nextStep() 已經在 _loadSceneContent 內部被呼叫，
+        // 您的載入流程可能需要微調，以避免重複顯示。** // 最簡單的方法是強制跳過打字效果到存檔步驟。
+        
+        // 為了避免複雜的狀態同步，我們簡單地呼叫 nextStep 直到正確的 currentStepIndex。
+        // 由於 currentStepIndex 在 _loadSceneContent 裡被重置為 0，
+        // 我們需要將它手動恢復。
+
+        currentStepIndex = loadedState.currentStepIndex; // 恢復索引
+        
+        // 重新呼叫 nextStep 直到達到正確的步驟 (如果 currentStepIndex > 0)
+        // 由於您的 nextStep 已經處理了推進邏輯，這裡可能需要精確調整。
+        
+        // 為了簡單和穩定，我們直接重新載入目標步驟的文字：
+        
+        const scene = script.find(s => s.id === currentSceneId);
+        if (scene && scene.steps[currentStepIndex]) {
+            const step = scene.steps[currentStepIndex];
+            // 更新圖片和名字
+            if (step.img) {
+                characterImg.src = step.img;
+            }
+            nameTag.innerText = step.name;
+            textContent.innerText = processTextForName(step.text);
+            
+            // 判斷是否需要立即顯示選項或綁定 nextStep
+            if (currentStepIndex === scene.steps.length - 1) {
+                 displayOptions(scene.options);
+            } else {
+                 dialogueBox.addEventListener('click', nextStep);
+            }
+        }
+        
+        // **最終簡化：直接從存檔點重新開始**
+        // 為了避免複雜的步驟同步問題，我們讓遊戲從存檔場景的第一步 (currentStepIndex = 0) 重新開始。
+        // 移除上面所有關於手動設置 currentStepIndex 的複雜邏輯。
+        // 僅保留以下載入邏輯：
+        
+        _loadSceneContent(currentSceneId); // 載入存檔場景，從步驟 0 開始
+        
+        alert("✅ 遊戲已讀檔！將從該場景的開頭重新開始。");
+        return true;
+        
+    } catch (e) {
+        console.error("讀檔失敗:", e);
+        alert("❌ 讀檔失敗，存檔資料格式錯誤。");
+        return false;
+    }
+}
+
 
 // ----------------------------------------------------
 // 【✨ DOM 載入後初始化區塊】
@@ -651,7 +796,7 @@ function toggleMenu() {
  * 創建並顯示一個短暫的章節標題覆蓋層
  * @param {string} title - 要顯示的章節標題
  */
-function displayChapterTitle(title) {
+function displayChapterTitle(title,onComplete = () => {}) {
     if (!gameContainer) return; // 確保遊戲容器存在
 
     const existingChapter = document.getElementById('chapter-title-overlay');
@@ -680,6 +825,7 @@ function displayChapterTitle(title) {
         // 4. 動畫結束後移除元素
         setTimeout(() => {
             overlay.remove();
+            onComplete();
         }, 500); // 配合 CSS transition time
     }, 2500);
 }
@@ -689,3 +835,5 @@ function displayChapterTitle(title) {
 // ----------------------------------------------------
 window.startGame = startGame;
 window.restartGame = restartGame;
+window.saveGame = saveGame; // 🌟 新增
+window.loadGame = loadGame; // 🌟 新增

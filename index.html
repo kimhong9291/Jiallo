@@ -42,6 +42,13 @@ index.html
                     <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">重新開始</div>
                     <button id="interrupt-btn" class="menu-btn" onclick="restartGame()">中斷 (回到開始)</button>
                 </div>
+
+                <div id="save-load-section" style="margin-top: 1.5vh; border-top: 1px solid #eee; padding-top: 1.5vh;">
+                    <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">遊戲存檔</div>
+                    <button id="save-btn" class="menu-btn" onclick="saveGame()">💾 存檔</button>
+                    <button id="load-btn" class="menu-btn" onclick="loadGame()" style="margin-left: 10px;">📤
+                        讀檔</button>
+                </div>
             </div>
         </div>
 
@@ -52,8 +59,8 @@ index.html
         <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display" style="display: none;">
 
         <div id="dialogue-box">
-            <div id="name-tag">林建成</div>
-            <div id="text-content">...</div>
+            <div id="name-tag"></div>
+            <div id="text-content"></div>
         </div>
 
         <div id="options-container"></div>
@@ -64,7 +71,7 @@ index.html
 
             <p>請輸入你的名字 (可選，留空則使用「你」):</p>
 
-             <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
+            <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
                 style="margin: 10px 0; padding: 10px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 5px;">
 
             <button id="start-game-btn" class="option-btn"
