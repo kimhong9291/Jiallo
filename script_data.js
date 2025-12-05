@@ -563,9 +563,9 @@ export const main_script_chap1 = [
             { name: "文字卡片", text: "「$\text{TRUE}$」" }
         ],
         options: [
-            { text: "回覆：「這是什麼意思？」", score: 5, next: 'ending_placeholder', reaction: "建成回：「 $\text{IF}$ ( $\text{你願意}$ ), $\text{TRUE}$, $\text{FALSE}$ 」" },
-            { text: "回覆：「$\text{TRUE}$」", score: 30, next: 'ending_placeholder', reaction: "建成回：「我...我會永遠 $\text{Filter}$ 掉你所有的不開心。」" },
-            { text: "打電話給他，什麼都不說。", score: 20, next: 'ending_placeholder', reaction: "建成在電話那頭緊張地說：「我知道這個 $\text{Table}$ 沒寫清楚，但...我需要你。」" }
+            { text: "回覆：「這是什麼意思？」", score: 5, next: '38', reaction: "建成回：「 $\text{IF}$ ( $\text{你願意}$ ), $\text{TRUE}$, $\text{FALSE}$ 」" },
+            { text: "回覆：「$\text{TRUE}$」", score: 30, next: '38', reaction: "建成回：「我...我會永遠 $\text{Filter}$ 掉你所有的不開心。」" },
+            { text: "打電話給他，什麼都不說。", score: 20, next: '38', reaction: "建成在電話那頭緊張地說：「我知道這個 $\text{Table}$ 沒寫清楚，但...我需要你。」" }
         ]
     },
 
