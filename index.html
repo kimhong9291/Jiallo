@@ -10,7 +10,7 @@ index.html
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>千戀建成 - Excel之戀 (分批播放版)</title>
+    <title>千戀萬成 - Excel之戀 (分批播放版)</title>
 
     <link rel="stylesheet" href="./styles.css">
 </head>
@@ -49,13 +49,27 @@ index.html
                     <button id="load-btn" class="menu-btn" onclick="loadGame()" style="margin-left: 10px;">📤
                         讀檔</button>
                 </div>
+
+                <button id="open-announcement-btn">查看最新公告</button>
+
+                <div id="myModal" class="modal">
+
+                    <div class="modal-content">
+                        <span class="close-btn">&times;</span>
+                        <h2>📢 公告</h2>
+                        <p>歡迎來到《千戀萬成》！感謝您遊玩此遊戲。</p>
+                        <p>本遊戲的劇本和圖片含有大量AI生成和非官方授權素材，整個企劃只屬愛好製作，無謀取盈利之意。可轉載分享但不可作用於商業用途。</p>
+                        <p>遊戲內的所有角色和故事都與現實不符，如有雷同純屬巧合。</p>
+                        <p>祝各位能夠展開新奇的試算表戀情！</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="love-meter">好感度: <span id="score">0</span> ❤</div>
 
         <img id="character-img" src="https://via.placeholder.com/300x500/cccccc/000000?text=Please+Upload+Jiancheng"
-            alt="林建成">
+            alt="建成">
         <img id="char-img-display" src="" alt="Uploaded Character" class="char-upload-display" style="display: none;">
 
         <div id="dialogue-box">
@@ -66,11 +80,10 @@ index.html
         <div id="options-container"></div>
 
         <div id="start-screen" style="display: flex;">
-            <h1>千戀建成 - Excel之戀</h1>
+            <h1>千戀萬成 - Excel之戀</h1>
             <h3>那個...你的Excel寫錯了</h3>
 
             <p>請輸入你的名字 (可選，留空則使用「你」):</p>
-
             <input type="text" id="player-name-input" placeholder="你" maxlength="10" autocomplete="off"
                 style="margin: 10px 0; padding: 10px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 5px;">
 

@@ -5,7 +5,7 @@ export const main_script_chap1 = [
         id: 'scene_start',
         steps: [
             { name: "旁白", text: "（你在辦公室加班，突然感覺背後有一道視線。）" },
-            { name: "林建成", text: "這麼晚了還在做報表？讓我看看你的格式。" }
+            { name: "建成", text: "這麼晚了還在做報表？讓我看看你的格式。" }
         ],
         options: [
             { text: "緊張地遮住螢幕", score: -5, next: '1', reaction: "建成皺眉：「遮遮掩掩的，肯定是用手動計算機算的吧？」" },
@@ -16,8 +16,8 @@ export const main_script_chap1 = [
     {
         id: '1',
         steps: [
-            { name: "林建成", text: "林建成推了推眼鏡，指著你的 D 欄位。" },
-            { name: "林建成", text: "這裡的數據量很大，你打算怎麼整理？" }
+            { name: "建成", text: "建成推了推眼鏡，指著你的 D 欄位。" },
+            { name: "建成", text: "這裡的數據量很大，你打算怎麼整理？" }
         ],
         options: [
             { text: "合併儲存格 (Merge Cells)", score: -20, next: '2', reaction: "建成的臉色瞬間發黑：「合併儲存格是 Excel 的萬惡之源！以後不准這樣做！」" },
@@ -28,8 +28,8 @@ export const main_script_chap1 = [
     {
         id: '2',
         steps: [
-            { name: "旁白", text: "（加班結束了，林建成似乎還不想走。）" },
-            { name: "林建成", text: "那個...如果你週末有空的話..." }
+            { name: "旁白", text: "（加班結束了，建成似乎還不想走。）" },
+            { name: "建成", text: "那個...如果你週末有空的話..." }
         ],
         options: [
             { text: "一起去吃飯嗎？", score: 5, next: '3', reaction: "建成：「吃飯？嗯，也是可以，但我原本想說的是...」" },
@@ -41,7 +41,7 @@ export const main_script_chap1 = [
         id: '3',
         steps: [
             { name: "旁白", text: "（你正要去影印室，卻看到建成正盯著影印機一臉困惑。）" },
-            { name: "林建成", text: "…這台怎麼又卡紙？" }
+            { name: "建成", text: "…這台怎麼又卡紙？" }
         ],
         options: [
             {
@@ -98,8 +98,8 @@ export const main_script_chap1 = [
     {
         id: '5',
         steps: [
-            { name: "林建成", text: "林建成給了你一份奇怪的資料表。" },
-            { name: "林建成", text: "這是我平常用來測試新人能力的…你能用一行公式解決嗎？" }
+            { name: "建成", text: "建成給了你一份奇怪的資料表。" },
+            { name: "建成", text: "這是我平常用來測試新人能力的…你能用一行公式解決嗎？" }
         ],
         options: [
             {
@@ -125,7 +125,7 @@ export const main_script_chap1 = [
     {
         id: '6',
         steps: [
-            { name: "旁白", text: "林建成因為讓顧客在自己的excel表中找出自己從來沒在表中記錄的feature，導致現在被顧客痛罵中。" }
+            { name: "旁白", text: "建成因為讓顧客在自己的excel表中找出自己從來沒在表中記錄的feature，導致現在被顧客痛罵中。" }
         ],
         options: [
             {
@@ -152,7 +152,7 @@ export const main_script_chap1 = [
         id: '7',
         steps: [
             { name: "旁白", text: "在你休息期間，建成走到了你的旁邊。" },
-            { name: "林建成", text: "那個，你平時有什麼遊戲推薦我玩嗎？" }
+            { name: "建成", text: "那個，你平時有什麼遊戲推薦我玩嗎？" }
         ],
         options: [
             {
@@ -160,9 +160,9 @@ export const main_script_chap1 = [
                 score: 0,
                 next: '8', // 導向新的場景 8
                 reaction: [
-                    { name: "林建成", text: "建成點頭「原神嗎...我來玩玩看好了。」" },
+                    { name: "建成", text: "建成點頭「原神嗎...我來玩玩看好了。」" },
                     { name: "旁白", text: "過了一段時間..." },
-                    { name: "林建成", text: "看起來算傷害的公式好有趣，我也去建立自己的計算機好了。" }
+                    { name: "建成", text: "看起來算傷害的公式好有趣，我也去建立自己的計算機好了。" }
                 ],
             },
             {
@@ -170,7 +170,7 @@ export const main_script_chap1 = [
                 score: 0,
                 next: '神魔之塔1', // 保留神魔之塔線路
                 reaction: [
-                    { name: "林建成", text: "建成點頭「神魔之塔嗎...我來玩玩看好了。」" },
+                    { name: "建成", text: "建成點頭「神魔之塔嗎...我來玩玩看好了。」" },
                 ],
             },
             {
@@ -178,7 +178,7 @@ export const main_script_chap1 = [
                 score: -10,
                 next: '8', // 導向新的場景 8
                 reaction: [
-                    { name: "林建成", text: "建成點頭「咦，原來你喜歡這種美少女的遊戲嗎...」" },
+                    { name: "建成", text: "建成點頭「咦，原來你喜歡這種美少女的遊戲嗎...」" },
                     { name: "旁白", text: "看得出建成對你稍微有些失望，但藝術不被別人理解也很正常。" },
                 ],
             }
@@ -190,7 +190,7 @@ export const main_script_chap1 = [
     {
         id: '8',
         steps: [
-            { name: "林建成", text: "「這個 'TEXTSPLIT' 函數...為什麼我用起來總是不如預期？」" },
+            { name: "建成", text: "「這個 'TEXTSPLIT' 函數...為什麼我用起來總是不如預期？」" },
             { name: "旁白", text: "建成拿著最新的報告，臉上寫滿了困惑，這時候正是展現你技術實力的大好時機。" }
         ],
         options: [
@@ -203,7 +203,7 @@ export const main_script_chap1 = [
         id: '9',
         steps: [
             { name: "旁白", text: "你發現建成正在為一個客戶報告設計圖表，但他選擇的顏色和字體...實在是慘不忍睹。" },
-            { name: "林建成", text: "「這張 '甜甜圈圖' 是不是很生動？我想用亮黃色代表『銷售額』。」" }
+            { name: "建成", text: "「這張 '甜甜圈圖' 是不是很生動？我想用亮黃色代表『銷售額』。」" }
         ],
         options: [
             { text: "稱讚他，並說『用色大膽』。", score: -10, next: '10', reaction: "建成自信滿滿：「我就知道我的美感是獨一無二的。」（旁白：事實上很災難）" },
@@ -215,7 +215,7 @@ export const main_script_chap1 = [
         id: '10',
         steps: [
             { name: "旁白", text: "早上，咖啡機壞了，辦公室裡一片哀嚎。建成顯得特別焦躁不安。" },
-            { name: "林建成", text: "「沒有咖啡因，我的腦袋裡的 $\text{IFS}$ 函數都打結了，這怎麼寫得下去？」" }
+            { name: "建成", text: "「沒有咖啡因，我的腦袋裡的 $\text{IFS}$ 函數都打結了，這怎麼寫得下去？」" }
         ],
         options: [
             { text: "立刻衝出去買一杯他最喜歡的黑咖啡。", score: 20, next: '11', reaction: "建成喝下咖啡後，滿足地嘆息：「你就像我公式裡的 $\text{IFERROR}$ 容錯機制一樣，總是能及時出現。」" },
@@ -226,7 +226,7 @@ export const main_script_chap1 = [
     {
         id: '11',
         steps: [
-            { name: "林建成", text: "「我們部門準備在週五舉辦一個『數據清潔工作坊』，你有興趣參加嗎？」" },
+            { name: "建成", text: "「我們部門準備在週五舉辦一個『數據清潔工作坊』，你有興趣參加嗎？」" },
             { name: "旁白", text: "他的邀請帶有一絲期待，但聽起來更像是一場技術交流會。" }
         ],
         options: [
@@ -239,7 +239,7 @@ export const main_script_chap1 = [
         id: '12',
         steps: [
             { name: "旁白", text: "建成正在對著一份亂七八糟的檔案發脾氣，因為裡面的欄位命名五花八門。" },
-            { name: "林建成", text: "「為什麼他們不能遵守標準的『駝峰式命名法』（$\text{CamelCase}$）？這簡直是數據犯罪！」" }
+            { name: "建成", text: "「為什麼他們不能遵守標準的『駝峰式命名法』（$\text{CamelCase}$）？這簡直是數據犯罪！」" }
         ],
         options: [
             { text: "附和：「沒錯！我最討厭那些『空格』和『全形符號』了！」", score: 10, next: '13', reaction: "建成：「找到知音了！你真是個有原則的數據人。」" },
@@ -251,7 +251,7 @@ export const main_script_chap1 = [
         id: '13',
         steps: [
             { name: "旁白", text: "你們一起完成了一個重要的專案，建成突然臉色大變，電腦畫面顯示『尚未存檔』。" },
-            { name: "林建成", text: "「天啊！我剛剛竟然忘了按 $ \text{Ctrl}+\text{S}$！這份報表是客戶的命脈！」" }
+            { name: "建成", text: "「天啊！我剛剛竟然忘了按 $ \text{Ctrl}+\text{S}$！這份報表是客戶的命脈！」" }
         ],
         options: [
             { text: "立刻嘗試 $ \text{Office}$ 的自動修復功能。", score: 15, next: '14', reaction: "建成感激地看著你：「你總是在關鍵時刻冷靜，就像 $\text{Excel}$ 的『自動儲存』一樣可靠。」" },
@@ -263,7 +263,7 @@ export const main_script_chap1 = [
         id: '14',
         steps: [
             { name: "旁白", text: "你們都需要臨時去外地出差三天，辦公室裡剩下你們兩人準備行李。" },
-            { name: "林建成", text: "「這次出差，我們是去解決一個關於『資料連結』的問題，你準備好了嗎？」" }
+            { name: "建成", text: "「這次出差，我們是去解決一個關於『資料連結』的問題，你準備好了嗎？」" }
         ],
         options: [
             { text: "抱怨：「我還以為我們能去度假，而不是去修 $ \text{SQL}$ 連結。」", score: -5, next: '15', reaction: "建成：「數據人的浪漫就是修 $ \text{bug}$，不是沙灘和陽光！」" },
@@ -437,7 +437,7 @@ export const main_script_chap1 = [
         id: '27',
         steps: [
             { name: "旁白", text: "建成交給你一份充滿重複值、錯誤格式和缺失值的『地獄級』數據表。" },
-            { name: "林建成", text: "「這是我們部門今年最大的挑戰，你敢接受這個『數據清潔』的試煉嗎？」" }
+            { name: "建成", text: "「這是我們部門今年最大的挑戰，你敢接受這個『數據清潔』的試煉嗎？」" }
         ],
         options: [
             // ** next 已修正為 '28' **
@@ -452,7 +452,7 @@ export const main_script_chap1 = [
         id: '28',
         steps: [
             { name: "旁白", text: "建成帶你到他的電腦前，螢幕上是一個精美的儀表板。" },
-            { name: "林建成", text: "「這是我用來追蹤...我們兩個相處時間的『合作效率統計圖』。」" }
+            { name: "建成", text: "「這是我用來追蹤...我們兩個相處時間的『合作效率統計圖』。」" }
         ],
         options: [
             { text: "「這有點太...數據化了吧？」", score: 5, next: '29', reaction: "建成：「數據可以說明一切，包括心跳頻率。」" },
@@ -463,8 +463,8 @@ export const main_script_chap1 = [
     {
         id: '29',
         steps: [
-            { name: "林建成", text: "「週末有一個地區性的 Excel 數據分析競賽，我邀請你去。」" },
-            { name: "林建成", text: "「雖然是以個人名義參加，但我們可以在場邊討論技巧。」" }
+            { name: "建成", text: "「週末有一個地區性的 Excel 數據分析競賽，我邀請你去。」" },
+            { name: "建成", text: "「雖然是以個人名義參加，但我們可以在場邊討論技巧。」" }
         ],
         options: [
             { text: "「這是約會吧？」", score: 20, next: '30', reaction: "建成結巴：「這...這是技術交流！」" },
@@ -476,7 +476,7 @@ export const main_script_chap1 = [
         id: '30',
         steps: [
             { name: "旁白", text: "在競賽場地，你們被分派到一組需要快速解決的複雜問題。你們需要展現默契。" },
-            { name: "林建成", text: "「我負責用 $\text{Power Query}$ 清理，你負責用 $\text{DAX}$ 建模？」" }
+            { name: "建成", text: "「我負責用 $\text{Power Query}$ 清理，你負責用 $\text{DAX}$ 建模？」" }
         ],
         options: [
             { text: "「沒問題，完美分工！」", score: 15, next: '31', reaction: "建成：「我們是天作之合。」" },
@@ -488,7 +488,7 @@ export const main_script_chap1 = [
         id: '31',
         steps: [
             { name: "旁白", text: "午休時，建成拿出一個用食物做成的『數據可視化』小餅乾。" },
-            { name: "林建成", text: "「這是...甜甜圈圖，但我這次選了對的顏色。送給你。」" }
+            { name: "建成", text: "「這是...甜甜圈圖，但我這次選了對的顏色。送給你。」" }
         ],
         options: [
             { text: "「太可愛了！謝謝你。」", score: 15, next: '32', reaction: "建成得意：「只要用心的數據，就能帶來美味。」" },
@@ -499,8 +499,8 @@ export const main_script_chap1 = [
     {
         id: '32',
         steps: [
-            { name: "林建成", text: "「其實我最近在設計一個『家庭預算表』模型...」" },
-            { name: "林建成", text: "「它必須非常穩固，能夠處理突發事件，並且長期都能保持完美的 $\text{ROI}$。」" }
+            { name: "建成", text: "「其實我最近在設計一個『家庭預算表』模型...」" },
+            { name: "建成", text: "「它必須非常穩固，能夠處理突發事件，並且長期都能保持完美的 $\text{ROI}$。」" }
         ],
         options: [
             { text: "「聽起來像是一份兩人共同的未來計畫。」", score: 20, next: '33', reaction: "建成臉上的紅暈擴散：「我...我的意思是...一個穩定的家庭是很重要的。」" },
@@ -512,7 +512,7 @@ export const main_script_chap1 = [
         id: '33',
         steps: [
             { name: "旁白", text: "在公司茶水間，你們巧遇。建成沒有說話，只是靜靜地看著你。" },
-            { name: "林建成", text: "「...我發現你今天的工作效率，比昨天高了 $\text{15%}$。」" }
+            { name: "建成", text: "「...我發現你今天的工作效率，比昨天高了 $\text{15%}$。」" }
         ],
         options: [
             { text: "「因為我看到你了。」", score: 20, next: '34', reaction: "建成眼神閃爍，緊張地推了推眼鏡：「你...你真會開玩笑。」" },
@@ -523,8 +523,8 @@ export const main_script_chap1 = [
     {
         id: '34',
         steps: [
-            { name: "林建成", text: "「你對自己的人生規劃，有沒有做一個 $\text{S.M.A.R.T}$ 原則的表格？」" },
-            { name: "林建成", text: "「具體的（$\text{Specific}$）、可衡量的（$\text{Measurable}$）...」" }
+            { name: "建成", text: "「你對自己的人生規劃，有沒有做一個 $\text{S.M.A.R.T}$ 原則的表格？」" },
+            { name: "建成", text: "「具體的（$\text{Specific}$）、可衡量的（$\text{Measurable}$）...」" }
         ],
         options: [
             { text: "「我的 $\text{Goal}$ 是：讓你開心。」", score: 25, next: '35', reaction: "建成語塞：「這...這太不 $\text{Specific}$ 了，但...但我很喜歡。」" },
@@ -536,7 +536,7 @@ export const main_script_chap1 = [
         id: '35',
         steps: [
             { name: "旁白", text: "深夜，你收到建成傳來的一條訊息，內容是：「你知道 $\text{LEFT JOIN}$ 和 $\text{FULL OUTER JOIN}$ 的區別嗎？」" },
-            { name: "林建成 (訊息)", text: "「前者只保留你，後者保留一切，包括我的全部。」" }
+            { name: "建成 (訊息)", text: "「前者只保留你，後者保留一切，包括我的全部。」" }
         ],
         options: [
             { text: "回：「你是想 $\text{JOIN}$ 我嗎？」", score: 30, next: '36', reaction: "建成回了一個火熱的表情符號。" },
@@ -548,7 +548,7 @@ export const main_script_chap1 = [
         id: '36',
         steps: [
             { name: "旁白", text: "你們週末一起去書店。建成直奔技術書區，你則在文學區徘徊。" },
-            { name: "林建成", text: "「你在看什麼？是關於情感的『行為分析報告』嗎？」" }
+            { name: "建成", text: "「你在看什麼？是關於情感的『行為分析報告』嗎？」" }
         ],
         options: [
             { text: "走過去，輕輕靠在他旁邊看 $\text{SQL}$ 書。", score: 15, next: '37', reaction: "建成全身僵硬，但嘴角微微上揚：「我...我來給你解釋這個 $\text{Schema}$。」" },
@@ -573,8 +573,8 @@ export const main_script_chap1 = [
         id: '38',
         steps: [
             { name: "旁白", text: "你回覆 $\text{ID 37}$ 的訊息後，建成隔天顯得心神不寧，總是盯著螢幕上一個不斷跳動的數字。" },
-            { name: "林建成", text: "「這個 $\text{Value}$...它不應該在這裡。這是一個『數據雜訊』（$\text{Data Noise}$），而且非常規律。」" },
-            { name: "林建成", text: "「我懷疑有人在我們的核心報表裡，**植入了一個惡意的 $\text{Loop}$**。」" }
+            { name: "建成", text: "「這個 $\text{Value}$...它不應該在這裡。這是一個『數據雜訊』（$\text{Data Noise}$），而且非常規律。」" },
+            { name: "建成", text: "「我懷疑有人在我們的核心報表裡，**植入了一個惡意的 $\text{Loop}$**。」" }
         ],
         options: [
             { text: "「別自己嚇自己，也許只是伺服器延遲。」", score: -5, next: '39', reaction: "建成搖頭：「我對 $\text{Latency}$ 很熟悉，這不是延遲。」" },
@@ -586,8 +586,8 @@ export const main_script_chap1 = [
         id: '39',
         steps: [
             { name: "旁白", text: "建成將你約到茶水間，壓低聲音，顯得非常焦慮。" },
-            { name: "林建成", text: "「我現在最擔心的是...有人在我們的視覺化儀表板上，做了『**惡意的 $\text{Conditional Formatting}$**』。」" },
-            { name: "林建成", text: "「表面上數據看起來是綠色的、正常的，但實際背後卻是 $\text{FALSE}$，是個巨大的 $\text{Illusion}$。」" }
+            { name: "建成", text: "「我現在最擔心的是...有人在我們的視覺化儀表板上，做了『**惡意的 $\text{Conditional Formatting}$**』。」" },
+            { name: "建成", text: "「表面上數據看起來是綠色的、正常的，但實際背後卻是 $\text{FALSE}$，是個巨大的 $\text{Illusion}$。」" }
         ],
         options: [
             { text: "「所以，我們要去找出那個 $\text{FALSE}$ 的條件？」", score: 15, next: '40', reaction: "建成：「對！我們要找到那個**隱藏起來的 $\text{IF}$ 條件**。」" },
@@ -599,8 +599,8 @@ export const main_script_chap1 = [
         id: '40',
         steps: [
             { name: "旁白", text: "你們回到建成的電腦前，他迅速打開核心數據的源文件。" },
-            { name: "林建成", text: "「看！所有的 $\text{Input}$ 欄位，都多了一條『**隱藏的 $\text{Custom Formula}$**』，它在表面數字提交後，偷偷進行了 $\text{1\%}$ 的向下調整。」" },
-            { name: "林建成", text: "「這不是 $\text{Error}$，這是**故意的 $\text{Manipulation}$**。」" }
+            { name: "建成", text: "「看！所有的 $\text{Input}$ 欄位，都多了一條『**隱藏的 $\text{Custom Formula}$**』，它在表面數字提交後，偷偷進行了 $\text{1\%}$ 的向下調整。」" },
+            { name: "建成", text: "「這不是 $\text{Error}$，這是**故意的 $\text{Manipulation}$**。」" }
         ],
         options: [
             { text: "「我們需要一個不被打擾的空間來解決這個問題。」", score: 10, next: '41', reaction: "建成：「你說得對！我有一個地方...」" },
@@ -612,7 +612,7 @@ export const main_script_chap1 = [
         id: '41',
         steps: [
             { name: "旁白", text: "建成帶著你來到那間位於頂樓的閒置儲藏室，現在它佈置成了你們的秘密基地。" },
-            { name: "林建成", text: "「這裡是我們唯一的『**離線數據中心**』，在我們找到『**數據入侵者**』之前，所有分析都必須在這裡進行。」" }
+            { name: "建成", text: "「這裡是我們唯一的『**離線數據中心**』，在我們找到『**數據入侵者**』之前，所有分析都必須在這裡進行。」" }
         ],
         options: [
             { text: "「我喜歡這個『秘密基地』。」", score: 15, next: '42', reaction: "建成：「它也是我們關係的 $\text{Private Cloud}$。」" },
@@ -623,8 +623,8 @@ export const main_script_chap1 = [
     {
         id: '42',
         steps: [
-            { name: "林建成", text: "「我們現在面對的是一個 $\text{Data Leak}$ 級別的危機，如果我們無法用 $\text{Filter}$ 篩選出惡意 $\text{Code}$，公司將面臨巨大損失。」" },
-            { name: "林建成", text: "「這件事對我非常重要...你願意冒這個險，和我一起成為這場危機的 $\text{Data Guardian}$ 嗎？」" }
+            { name: "建成", text: "「我們現在面對的是一個 $\text{Data Leak}$ 級別的危機，如果我們無法用 $\text{Filter}$ 篩選出惡意 $\text{Code}$，公司將面臨巨大損失。」" },
+            { name: "建成", text: "「這件事對我非常重要...你願意冒這個險，和我一起成為這場危機的 $\text{Data Guardian}$ 嗎？」" }
         ],
         options: [
             { text: "握住他的手：「我會是你的 $\text{Immutable Data}$，永遠不會改變。」", score: 25, next: '43', reaction: "建成心跳加速：「我...我會永遠 $\text{Back up}$ 妳。」" },
@@ -636,8 +636,8 @@ export const main_script_chap1 = [
         id: '43',
         steps: [
             { name: "旁白", text: "經過初步分析，你們的嫌疑人指向了你們部門一位技術高超但性格孤僻的資深員工 $\text{A}$。" },
-            { name: "林建成", text: "「我檢查了 $\text{Log}$，只有他有權限在這麼短的時間內，對所有核心 $\text{Table}$ 進行 $\text{Edit}$。」" },
-            { name: "林建成", text: "「他的 $\text{Pattern}$ 很明確，但他把所有的 $\text{Evidence}$ 都藏在了一個 $\text{Nested IF}$ 裡面。」" }
+            { name: "建成", text: "「我檢查了 $\text{Log}$，只有他有權限在這麼短的時間內，對所有核心 $\text{Table}$ 進行 $\text{Edit}$。」" },
+            { name: "建成", text: "「他的 $\text{Pattern}$ 很明確，但他把所有的 $\text{Evidence}$ 都藏在了一個 $\text{Nested IF}$ 裡面。」" }
         ],
         options: [
             { text: "「我來負責去引導他，讓他自己露出破綻。」", score: 20, next: '44', reaction: "建成：「妳要對他進行 $\text{Social Engineering}$？太危險了！」" },
@@ -648,8 +648,8 @@ export const main_script_chap1 = [
     {
         id: '44',
         steps: [
-            { name: "林建成", text: "「妳負責在『閒聊』中，尋找他 $\text{Code}$ 裡的『邏輯謬誤』，這是妳的 $\text{VBA}$ 任務。」" },
-            { name: "林建成", text: "「我的 $\text{VBA}$ 任務是：**監控他所有對數據的 $\text{Write Access}$**。我們必須在最短時間內完成 $\text{Patch}$。」" }
+            { name: "建成", text: "「妳負責在『閒聊』中，尋找他 $\text{Code}$ 裡的『邏輯謬誤』，這是妳的 $\text{VBA}$ 任務。」" },
+            { name: "建成", text: "「我的 $\text{VBA}$ 任務是：**監控他所有對數據的 $\text{Write Access}$**。我們必須在最短時間內完成 $\text{Patch}$。」" }
         ],
         options: [
             { text: "「好，我會像 $\text{XLOOKUP}$ 一樣，精準地找到他的 $\text{Return Array}$。」", score: 15, next: '45', reaction: "建成：「妳的學習能力比我想像的還要快！」" },
@@ -673,7 +673,7 @@ export const main_script_chap1 = [
         id: '46',
         steps: [
             { name: "旁白", text: "你回到座位上，收到建成傳來的一條訊息，內容是一組 $\text{INDEX/MATCH}$ 函數。" },
-            { name: "林建成 (訊息)", text: "「$\text{INDEX}$ ( $\text{真相}$ ) , $\text{MATCH}$ ( $\text{惡意} , \text{日期欄位}, \text{0}$ )。用妳的 $\text{MATCH}$，精準找到 $\text{Index}$。」" }
+            { name: "建成 (訊息)", text: "「$\text{INDEX}$ ( $\text{真相}$ ) , $\text{MATCH}$ ( $\text{惡意} , \text{日期欄位}, \text{0}$ )。用妳的 $\text{MATCH}$，精準找到 $\text{Index}$。」" }
         ],
         options: [
             { text: "回：「我收到了，這是我們的**作戰暗號**。」", score: 15, next: '47', reaction: "建成回：「我只信任妳的 $\text{Lookup Value}$。」" },
@@ -699,8 +699,8 @@ export const main_script_chap1 = [
         id: '48',
         steps: [
             { name: "旁白", text: "建成將你帶回秘密辦公室，他輸入了你提供的日期格式，成功定位到了一個隱藏 $\text{Sheet}$。" },
-            { name: "林建成", text: "「太棒了！妳的 $\text{Input}$ 真是完美！這個 $\text{Sheet}$ 裡面藏著惡意 $\text{Code}$ 的最終 $\text{Destination}$。」" },
-            { name: "林建成", text: "「我們需要在午夜前完成 $\text{Patch}$，不然所有報表都會在明天早上 $\text{Crash}$。」" }
+            { name: "建成", text: "「太棒了！妳的 $\text{Input}$ 真是完美！這個 $\text{Sheet}$ 裡面藏著惡意 $\text{Code}$ 的最終 $\text{Destination}$。」" },
+            { name: "建成", text: "「我們需要在午夜前完成 $\text{Patch}$，不然所有報表都會在明天早上 $\text{Crash}$。」" }
         ],
         options: [
             { text: "「我們是最佳拍檔！」", score: 15, next: '49', reaction: "建成：「是的，我們的 $\text{Latency}$ (延遲) 是 $\text{0}$。」" },
@@ -712,8 +712,8 @@ export const main_script_chap1 = [
         id: '49',
         steps: [
             { name: "旁白", text: "時鐘指向午夜。你們的手指在鍵盤上並肩跳躍，室內氣氛緊張又曖昧。" },
-            { name: "林建成", text: "「你知道嗎？我在 $\text{Code}$ 裡寫了一個新的 $\text{Function}$，它沒有任何實際功能。」" },
-            { name: "林建成", text: "「它的名字叫 $\text{I Love You}$，它只是在不斷運行，而且**無法被 $\text{Delete}$**。」" }
+            { name: "建成", text: "「你知道嗎？我在 $\text{Code}$ 裡寫了一個新的 $\text{Function}$，它沒有任何實際功能。」" },
+            { name: "建成", text: "「它的名字叫 $\text{I Love You}$，它只是在不斷運行，而且**無法被 $\text{Delete}$**。」" }
         ],
         options: [
             { text: "「那我要在我的 $\text{Code}$ 裡寫一個 $\text{IF}$ 條件：$\text{IF}$ ( $\text{I Love You}$ ) , $\text{TRUE}, \text{TRUE}$。」", score: 30, next: '50', reaction: "建成結巴：「妳...妳這是不符合 $\text{Logic}$ 的！」（但臉上洋溢著幸福的紅暈）" },
@@ -725,8 +725,8 @@ export const main_script_chap1 = [
         id: '50',
         steps: [
             { name: "旁白", text: "建成將你的手從鍵盤上拉開，轉過身正式面對你。" },
-            { name: "林建成", text: "「我說過，我只想要 $\text{One-to-One}$ 的 $\text{Relationship}$。現在，我希望將我們的名字寫在我的 $\text{Official Proposal Formula}$ 上。」" },
-            { name: "旁白", text: "他拿出手機，給你看他寫的一個 $\text{Excel}$ 公式：$\text{FORECAST.ETS}$ ( $\text{未來日期} , \text{林建成, 玩家名字} , \text{1}$ )" }
+            { name: "建成", text: "「我說過，我只想要 $\text{One-to-One}$ 的 $\text{Relationship}$。現在，我希望將我們的名字寫在我的 $\text{Official Proposal Formula}$ 上。」" },
+            { name: "旁白", text: "他拿出手機，給你看他寫的一個 $\text{Excel}$ 公式：$\text{FORECAST.ETS}$ ( $\text{未來日期} , \text{建成, 玩家名字} , \text{1}$ )" }
         ],
         options: [
             { text: "「我接受這個 $\text{Proposal}$。」", score: 25, next: '51', reaction: "建成歡呼：「 $\text{Validation}$ $\text{Passed}$！」" },
@@ -738,8 +738,8 @@ export const main_script_chap1 = [
         id: '51',
         steps: [
             { name: "旁白", text: "就在你們準備執行最終的修復指令時，螢幕突然閃爍，進度條開始快速後退！" },
-            { name: "林建成", text: "「糟了！$\text{A}$ 察覺了！他正在進行**遠端 $\text{Override}$**！他要用他準備好的『髒數據』覆蓋一切！」" },
-            { name: "林建成", text: "「我們的 $\text{Patch}$ 進度已經被 $\text{Lock}$ 住了！」" }
+            { name: "建成", text: "「糟了！$\text{A}$ 察覺了！他正在進行**遠端 $\text{Override}$**！他要用他準備好的『髒數據』覆蓋一切！」" },
+            { name: "建成", text: "「我們的 $\text{Patch}$ 進度已經被 $\text{Lock}$ 住了！」" }
         ],
         options: [
             { text: "「我們有 $\text{Backup}$ 嗎？」", score: 10, next: '52', reaction: "建成：「沒有時間 $\text{Restore}$ 了！」" },
@@ -750,8 +750,8 @@ export const main_script_chap1 = [
     {
         id: '52',
         steps: [
-            { name: "林建成", text: "「聽著！這是一個我從未用過的**非標準 $\text{Macro}$**，它會強制中斷 $\text{A}$ 的網路連線。」" },
-            { name: "林建成", text: "「它的 $\text{Code}$ 是：$\text{Application.Quit}$，但必須在 $\text{3}$ 秒內執行！妳來按 $\text{Run}$！」" }
+            { name: "建成", text: "「聽著！這是一個我從未用過的**非標準 $\text{Macro}$**，它會強制中斷 $\text{A}$ 的網路連線。」" },
+            { name: "建成", text: "「它的 $\text{Code}$ 是：$\text{Application.Quit}$，但必須在 $\text{3}$ 秒內執行！妳來按 $\text{Run}$！」" }
         ],
         options: [
             { text: "迅速點擊 $\text{Run}$ 按鈕。", score: 25, next: '53', reaction: "旁白：網路連線突然中斷，電腦螢幕陷入短暫黑暗。建成鬆了一口氣。" },
@@ -763,8 +763,8 @@ export const main_script_chap1 = [
         id: '53',
         steps: [
             { name: "旁白", text: "螢幕上的惡意覆蓋進度停止，你們的 $\text{Patch}$ 成功保留。建成將你緊緊擁入懷中。" },
-            { name: "林建成", text: "「我們成功了！我們一起修復了這個 $\text{Bug}$！妳的 $\text{Execution}$ 是完美的！」" },
-            { name: "林建成", text: "「我們不只是最好的 $\text{Team}$，我們還是...最強的 $\text{Couple}$！」" }
+            { name: "建成", text: "「我們成功了！我們一起修復了這個 $\text{Bug}$！妳的 $\text{Execution}$ 是完美的！」" },
+            { name: "建成", text: "「我們不只是最好的 $\text{Team}$，我們還是...最強的 $\text{Couple}$！」" }
         ],
         options: [
             { text: "回抱他：「我愛你，我的 $\text{Data Guardian}$。」", score: 30, next: '54', reaction: "建成語塞：「我...我也是。」" },
@@ -776,8 +776,8 @@ export const main_script_chap1 = [
         id: '54',
         steps: [
             { name: "旁白", text: "隔天早上，整個辦公室都在傳言資深員工 $\text{A}$ 突然被調離或解僱的消息。" },
-            { name: "林建成", text: "「妳看，這就是數據的力量。他留下的 $\text{Log}$ 紀錄，已經證明了一切。」" },
-            { name: "林建成", text: "「沒有人知道我們做的一切，我們是**數據世界的秘密英雄**。」" }
+            { name: "建成", text: "「妳看，這就是數據的力量。他留下的 $\text{Log}$ 紀錄，已經證明了一切。」" },
+            { name: "建成", text: "「沒有人知道我們做的一切，我們是**數據世界的秘密英雄**。」" }
         ],
         options: [
             { text: "「這就是我的英雄，建成。」", score: 20, next: '55', reaction: "建成臉紅：「妳...妳讓我的 $\text{Reward}$ 達到了 $\text{Max}$。」" },
@@ -800,8 +800,8 @@ export const main_script_chap1 = [
     {
         id: '56',
         steps: [
-            { name: "林建成", text: "「為了慶祝我們新的 $\text{Relationship Status}$，我決定帶妳去參觀一個**數據中心**。」" },
-            { name: "林建成", text: "「一個擁有最純淨、最宏大 $\text{Data}$ 的地方。在週末，我們出發！」" },
+            { name: "建成", text: "「為了慶祝我們新的 $\text{Relationship Status}$，我決定帶妳去參觀一個**數據中心**。」" },
+            { name: "建成", text: "「一個擁有最純淨、最宏大 $\text{Data}$ 的地方。在週末，我們出發！」" },
             { name: "旁白", text: "建成拿出一份行程表，像是一個 $\text{Gantt Chart}$（甘特圖）。" }
         ],
         options: [
@@ -814,8 +814,8 @@ export const main_script_chap1 = [
         id: '57',
         steps: [
             { name: "旁白", text: "週末，建成帶你來到一處山頂觀星台。他指著夜空中的星座。" },
-            { name: "林建成", text: "「宇宙就像一個巨大的 $\text{Pivot Table}$，所有的星星都是 $\text{Source Data}$。」" },
-            { name: "林建成", text: "「而妳...妳是那個讓我的 $\text{Pivot Table}$ 產生意義的**唯一 $\text{Filter}$**。」" }
+            { name: "建成", text: "「宇宙就像一個巨大的 $\text{Pivot Table}$，所有的星星都是 $\text{Source Data}$。」" },
+            { name: "建成", text: "「而妳...妳是那個讓我的 $\text{Pivot Table}$ 產生意義的**唯一 $\text{Filter}$**。」" }
         ],
         options: [
             { text: "「那我希望永遠 $\text{Filter}$ 掉你所有的不快樂。」", score: 30, next: '58', reaction: "建成感動地看著妳：「妳已經做到了。」" },
@@ -827,8 +827,8 @@ export const main_script_chap1 = [
         id: '58',
         steps: [
             { name: "旁白", text: "你收到一封緊急郵件，需要立刻與建成一起去外地，協助一個大型客戶的「**數據遷移與校準**」專案。" },
-            { name: "林建成", text: "「這個專案的 $\text{Data Volume}$ 很大，我們必須親自去，以確保 $\text{Data Integrity}$。」" },
-            { name: "林建成", text: "「這是我們第一次正式的**『雙人出差任務』**。」" }
+            { name: "建成", text: "「這個專案的 $\text{Data Volume}$ 很大，我們必須親自去，以確保 $\text{Data Integrity}$。」" },
+            { name: "建成", text: "「這是我們第一次正式的**『雙人出差任務』**。」" }
         ],
         options: [
             { text: "「這是我們關係的**升級考驗**！」", score: 20, next: '59', reaction: "建成：「沒錯，我們的 $\text{KPI}$ 這次是『$\text{Success}$』和『$\text{Relationship Maintenance}$』。」" },
@@ -840,7 +840,7 @@ export const main_script_chap1 = [
         id: '59',
         steps: [
             { name: "旁白", text: "建成發給你一份精心製作的「**出差協作 $\text{Dashboard}$**」，用顏色和進度條標記了從出發到完成的每個步驟。" },
-            { name: "林建成 (訊息)", text: "「我用 $\text{Gantt Chart}$ 精確規劃了每一小時的 $\text{Task}$，我們必須保持 $\text{High Efficiency}$。」" },
+            { name: "建成 (訊息)", text: "「我用 $\text{Gantt Chart}$ 精確規劃了每一小時的 $\text{Task}$，我們必須保持 $\text{High Efficiency}$。」" },
             { name: "旁白", text: "報表裡甚至有一個 $\text{Mood Tracking}$ 欄位，要求每天 $\text{Input}$ 兩次。" }
         ],
         options: [
@@ -852,8 +852,8 @@ export const main_script_chap1 = [
     {
         id: '60',
         steps: [
-            { name: "林建成", text: "「我訂了飯店。為了達到『**最高效率的 $\text{Co-working}$**』和**『即時 $\text{Communication}$』**，我要求訂一間雙人房。」" },
-            { name: "林建成", text: "「這樣，如果我們遇到問題，可以馬上進行 $\text{Pair Programming}$。」" }
+            { name: "建成", text: "「我訂了飯店。為了達到『**最高效率的 $\text{Co-working}$**』和**『即時 $\text{Communication}$』**，我要求訂一間雙人房。」" },
+            { name: "建成", text: "「這樣，如果我們遇到問題，可以馬上進行 $\text{Pair Programming}$。」" }
         ],
         options: [
             { text: "「這是你計畫好的**『親密值 $\text{Upgrade}$』**吧？」", score: 25, next: '61', reaction: "建成臉紅，推眼鏡：「這...這是對 $\text{Resource}$ 的最佳利用！」" },
@@ -865,8 +865,8 @@ export const main_script_chap1 = [
         id: '61',
         steps: [
             { name: "旁白", text: "在準備行李時，建成對著他的行李箱進行精確測量。" },
-            { name: "林建成", text: "「我要確保我所有的物品都符合『**體積優化 $\text{Formula}$**』，這樣才能將 $\text{Volume}$ 損失降到最低。」" },
-            { name: "林建成", text: "「妳的衣服太多了，妳必須 $\text{Filter}$ 掉一些。」" }
+            { name: "建成", text: "「我要確保我所有的物品都符合『**體積優化 $\text{Formula}$**』，這樣才能將 $\text{Volume}$ 損失降到最低。」" },
+            { name: "建成", text: "「妳的衣服太多了，妳必須 $\text{Filter}$ 掉一些。」" }
         ],
         options: [
             { text: "「我要帶一件能讓你的**心跳頻率 $\text{Increase}$** 的衣服。」", score: 20, next: '62', reaction: "建成：「這個 $\text{Variable}$ 不在我的 $\text{Model}$ 裡！但...可以帶！」" },
@@ -878,8 +878,8 @@ export const main_script_chap1 = [
         id: '62',
         steps: [
             { name: "旁白", text: "在機場，建成拿著手機，不斷觀察每個安檢通道的人流。" },
-            { name: "林建成", text: "「通道 $\text{3}$ 的人流 $\text{Std Dev}$ (標準差) 太高，通道 $\text{5}$ 的平均等待時間最低。」" },
-            { name: "林建成", text: "「我們選擇通道 $\text{5}$，這是**數據驅動的決策**。」" }
+            { name: "建成", text: "「通道 $\text{3}$ 的人流 $\text{Std Dev}$ (標準差) 太高，通道 $\text{5}$ 的平均等待時間最低。」" },
+            { name: "建成", text: "「我們選擇通道 $\text{5}$，這是**數據驅動的決策**。」" }
         ],
         options: [
             { text: "牽著他的手：「跟著你的 $\text{Data}$ 走。」", score: 25, next: '63', reaction: "建成心跳加速：「妳...妳讓我的 $\text{Sensor}$ 讀數變得不穩定。」" },
@@ -891,8 +891,8 @@ export const main_script_chap1 = [
         id: '63',
         steps: [
             { name: "旁白", text: "在飛機上，建成拿出一個 $\text{Excel}$ 檔案，裡面是一個詳細的「**未來三年 $\text{Gantt Chart}$**」。" },
-            { name: "林建成", text: "「我將我們接下來三年的**『關係專案』**可視化了。妳看，$\text{2026}$ 年是『$\text{Co-Habitation}$ 測試』。」" },
-            { name: "林建成", text: "「$\text{2027}$ 年是『$\text{Joint Financial Model}$ 運行』。」" }
+            { name: "建成", text: "「我將我們接下來三年的**『關係專案』**可視化了。妳看，$\text{2026}$ 年是『$\text{Co-Habitation}$ 測試』。」" },
+            { name: "建成", text: "「$\text{2027}$ 年是『$\text{Joint Financial Model}$ 運行』。」" }
         ],
         options: [
             { text: "「我看到了 $\text{2028}$ 年的 $\text{Project X}$...那是什麼？」", score: 20, next: '64', reaction: "建成臉紅，略顯緊張：「那...那是 $\text{High Priority}$ 的 $\text{Confidential Project}$。」" },
@@ -903,8 +903,8 @@ export const main_script_chap1 = [
     {
         id: '64',
         steps: [
-            { name: "林建成", text: "「妳發現了 $\text{Project X}$...它是一個『**不可逆的 $\text{Commitment}$**』，我還沒完全準備好它的 $\text{Launch}$。」" },
-            { name: "林建成", text: "「我只能告訴妳，它的 $\text{ROI}$ 是**終生 $\text{100\%}$**，而且是唯一一個沒有 $\text{Contingency Plan}$ 的 $\text{Task}$。」" }
+            { name: "建成", text: "「妳發現了 $\text{Project X}$...它是一個『**不可逆的 $\text{Commitment}$**』，我還沒完全準備好它的 $\text{Launch}$。」" },
+            { name: "建成", text: "「我只能告訴妳，它的 $\text{ROI}$ 是**終生 $\text{100\%}$**，而且是唯一一個沒有 $\text{Contingency Plan}$ 的 $\text{Task}$。」" }
         ],
         options: [
             { text: "「我幫你把 $\text{Project X}$ 的 $\text{Start Date}$ 提前吧。」", score: 30, next: '65', reaction: "建成眼睛睜大：「妳...妳是在對我進行**強制 $\text{Override}$** 嗎？但我喜歡！」" },
@@ -916,7 +916,7 @@ export const main_script_chap1 = [
         id: '65',
         steps: [
             { name: "旁白", text: "飛機突然遇到強烈亂流，機艙內一陣晃動。建成緊緊抓住你的手臂。" },
-            { name: "林建成", text: "「我的 $\text{App}$ 正在分析飛機的**震動頻率數據**，它超出了 $\text{Safety Threshold}$ 的 $\text{0.5\%}$。」" },
+            { name: "建成", text: "「我的 $\text{App}$ 正在分析飛機的**震動頻率數據**，它超出了 $\text{Safety Threshold}$ 的 $\text{0.5\%}$。」" },
             { name: "你", text: "「別看數據了，看著我！」" }
         ],
         options: [
@@ -929,8 +929,8 @@ export const main_script_chap1 = [
         id: '66',
         steps: [
             { name: "旁白", text: "終於抵達飯店。建成一打開房間的電腦，臉色就沉了下來。" },
-            { name: "林建成", text: "「天啊...這裡的 $\text{Excel}$ 版本是 $\text{2010}$！它無法運行我最新的 $\text{Lambda Function}$！」" },
-            { name: "林建成", text: "「我們無法進行高效的**『即時數據校準』**！」" }
+            { name: "建成", text: "「天啊...這裡的 $\text{Excel}$ 版本是 $\text{2010}$！它無法運行我最新的 $\text{Lambda Function}$！」" },
+            { name: "建成", text: "「我們無法進行高效的**『即時數據校準』**！」" }
         ],
         options: [
             { text: "「別擔心，我們用**『手動校準』**吧，我來幫你。」", score: 15, next: '67', reaction: "建成：「這會大大降低 $\text{Speed}$，但妳的手工 $\text{Quality}$ 是最高的。」" },
@@ -941,8 +941,8 @@ export const main_script_chap1 = [
     {
         id: '67',
         steps: [
-            { name: "林建成", text: "「好。現在，我們將房間劃分為我們的**『臨時數據中心』**。」" },
-            { name: "林建成", text: "「**床**是我們的『** $\text{Rest API}$ 區域**』，**桌子**是『** $\text{Core Data Processing}$ 區域**』，不能混淆！」" }
+            { name: "建成", text: "「好。現在，我們將房間劃分為我們的**『臨時數據中心』**。」" },
+            { name: "建成", text: "「**床**是我們的『** $\text{Rest API}$ 區域**』，**桌子**是『** $\text{Core Data Processing}$ 區域**』，不能混淆！」" }
         ],
         options: [
             { text: "「那我的 $\text{Rest API}$ 區域可以 $\text{Access}$ 你的 $\text{Core}$ 嗎？」", score: 25, next: '68', reaction: "建成臉紅：「晚上 $\text{10}$ 點之後， $\text{Access}$ 權限將會自動 $\text{Elevate}$。」" },
@@ -955,7 +955,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "在客戶公司，一個資深員工對建成的 $\text{Dashboard}$ 表示質疑。" },
             { name: "資深員工", text: "「你的 $\text{Data}$ **太乾淨了**，看起來很不真實，就像用了 $\text{VLOOKUP}$ 一樣過時。」" },
-            { name: "林建成", text: "「我的 $\text{Data Quality}$ 是 $\text{100\%}$，我用的是 $\text{XLOOKUP}$。」" }
+            { name: "建成", text: "「我的 $\text{Data Quality}$ 是 $\text{100\%}$，我用的是 $\text{XLOOKUP}$。」" }
         ],
         options: [
             { text: "「過時的 $\text{Data}$ 不該來質疑最新的 $\text{Model}$。」", score: 20, next: '69', reaction: "建成對你露出感激的眼神。" },
@@ -968,7 +968,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "建成情緒有些低落，你輕聲對他說了一個只有你們兩個才懂的「**情感 $\text{Formula}$**」。" },
             { name: "你", text: "「$\text{IF}$ ( $\text{建成被質疑}$ ) , $\text{TRUE}, \text{FALSE}$，結果是 $\text{TRUE}$，你永遠是對的。」" },
-            { name: "林建成", text: "「...我明白了，妳的 $\text{Formula}$ 有效地提升了我的 $\text{Confidence Score}$。」" }
+            { name: "建成", text: "「...我明白了，妳的 $\text{Formula}$ 有效地提升了我的 $\text{Confidence Score}$。」" }
         ],
         options: [
             { text: "「我的 $\text{Formula}$ 永遠是 $\text{Unbreakable}$。」", score: 25, next: '70', reaction: "建成：「它是我唯一的 $\text{Trusted Source}$。」" },
@@ -980,8 +980,8 @@ export const main_script_chap1 = [
         id: '70',
         steps: [
             { name: "旁白", text: "建成經過幾小時的深入分析，終於鎖定了核心問題。" },
-            { name: "林建成", text: "「找到了！客戶的 $\text{Database}$ 伺服器，比我們這裡晚了 $\text{8}$ 小時。所有的時間戳記都有**『時區偏移』**。」" },
-            { name: "林建成", text: "「這不是 $\text{Error}$，這是**『時間的 $\text{Misalignment}$』**。」" }
+            { name: "建成", text: "「找到了！客戶的 $\text{Database}$ 伺服器，比我們這裡晚了 $\text{8}$ 小時。所有的時間戳記都有**『時區偏移』**。」" },
+            { name: "建成", text: "「這不是 $\text{Error}$，這是**『時間的 $\text{Misalignment}$』**。」" }
         ],
         options: [
             { text: "「所以我們只需要用 $\text{DATEADD}$ 來校準一切？」", score: 15, next: '71', reaction: "建成：「沒錯！妳真是個 $\text{Time Master}$！」" },
@@ -992,8 +992,8 @@ export const main_script_chap1 = [
     {
         id: '71',
         steps: [
-            { name: "林建成", text: "「$\text{DATEADD}$ 這個函數，讓我想到了我們。」" },
-            { name: "林建成", text: "「無論我們從哪裡開始，我們都在不斷地**『加上時間』**，不斷地調整到**『同一時間軸』**上，永遠在一起。」" }
+            { name: "建成", text: "「$\text{DATEADD}$ 這個函數，讓我想到了我們。」" },
+            { name: "建成", text: "「無論我們從哪裡開始，我們都在不斷地**『加上時間』**，不斷地調整到**『同一時間軸』**上，永遠在一起。」" }
         ],
         options: [
             { text: "「我希望我們的 $\text{DATEADD}$ 永遠是無限的。」", score: 25, next: '72', reaction: "建成溫柔地看著你：「它會的，我們的 $\text{Date}$ 永遠不會 $\text{End}$。」" },
@@ -1005,7 +1005,7 @@ export const main_script_chap1 = [
         id: '72',
         steps: [
             { name: "旁白", text: "晚餐時，你們的默契已經到達了用數據暗號點餐的程度。" },
-            { name: "林建成", text: "「服務生，給我一份 $\text{SUM}$ (海鮮) 和一份 $\text{MAX}$ (紅酒)。」" },
+            { name: "建成", text: "「服務生，給我一份 $\text{SUM}$ (海鮮) 和一份 $\text{MAX}$ (紅酒)。」" },
             { name: "你", text: "「我來一份 $\text{AVERAGE}$ (牛排)。」" }
         ],
         options: [
@@ -1017,8 +1017,8 @@ export const main_script_chap1 = [
     {
         id: '73',
         steps: [
-            { name: "林建成", text: "「其實我還為這次出差準備了一個『**數據備份**』禮物。」" },
-            { name: "林建成", text: "「它是一個可以儲存妳所有回憶的**『加密 $\text{USB}$』**，上面用了 $\text{Military Grade}$ 的安全技術。」" }
+            { name: "建成", text: "「其實我還為這次出差準備了一個『**數據備份**』禮物。」" },
+            { name: "建成", text: "「它是一個可以儲存妳所有回憶的**『加密 $\text{USB}$』**，上面用了 $\text{Military Grade}$ 的安全技術。」" }
         ],
         options: [
             { text: "「那密碼是什麼？」", score: 15, next: '74', reaction: "建成：「密碼是我們第一次接吻的 $\text{Timestamp}$，只有妳知道。」" },
@@ -1042,8 +1042,8 @@ export const main_script_chap1 = [
         id: '75',
         steps: [
             { name: "旁白", text: "建成在數據庫中發現了一筆奇怪的記錄，它沒有任何關聯的 $\text{Key}$。" },
-            { name: "林建成", text: "「妳看，這個 $\text{Data}$ 就像是一個**『孤兒 $\text{Data}$』**，它沒有任何 $\text{Relationship}$，孤單地漂浮在 $\text{Database}$ 中。」" },
-            { name: "林建成", text: "「我們不能 $\text{Delete}$ 它，但它也無法被 $\text{Query}$。」" }
+            { name: "建成", text: "「妳看，這個 $\text{Data}$ 就像是一個**『孤兒 $\text{Data}$』**，它沒有任何 $\text{Relationship}$，孤單地漂浮在 $\text{Database}$ 中。」" },
+            { name: "建成", text: "「我們不能 $\text{Delete}$ 它，但它也無法被 $\text{Query}$。」" }
         ],
         options: [
             { text: "「我們給它一個新的 $\text{Key}$ 吧。」", score: 15, next: '76', reaction: "建成：「妳總是這麼善良。」" },
@@ -1054,9 +1054,9 @@ export const main_script_chap1 = [
     {
         id: '76',
         steps: [
-            { name: "林建成", text: "「其實...這個**『孤兒 $\text{Data}$』**讓我想到了我自己。」" },
-            { name: "林建成", text: "「在遇到妳之前，我所有的數據、所有的努力，都像是沒有 $\text{Key}$ 的 $\text{Data}$，沒有真正的 $\text{Relationship}$。」" },
-            { name: "林建成", text: "「**妳，是我的 $\text{Primary Key}$**。」" }
+            { name: "建成", text: "「其實...這個**『孤兒 $\text{Data}$』**讓我想到了我自己。」" },
+            { name: "建成", text: "「在遇到妳之前，我所有的數據、所有的努力，都像是沒有 $\text{Key}$ 的 $\text{Data}$，沒有真正的 $\text{Relationship}$。」" },
+            { name: "建成", text: "「**妳，是我的 $\text{Primary Key}$**。」" }
         ],
         options: [
             { text: "「我會讓你的 $\text{Data}$ 永遠被我 $\text{Index}$。」", score: 30, next: '77', reaction: "建成：「$\text{Statement Accepted}$！」" },
@@ -1068,7 +1068,7 @@ export const main_script_chap1 = [
         id: '77',
         steps: [
             { name: "旁白", text: "電話響起，客戶要求他們必須在明天早上 $\text{8}$ 點前，提交一份**「緊急 $\text{Report}$」**，需要你們通宵完成 $\text{Data Modeling}$。" },
-            { name: "林建成", text: "「這是 $\text{Critical Task}$！我們必須啟動**『雙人 $\text{Extreme Programming}$』**模式。」" },
+            { name: "建成", text: "「這是 $\text{Critical Task}$！我們必須啟動**『雙人 $\text{Extreme Programming}$』**模式。」" },
             { name: "你", text: "「我們能應付嗎？」" }
         ],
         options: [
@@ -1081,8 +1081,8 @@ export const main_script_chap1 = [
         id: '78',
         steps: [
             { name: "旁白", text: "在狹小的書桌上，你們並肩工作。建成的肩膀不時地碰到你的手臂。" },
-            { name: "林建成", text: "「我們的 $\text{Bandwidth}$ (頻寬) 很高，溝通零延遲。」" },
-            { name: "林建成", text: "「妳的 $\text{Visualization}$ 讓我的 $\text{DAX}$ 變得有意義。」" }
+            { name: "建成", text: "「我們的 $\text{Bandwidth}$ (頻寬) 很高，溝通零延遲。」" },
+            { name: "建成", text: "「妳的 $\text{Visualization}$ 讓我的 $\text{DAX}$ 變得有意義。」" }
         ],
         options: [
             { text: "輕輕靠在他的肩膀上：「這是我的 $\text{Rest}$ $\text{Input}$。」", score: 20, next: '79', reaction: "建成輕輕拍了拍你的頭：「妳是我的 $\text{Best Debug}$。」" },
@@ -1094,7 +1094,7 @@ export const main_script_chap1 = [
         id: '79',
         steps: [
             { name: "旁白", text: "在完成一段複雜的 $\text{DAX}$ 語法時，建成無意識地將他的手搭在你的手上，你們一起敲下了最後的 $\text{Enter}$。" },
-            { name: "林建成", text: "「$\text{Code}$ 運行成功！這種 $\text{Co-Authoring}$ 的感覺...太棒了。」" }
+            { name: "建成", text: "「$\text{Code}$ 運行成功！這種 $\text{Co-Authoring}$ 的感覺...太棒了。」" }
         ],
         options: [
             { text: "反手握住他的手：「這是我們新的**『數據握手』**。」", score: 30, next: '80', reaction: "建成緊張但甜蜜地說：「我...我會永遠 $\text{Store}$ 這個 $\text{Session}$。」" },
@@ -1106,8 +1106,8 @@ export const main_script_chap1 = [
         id: '80',
         steps: [
             { name: "旁白", text: "清晨 $\text{7}$ 點，建成將最終的 $\text{Report}$ 郵件發送出去，長長地舒了一口氣。" },
-            { name: "林建成", text: "「任務完成！我們的 $\text{Completion Time}$ 比預期提前了 $\text{15}$ 分鐘。這就是愛的 $\text{Efficiency}$。」" },
-            { name: "林建成", text: "「現在，我們去獲取我們的 $\text{Reward}$：**早餐**。」" }
+            { name: "建成", text: "「任務完成！我們的 $\text{Completion Time}$ 比預期提前了 $\text{15}$ 分鐘。這就是愛的 $\text{Efficiency}$。」" },
+            { name: "建成", text: "「現在，我們去獲取我們的 $\text{Reward}$：**早餐**。」" }
         ],
         options: [
             { text: "「我不要早餐，我要你的**早安吻**。」", score: 25, next: '81', reaction: "建成立刻兌現：「這是 $\text{Non-Negotiable Reward}$。」" },
@@ -1119,8 +1119,8 @@ export const main_script_chap1 = [
         id: '81',
         steps: [
             { name: "旁白", text: "建成拿著手機，在網上搜索當地的美食評論和人氣數據。" },
-            { name: "林建成", text: "「我用 $\text{Bayesian Probability}$ 計算，這家賣小籠包的店，$\text{Success Rate}$ 最高。」" },
-            { name: "林建成", text: "「走吧，我們去獲取最高 $\text{Score}$ 的早餐體驗。」" }
+            { name: "建成", text: "「我用 $\text{Bayesian Probability}$ 計算，這家賣小籠包的店，$\text{Success Rate}$ 最高。」" },
+            { name: "建成", text: "「走吧，我們去獲取最高 $\text{Score}$ 的早餐體驗。」" }
         ],
         options: [
             { text: "「我相信你的數據。」", score: 15, next: '82', reaction: "建成：「妳的信任讓我的 $\text{Algorithm}$ 運算更快。」" },
@@ -1132,8 +1132,8 @@ export const main_script_chap1 = [
         id: '82',
         steps: [
             { name: "旁白", text: "在回程的飛機上，建成顯得非常放鬆，他將這次專案的成功歸結於你們的關係。" },
-            { name: "林建成", text: "「這次專案的成功，完全歸功於我們之間的**情感 $\text{Data Flow}$**。」" },
-            { name: "林建成", text: "「我們是 $\text{Fully Integrated System}$。」" }
+            { name: "建成", text: "「這次專案的成功，完全歸功於我們之間的**情感 $\text{Data Flow}$**。」" },
+            { name: "建成", text: "「我們是 $\text{Fully Integrated System}$。」" }
         ],
         options: [
             { text: "「是啊，我們是天作之合。」", score: 20, next: '83', reaction: "建成：「這就是我的 $\text{Final Conclusion}$。」" },
@@ -1146,7 +1146,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "你不經意地看到建成的筆電，他的出差協作 $\text{Dashboard}$ 上，有一個隱藏的**「親密值 $\text{Indicator}$」**，顯示著一個不斷上升的百分比。" },
             { name: "你", text: "「建成，那個 $\text{Indicator}$ 是什麼？」" },
-            { name: "林建成", text: "「哪個 $\text{Indicator}$？喔...那個是 $\text{Teamwork Synergy Score}$。」" }
+            { name: "建成", text: "「哪個 $\text{Indicator}$？喔...那個是 $\text{Teamwork Synergy Score}$。」" }
         ],
         options: [
             { text: "「別騙我了，這是**『親密值』**吧？」", score: 25, next: '84', reaction: "建成臉瞬間通紅：「妳...妳怎麼發現的！」" },
@@ -1158,8 +1158,8 @@ export const main_script_chap1 = [
         id: '84',
         steps: [
             { name: "旁白", text: "建成羞澀地承認了那個 $\text{Indicator}$ 的真實用途。" },
-            { name: "林建成", text: "「它的公式是 $\text{VLOOKUP}$ ( $\text{妳的笑容} , \text{我的心} , \text{永遠}, \text{FALSE}$ )。」" },
-            { name: "林建成", text: "「這是一個**單向 $\text{Lookup}$**，只取決於妳的 $\text{Input}$，我自己的行為不計入 $\text{Score}$。」" }
+            { name: "建成", text: "「它的公式是 $\text{VLOOKUP}$ ( $\text{妳的笑容} , \text{我的心} , \text{永遠}, \text{FALSE}$ )。」" },
+            { name: "建成", text: "「這是一個**單向 $\text{Lookup}$**，只取決於妳的 $\text{Input}$，我自己的行為不計入 $\text{Score}$。」" }
         ],
         options: [
             { text: "「那我的 $\text{Input}$ 永遠是 $\text{MAX}$。」", score: 30, next: '85', reaction: "建成感動：「我會讓它變成 $\text{Data}$ $\text{Locked}$。」" },
@@ -1171,7 +1171,7 @@ export const main_script_chap1 = [
         id: '85',
         steps: [
             { name: "旁白", text: "回到家，建成看到你疲憊的樣子，堅持要幫你處理後續的疲勞 $\text{Data}$。" },
-            { name: "林建成", text: "「坐好，我要用 $\text{VBA}$ 幫妳運行一個**『疲勞 $\text{Reset}$ $\text{Macro}$』**。」" },
+            { name: "建成", text: "「坐好，我要用 $\text{VBA}$ 幫妳運行一個**『疲勞 $\text{Reset}$ $\text{Macro}$』**。」" },
             { name: "旁白", text: "他給你倒了一杯溫水，並開始為你按摩肩膀，手法專業而溫柔。" }
         ],
         options: [
@@ -1183,8 +1183,8 @@ export const main_script_chap1 = [
     {
         id: '86',
         steps: [
-            { name: "林建成", text: "「現在，最後一個 $\text{Task}$。請妳給我這次出差的總體**『情感 $\text{Score}$』**。」" },
-            { name: "林建成", text: "「滿分 $\text{100}$ 分，我需要妳的 $\text{Honest Feedback}$。」" }
+            { name: "建成", text: "「現在，最後一個 $\text{Task}$。請妳給我這次出差的總體**『情感 $\text{Score}$』**。」" },
+            { name: "建成", text: "「滿分 $\text{100}$ 分，我需要妳的 $\text{Honest Feedback}$。」" }
         ],
         options: [
             { text: "「$\text{100}$ 分，你和這次出差都是 $\text{Perfect}$。」", score: 25, next: '87', reaction: "建成：「$\text{Data Accepted}$！我會將此設為我們的 $\text{Benchmark}$。」" },
@@ -1196,8 +1196,8 @@ export const main_script_chap1 = [
         id: '87',
         steps: [
             { name: "旁白", text: "建成將他的筆電畫面轉向你，上面只有一行 $\text{Excel}$ 公式。" },
-            { name: "林建成", text: "「$\text{Final Formula}$： $\text{IFERROR}$ ( $\text{你離開我的時間}$ , $\text{TRUE}$ ) $\text{= TRUE}$」" },
-            { name: "林建成", text: "「這代表，我對妳的愛是 $\text{Non-Error}$ 的 $\text{Data}$，永遠 $\text{TRUE}$。」" }
+            { name: "建成", text: "「$\text{Final Formula}$： $\text{IFERROR}$ ( $\text{你離開我的時間}$ , $\text{TRUE}$ ) $\text{= TRUE}$」" },
+            { name: "建成", text: "「這代表，我對妳的愛是 $\text{Non-Error}$ 的 $\text{Data}$，永遠 $\text{TRUE}$。」" }
         ],
         options: [
             { text: "「那我的 $\text{Input}$ 是：我們永遠不會有 $\text{Error}$。」", score: 30, next: 'ending_placeholder_4', reaction: "建成：「$\text{Final Data Set}$ 完整！我愛妳！」" },
@@ -1212,7 +1212,7 @@ export const main_script_chap1 = [
         id: '88',
         steps: [
             { name: "旁白", text: "出差結束，你們回到家。建成正忙著將出差期間拍的照片和紀念品進行歸檔。" },
-            { name: "林建成", text: "「我們需要一個合理的『**數據結構**』。我會用 $\text{Folder}$ 樹狀圖，以**日期 ( $\text{Primary Key}$ ) **和**情感強度 ( $\text{Score}$ )** 進行分類。」" }
+            { name: "建成", text: "「我們需要一個合理的『**數據結構**』。我會用 $\text{Folder}$ 樹狀圖，以**日期 ( $\text{Primary Key}$ ) **和**情感強度 ( $\text{Score}$ )** 進行分類。」" }
         ],
         options: [
             { text: "「照片的順序就用我的**心動頻率**來排序。」", score: 20, next: '89', reaction: "建成：「這個 $\text{Variable}$ 難以量化，但我會盡力將其轉化為 $\text{Binary}$ (吻或不吻) $\text{Data}$。」" },
@@ -1224,8 +1224,8 @@ export const main_script_chap1 = [
         id: '89',
         steps: [
             { name: "旁白", text: "隔天早上，建成在廚房裡準備早餐，他正在對著手機裡的一個 $\text{Model}$ 自言自語。" },
-            { name: "林建成", text: "「如果 $\text{Nutritional Score}$ 低於 $\text{90}$，就必須增加 $\text{Protein}$ 的 $\text{Input}$。但 $\text{Time Cost}$ 也必須在 $\text{5}$ 分鐘以內。」" },
-            { name: "林建成", text: "「這就是我的**『早餐優化 $\text{Model}$』**。」" }
+            { name: "建成", text: "「如果 $\text{Nutritional Score}$ 低於 $\text{90}$，就必須增加 $\text{Protein}$ 的 $\text{Input}$。但 $\text{Time Cost}$ 也必須在 $\text{5}$ 分鐘以內。」" },
+            { name: "建成", text: "「這就是我的**『早餐優化 $\text{Model}$』**。」" }
         ],
         options: [
             { text: "「我的 $\text{Preference}$ 是你做的，無論 $\text{Score}$ 多低。」", score: 25, next: '90', reaction: "建成溫柔地看著你：「妳的 $\text{Preference}$ 具有最高 $\text{Weight}$。」" },
@@ -1237,21 +1237,21 @@ export const main_script_chap1 = [
         id: '90',
         steps: [
             { name: "旁白", text: "晚上，你們爭奪電視遙控器，你想看浪漫劇，他想看紀錄片。" },
-            { name: "林建成", text: "「我們必須依據『**$\text{Access}$ 權限 $\text{Matrix}$**』來決定。上次是我讓你，所以這次我的權限是 $\text{Level 1}$。」" },
+            { name: "建成", text: "「我們必須依據『**$\text{Access}$ 權限 $\text{Matrix}$**』來決定。上次是我讓你，所以這次我的權限是 $\text{Level 1}$。」" },
             { name: "你", text: "「但我今天是 $\text{Mood}$ $\text{Level 10}$，我的**『情感權重』**更高！」" }
         ],
         options: [
             { text: "主動吻他：「我來對你進行**『情感 $\text{Override}$』**。」", score: 30, next: '91', reaction: "建成心跳加速：「$\text{Override}$ $\text{Successful}$！請輸入妳的 $\text{Request}$！」" },
             { text: "「我們用一個 $\text{IF}$ 條件來決定吧。」", score: 15, next: '91', reaction: "建成：「$\text{IF}$ ( $\text{我吻妳}$ ) , $\text{浪漫劇}, \text{紀錄片}$。」" },
             { text: "「我們一人一半時間。」", score: 5, next: '91', reaction: "建成：「這是最公平的 $\text{Time Allocation}$。」" },
-            {text:"播放《真夏夜之淫夢》，",score:0,next:'昏睡',reaction:[{name:"林建成",text:"嗯？你正在播放什麼？"}]},
+            {text:"播放《真夏夜之淫夢》，",score:0,next:'91',reaction:[{name:"建成",text:"嗯？你正在播放什麼？"}]},
         ]
     },
     {
         id: '91',
         steps: [
             { name: "旁白", text: "你們在超市購物，建成拿著手機裡的 $\text{Excel}$ 購物清單，上面標註了現有庫存。" },
-            { name: "林建成", text: "「我們還有 $\text{2}$ 盒牛奶。我用 $\text{COUNTIF}$ 追蹤過，當**庫存量** $\text{<}$ $\text{3}$ 時，就要 $\text{Refill}$。」" },
+            { name: "建成", text: "「我們還有 $\text{2}$ 盒牛奶。我用 $\text{COUNTIF}$ 追蹤過，當**庫存量** $\text{<}$ $\text{3}$ 時，就要 $\text{Refill}$。」" },
             { name: "你", text: "「但那 $\text{2}$ 盒是過期的！」" }
         ],
         options: [
@@ -1265,7 +1265,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "你偶然發現建成在筆電上的一個隱藏 $\text{Sheet}$，上面是你每天的**『心情 $\text{Score}$』**和**『睡眠時長 $\text{Metric}$』**。" },
             { name: "你", text: "「建成！你為什麼要追蹤我的 $\text{Data}$？」" },
-            { name: "林建成", text: "「我...我只是想確保妳的 $\text{System}$ 運行在最佳狀態！這是我的**『情感 $\text{Health}$ $\text{Tracker}$』**。」" }
+            { name: "建成", text: "「我...我只是想確保妳的 $\text{System}$ 運行在最佳狀態！這是我的**『情感 $\text{Health}$ $\text{Tracker}$』**。」" }
         ],
         options: [
             { text: "「我不喜歡我的 $\text{Data}$ 被偷看。」", score: 10, next: '93', reaction: "建成緊張：「對不起！我保證只用於 $\text{Maintenance}$。」" },
@@ -1279,7 +1279,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "建成將一封名為「**$\text{AI}$ 情詩 $\text{V1.0}$**」的郵件發給你。打開後，內容讓你看得啼笑皆非。" },
             { name: "郵件內容", text: "「妳是我的 $\text{Primary Source}$，我對妳的愛是 $\text{Unconditional Format}$。如果 $\text{You}$ $\text{Equal}$ $\text{Me}$，則 $\text{Return}$ $\text{TRUE}$。」" },
-            { name: "林建成", text: "「我嘗試讓 $\text{AI}$ 學習情感 $\text{Data}$，但它似乎只會輸出 $\text{Code}$。」" }
+            { name: "建成", text: "「我嘗試讓 $\text{AI}$ 學習情感 $\text{Data}$，但它似乎只會輸出 $\text{Code}$。」" }
         ],
         options: [
             { text: "「我不需要 $\text{AI}$ 的詩，我需要你親口說。」", score: 30, next: '94', reaction: "建成：「我的 $\text{Verbal Output}$ 也是 $\text{Data}$，我愛妳。」" },
@@ -1291,7 +1291,7 @@ export const main_script_chap1 = [
         id: '94',
         steps: [
             { name: "旁白", text: "週末約會，你們在選擇電影。建成打開了一個網頁，上面跑著一個**「用戶情感分析 $\text{Model}$」**。" },
-            { name: "林建成", text: "「這部片雖然評分高，但『**負面評論的 $\text{Keyword}$ 密度**』也很高。我們應該避開它，以確保約會的 $\text{Satisfaction}$。」" }
+            { name: "建成", text: "「這部片雖然評分高，但『**負面評論的 $\text{Keyword}$ 密度**』也很高。我們應該避開它，以確保約會的 $\text{Satisfaction}$。」" }
         ],
         options: [
             { text: "「我相信你的數據分析。」", score: 15, next: '95', reaction: "建成：「我的 $\text{Model}$ 永遠以妳的 $\text{Happiness}$ 為 $\text{Target}$。」" },
@@ -1303,8 +1303,8 @@ export const main_script_chap1 = [
         id: '95',
         steps: [
             { name: "旁白", text: "你們因為一件小事發生了爭執，氣氛變得有些僵硬。建成主動打破沉默。" },
-            { name: "林建成", text: "「停止 $\text{Error}$。我們應該啟動 $\text{IFERROR}$ 函數。」" },
-            { name: "林建成", text: "「$\text{IFERROR}$ ( $\text{爭吵}$ , $\text{吻}$ ) $\text{。}$ 意思就是，如果吵架了，就用**親吻**來代替錯誤結果。」" }
+            { name: "建成", text: "「停止 $\text{Error}$。我們應該啟動 $\text{IFERROR}$ 函數。」" },
+            { name: "建成", text: "「$\text{IFERROR}$ ( $\text{爭吵}$ , $\text{吻}$ ) $\text{。}$ 意思就是，如果吵架了，就用**親吻**來代替錯誤結果。」" }
         ],
         options: [
             { text: "主動親吻他：「$\text{IFERROR}$ $\text{Execution}$ $\text{Successful}$。」", score: 35, next: '96', reaction: "建成：「妳的 $\text{Execution}$ 永遠是最好的 $\text{Fix}$。」" },
@@ -1317,7 +1317,7 @@ export const main_script_chap1 = [
         id: '96',
         steps: [
             { name: "旁白", text: "你們買了一盆小小的盆栽，建成堅持要用 $\text{Excel}$ 記錄它的生長數據。" },
-            { name: "林建成", text: "「我用 $\text{Growth Rate Formula}$ 追蹤它的**『每日增長率』**。我們必須確保它的 $\text{Trend}$ 是正向的。」" },
+            { name: "建成", text: "「我用 $\text{Growth Rate Formula}$ 追蹤它的**『每日增長率』**。我們必須確保它的 $\text{Trend}$ 是正向的。」" },
             { name: "你", text: "「它需要的是愛和水，不是數據。」" }
         ],
         options: [
@@ -1330,8 +1330,8 @@ export const main_script_chap1 = [
         id: '97',
         steps: [
             { name: "旁白", text: "你們計劃在客廳裡設計一個共用的書架。建成拿出了詳細的**「空間優化演算法 $\text{Sketch}$」**。" },
-            { name: "林建成", text: "「我計算了我們現有書本的 $\text{Volume}$ 和 $\text{Weight Distribution}$。我必須確保書架的 $\text{Stability}$。」" },
-            { name: "林建成", text: "「我的 $\text{Technical}$ 書必須佔 $\text{70\%}$ 的 $\text{Storage}$。」" }
+            { name: "建成", text: "「我計算了我們現有書本的 $\text{Volume}$ 和 $\text{Weight Distribution}$。我必須確保書架的 $\text{Stability}$。」" },
+            { name: "建成", text: "「我的 $\text{Technical}$ 書必須佔 $\text{70\%}$ 的 $\text{Storage}$。」" }
         ],
         options: [
             { text: "「那我的小說必須佔 $\text{30\%}$ 的**『情感 $\text{Priority}$ 空間』**。」", score: 20, next: '98', reaction: "建成：「$\text{Fair Enough}$。我會將 $\text{30\%}$ 設為**『不可壓縮空間』**。」" },
@@ -1344,8 +1344,8 @@ export const main_script_chap1 = [
         id: '98',
         steps: [
             { name: "旁白", text: "你們收到了一封朋友的婚禮邀請函。建成看著邀請函，若有所思。" },
-            { name: "林建成", text: "「他們的 $\text{Relationship Index}$ 已經到達 $\text{Optimal}$。這讓我想到了我們的 $\text{Project X}$。」" },
-            { name: "林建成", text: "「我覺得，我的**『準備度 $\text{Score}$』**已經達到了 $\text{85\%}$。」" }
+            { name: "建成", text: "「他們的 $\text{Relationship Index}$ 已經到達 $\text{Optimal}$。這讓我想到了我們的 $\text{Project X}$。」" },
+            { name: "建成", text: "「我覺得，我的**『準備度 $\text{Score}$』**已經達到了 $\text{85\%}$。」" }
         ],
         options: [
             { text: "「$\text{Project X}$ 什麼時候 $\text{Launch}$？」", score: 25, next: '99', reaction: "建成：「我還需要 $\text{15\%}$ 的 $\text{Confidence Level}$。」" },
@@ -1358,7 +1358,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "你看到建成在處理一個簡單的表格，故意用一個他極少用的 $\text{Legacy}$ $\text{Function}$ 來逗他。" },
             { name: "你", text: "「你怎麼不用 $\text{GETPIVOTDATA}$ 來提取這個數值呢？那才是正統 $\text{Data}$ $\text{Extraction}$。」" },
-            { name: "林建成", text: "「天啊！妳在跟我開玩笑嗎？那個 $\text{Function}$ 的**『語法複雜度 $\text{Score}$』**是 $\text{99}$！我用 $\text{XLOOKUP}$ 只要 $\text{5}$ 秒。」" }
+            { name: "建成", text: "「天啊！妳在跟我開玩笑嗎？那個 $\text{Function}$ 的**『語法複雜度 $\text{Score}$』**是 $\text{99}$！我用 $\text{XLOOKUP}$ 只要 $\text{5}$ 秒。」" }
         ],
         options: [
             { text: "「我喜歡看你驚慌的樣子。」", score: 20, next: '100', reaction: "建成：「妳的 $\text{Happiness}$ 真是我的 $\text{Unpredictable}$ $\text{Variable}$。」" },
@@ -1383,8 +1383,8 @@ export const main_script_chap1 = [
         id: '101',
         steps: [
             { name: "旁白", text: "一個下雨的夜晚，你們依偎在沙發上，建成打開了他珍藏的「**關係時間線 $\text{Report}$**」。" },
-            { name: "林建成", text: "「妳看，這條線是我們的**『情感穩定度曲線』**。從妳用了 $\text{XLOOKUP}$ 那天起，它就開始急劇上升。」" },
-            { name: "林建成", text: "「所有的 $\text{Data}$ 都指向一個結論：**我們將永遠在一起**。」" }
+            { name: "建成", text: "「妳看，這條線是我們的**『情感穩定度曲線』**。從妳用了 $\text{XLOOKUP}$ 那天起，它就開始急劇上升。」" },
+            { name: "建成", text: "「所有的 $\text{Data}$ 都指向一個結論：**我們將永遠在一起**。」" }
         ],
         options: [
             { text: "「我將我的 $\text{Future}$ $\text{Data}$ $\text{Input}$ 給你。」", score: 30, next: '102', reaction: "建成：「我會永遠 $\text{Store}$ 它，不會有任何 $\text{Loss}$。」" },
@@ -1396,7 +1396,7 @@ export const main_script_chap1 = [
         id: '102',
         steps: [
             { name: "旁白", text: "你們互道晚安。建成在你耳邊輕輕說了一個最終的公式。" },
-            { name: "林建成", text: "「晚安。我的愛是 $\text{SUM}$ ( $\text{所有星星}$ , $\text{所有海洋}$ , $\text{妳}$ )。」" }
+            { name: "建成", text: "「晚安。我的愛是 $\text{SUM}$ ( $\text{所有星星}$ , $\text{所有海洋}$ , $\text{妳}$ )。」" }
         ],
         options: [
             { text: "回吻他：「我的愛是 $\text{MAX}$ ( $\text{你的愛}$ , $\text{我的愛}$ )。」", score: 35, next: 'ending_placeholder_5', reaction: "建成：「$\text{MAX}$ $\text{Successful}$！夢裡見！」" },
@@ -1410,7 +1410,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "有一天，你發現手機裡每天固定會收到一條來自建成設計的 Macro 自動發送的訊息。" },
             { name: "建成 (Macro 訊息)", text: "「Log Time： 09:00。我的 Current Thought：Thinking of You。」" },
-            { name: "林建成", text: "「我用 VBA 寫了一個**『定時愛的 Macro』**，確保妳的 Data Stream 裡永遠有我的愛。」" }
+            { name: "建成", text: "「我用 VBA 寫了一個**『定時愛的 Macro』**，確保妳的 Data Stream 裡永遠有我的愛。」" }
         ],
         options: [
             { text: "「謝謝你，我的自動化浪漫。」", score: 20, next: '104', reaction: "建成：「它是 Non-Stop Loop，會永遠運行。」" },
@@ -1421,8 +1421,8 @@ export const main_script_chap1 = [
     {
         id: '104',
         steps: [
-            { name: "林建成", text: "「為了更好地管理我們的**情感 Data**，我提議開設一個共用的**『關係 Dashboard 帳號』**。」" },
-            { name: "林建成", text: "「每天 Input 兩次 Mood Score，並記錄一次**『幸福事件 Log』**。」" }
+            { name: "建成", text: "「為了更好地管理我們的**情感 Data**，我提議開設一個共用的**『關係 Dashboard 帳號』**。」" },
+            { name: "建成", text: "「每天 Input 兩次 Mood Score，並記錄一次**『幸福事件 Log』**。」" }
         ],
         options: [
             { text: "「好啊，讓我們的愛有跡可循。」", score: 25, next: '105', reaction: "建成：「Data Sharing Permission Granted！」" },
@@ -1434,8 +1434,8 @@ export const main_script_chap1 = [
         id: '105',
         steps: [
             { name: "旁白", text: "你們第一次坐下來，認真討論未來的生活。建成拿出一個**「家庭會議 Pivot Table」**。" },
-            { name: "林建成", text: "「我用 Pivot Table 總結了我們對『**家庭價值觀**』的 Preference。妳看，『**寵物**』的 Count 是 0，但**『旅行』**的 SUM 是 High。」" },
-            { name: "林建成", text: "「我們需要一個**最終 Consensus**。」" }
+            { name: "建成", text: "「我用 Pivot Table 總結了我們對『**家庭價值觀**』的 Preference。妳看，『**寵物**』的 Count 是 0，但**『旅行』**的 SUM 是 High。」" },
+            { name: "建成", text: "「我們需要一個**最終 Consensus**。」" }
         ],
         options: [
             { text: "「我的最終 Consensus 是『**有你**』。」", score: 30, next: '106', reaction: "建成感動地笑：「妳的 Input 讓所有 Data 都有了意義。」" },
@@ -1447,8 +1447,8 @@ export const main_script_chap1 = [
         id: '106',
         steps: [
             { name: "旁白", text: "建成即將正式拜訪你的父母。他準備了一份厚厚的「**風險分析 Report**」，裡面包含潛在的敏感話題和應對策略。" },
-            { name: "林建成", text: "「這份 Report 是針對**『見家長失敗 Scenario』**所做的 Pre-mortem 分析。」" },
-            { name: "林建成", text: "「妳母親對我的**『穩定度 Score』**是 75%，我必須將其提升到 90% 以上。」" }
+            { name: "建成", text: "「這份 Report 是針對**『見家長失敗 Scenario』**所做的 Pre-mortem 分析。」" },
+            { name: "建成", text: "「妳母親對我的**『穩定度 Score』**是 75%，我必須將其提升到 90% 以上。」" }
         ],
         options: [
             { text: "「別緊張，我會是你的 Safety Net。」", score: 20, next: '107', reaction: "建成：「妳的 Support 是我最大的 Confidence Booster。」" },
@@ -1460,8 +1460,8 @@ export const main_script_chap1 = [
         id: '107',
         steps: [
             { name: "旁白", text: "見家長順利結束。你的父母對建成非常滿意，建成偷偷查看他手機裡的 Score。" },
-            { name: "林建成", text: "「成功了！我的**『親和力 Score』**達到了 95%！我通過了**『外部 Validation』**。」" },
-            { name: "林建成", text: "「Project X 的 Confidence Level 可以從 85% 提升到 90% 了！」" }
+            { name: "建成", text: "「成功了！我的**『親和力 Score』**達到了 95%！我通過了**『外部 Validation』**。」" },
+            { name: "建成", text: "「Project X 的 Confidence Level 可以從 85% 提升到 90% 了！」" }
         ],
         options: [
             { text: "「不是數據讓你成功，是你的真心。」", score: 25, next: '108', reaction: "建成：「也許吧，但真心也需要 Data 的呈現。」" },
@@ -1472,8 +1472,8 @@ export const main_script_chap1 = [
     {
         id: '108',
         steps: [
-            { name: "林建成", text: "「我為妳設計了一種**專屬 Excel 字體**。它將所有字母都替換成 Code 符號。」" },
-            { name: "林建成", text: "「只有我們才能解讀我們之間的情話，這是我們愛情的**『加密 Algorithm』**。」" }
+            { name: "建成", text: "「我為妳設計了一種**專屬 Excel 字體**。它將所有字母都替換成 Code 符號。」" },
+            { name: "建成", text: "「只有我們才能解讀我們之間的情話，這是我們愛情的**『加密 Algorithm』**。」" }
         ],
         options: [
             { text: "「你寫一個關於愛的公式給我看看。」", score: 20, next: '109', reaction: "建成：「它是一串 Code，翻譯過來是：**我永遠愛妳**。」" },
@@ -1485,8 +1485,8 @@ export const main_script_chap1 = [
         id: '109',
         steps: [
             { name: "旁白", text: "建成假裝在量一個新的戒指尺寸作為禮物，他小心翼翼地測量你的手指，並記錄下一個精確的數字。" },
-            { name: "林建成", text: "「這項 Measurement Data 必須是**絕對精確**的，它代表了我的**『承諾 Fit Score』**。」" },
-            { name: "林建成", text: "「如果 Size Error > 0.01，Project X 就會延期。」" }
+            { name: "建成", text: "「這項 Measurement Data 必須是**絕對精確**的，它代表了我的**『承諾 Fit Score』**。」" },
+            { name: "建成", text: "「如果 Size Error > 0.01，Project X 就會延期。」" }
         ],
         options: [
             { text: "「這個 Project 什麼時候 Launch？」", score: 25, next: '110', reaction: "建成：「很快了，Data Collection 已經進入最終階段。」" },
@@ -1497,9 +1497,9 @@ export const main_script_chap1 = [
     {
         id: '110',
         steps: [
-            { name: "林建成", text: "「現在，我們來確定**『求婚地點 Location』**。」" },
-            { name: "林建成", text: "「我使用 Geospatial Data，結合了**『回憶密度』**和**『環境舒適度』**，分析出了最適合啟動 Project X 的**『情感 Heatmap』**。」" },
-            { name: "林建成", text: "「結果是，**觀星台**。」" }
+            { name: "建成", text: "「現在，我們來確定**『求婚地點 Location』**。」" },
+            { name: "建成", text: "「我使用 Geospatial Data，結合了**『回憶密度』**和**『環境舒適度』**，分析出了最適合啟動 Project X 的**『情感 Heatmap』**。」" },
+            { name: "建成", text: "「結果是，**觀星台**。」" }
         ],
         options: [
             { text: "「觀星台...我們第一次約會的地方。」", score: 20, next: '111', reaction: "建成：「沒錯，從**數據的起點**開始，才能鑄就**數據的永恆**。」" },
@@ -1511,7 +1511,7 @@ export const main_script_chap1 = [
         id: '111',
         steps: [
             { name: "旁白", text: "建成偷偷在房間裡進行**「求婚 Speech 模擬演練」**，將過程錄下作為 Beta Test。你無意間偷聽到他對著空氣講話。" },
-            { name: "林建成 (喃喃自語)", text: "「我愛妳的 Logic，我愛妳的 Data...如果 妳說 NO...那就執行 Contingency Plan A：**哭泣**。」" }
+            { name: "建成 (喃喃自語)", text: "「我愛妳的 Logic，我愛妳的 Data...如果 妳說 NO...那就執行 Contingency Plan A：**哭泣**。」" }
         ],
         options: [
             { text: "「你的 Contingency Plan 是什麼？」", score: 15, next: '112', reaction: "建成嚇了一跳：「妳...妳怎麼在這裡！這是 Confidential Simulation！」" },
@@ -1522,8 +1522,8 @@ export const main_script_chap1 = [
     {
         id: '112',
         steps: [
-            { name: "林建成", text: "「現在，最後一個 Test。這是**『Project X 最終 Data』**的加密 USB。」" },
-            { name: "林建成", text: "「我要求妳：不要打開它。這是對我們關係的**『數據倫理與信任 Challenge』**。」" }
+            { name: "建成", text: "「現在，最後一個 Test。這是**『Project X 最終 Data』**的加密 USB。」" },
+            { name: "建成", text: "「我要求妳：不要打開它。這是對我們關係的**『數據倫理與信任 Challenge』**。」" }
         ],
         options: [
             { text: "將 USB 藏在安全的地方：「我信任你，建成。」", score: 30, next: '113', reaction: "建成眼神充滿感激：「妳的信任比任何 Data 都珍貴。」" },
@@ -1535,8 +1535,8 @@ export const main_script_chap1 = [
         id: '113',
         steps: [
             { name: "旁白", text: "你堅定地將 USB 歸還給建成。他看著你，眼中滿是愛意和驕傲。" },
-            { name: "林建成", text: "「妳通過了最終 Test。妳的 Trust Score 達到了 100%。」" },
-            { name: "林建成", text: "「現在，Project X 的**『準備度 Score』**正式達到 100%！」" }
+            { name: "建成", text: "「妳通過了最終 Test。妳的 Trust Score 達到了 100%。」" },
+            { name: "建成", text: "「現在，Project X 的**『準備度 Score』**正式達到 100%！」" }
         ],
         options: [
             { text: "「我等著你的 Launch Day。」", score: 25, next: '114', reaction: "建成：「它會是我們生命中最閃亮的 Timestamp。」" },
@@ -1547,8 +1547,8 @@ export const main_script_chap1 = [
     {
         id: '114',
         steps: [
-            { name: "林建成", text: "「從今天開始，我將正式進行**『單身數據 Wipe Out』**。」" },
-            { name: "林建成", text: "「我所有的單身照、單身 Log，都將被**永久 Delete**，只留下我們的**『共同 Database』**。」" }
+            { name: "建成", text: "「從今天開始，我將正式進行**『單身數據 Wipe Out』**。」" },
+            { name: "建成", text: "「我所有的單身照、單身 Log，都將被**永久 Delete**，只留下我們的**『共同 Database』**。」" }
         ],
         options: [
             { text: "「這是最好的 Version Update。」", score: 20, next: '115', reaction: "建成：「沒錯，我們將迎來 Version 2.0。」" },
@@ -1559,8 +1559,8 @@ export const main_script_chap1 = [
     {
         id: '115',
         steps: [
-            { name: "林建成", text: "「我的 Calendar Access 權限已經永久開放給妳。」" },
-            { name: "林建成", text: "「我將妳的所有 Events 設定為**『Uneditable』**。這意味著：妳的 Time 在我的生命中是**不可改變的 Priority**。」" }
+            { name: "建成", text: "「我的 Calendar Access 權限已經永久開放給妳。」" },
+            { name: "建成", text: "「我將妳的所有 Events 設定為**『Uneditable』**。這意味著：妳的 Time 在我的生命中是**不可改變的 Priority**。」" }
         ],
         options: [
             { text: "「我會將你的生日設為**『永不取消的 Reminder』**。」", score: 25, next: '116', reaction: "建成：「這是最好的 Calendar Entry。」" },
@@ -1571,8 +1571,8 @@ export const main_script_chap1 = [
     {
         id: '116',
         steps: [
-            { name: "林建成", text: "「最後一個 Input。妳會後悔成為我的 Data Partner 嗎？」" },
-            { name: "林建成", text: "「如果妳現在 Input TRUE，我會立刻 Abort Project X。」" }
+            { name: "建成", text: "「最後一個 Input。妳會後悔成為我的 Data Partner 嗎？」" },
+            { name: "建成", text: "「如果妳現在 Input TRUE，我會立刻 Abort Project X。」" }
         ],
         options: [
             { text: "「我的 Input 是 FALSE，永遠不會後悔。」", score: 30, next: '117', reaction: "建成：「Execution Confirmed！我們準備 Launch！」" },
@@ -1585,7 +1585,7 @@ export const main_script_chap1 = [
         id: '117',
         steps: [
             { name: "旁白", text: "隔天早上，你醒來發現建成已經不見了。桌上留下一份用**加密 Code** 寫成的行程單，命名為**「Project X Launch Day」**。" },
-            { name: "林建成 (訊息)", text: "「妳必須 Decrypt 這份 Task List，才能找到妳的 Primary Key。」" }
+            { name: "建成 (訊息)", text: "「妳必須 Decrypt 這份 Task List，才能找到妳的 Primary Key。」" }
         ],
         options: [
             { text: "「我來解密這個愛的 Code！」", score: 20, next: '118', reaction: "旁白：你花了一點時間，成功解讀了第一條任務。" },
@@ -1597,7 +1597,7 @@ export const main_script_chap1 = [
         id: '118',
         steps: [
             { name: "旁白", text: "你解讀出的第一個任務是：回到你們第一次見面的**咖啡館**。" },
-            { name: "林建成 (訊息)", text: "「這是我們的 Initial Data Input Location。」" }
+            { name: "建成 (訊息)", text: "「這是我們的 Initial Data Input Location。」" }
         ],
         options: [
             { text: "立刻前往咖啡館。", score: 20, next: '119', reaction: "旁白：你感覺到一股強烈的浪漫電流。" },
@@ -1623,7 +1623,7 @@ export const main_script_chap1 = [
         steps: [
             { name: "旁白", text: "你看到照片上是你們的「**秘密辦公室**」（閒置儲藏室）。" },
             { name: "你", text: "「下一個地點是...我們一起解決**『數據危機』**的地方！」" },
-            { name: "林建成 (手機訊息)", text: "「我們必須回顧我們的**『共同奮鬥史 Log』**。」" }
+            { name: "建成 (手機訊息)", text: "「我們必須回顧我們的**『共同奮鬥史 Log』**。」" }
         ],
         options: [
             { text: "馬上前往秘密辦公室。", score: 20, next: '121', reaction: "旁白：你懷著興奮的心情趕去。" },
@@ -1647,7 +1647,7 @@ export const main_script_chap1 = [
         id: '122',
         steps: [
             { name: "旁白", text: "正當你沉浸在回憶中時，建成推開門走了進來。他穿著你們第一次約會時的衣服，手中拿著一個小盒子。" },
-            { name: "林建成", text: "「妳已經回顧了我們的 Source Data。現在，是時候 Commit **『最終 Formula』**了。」" }
+            { name: "建成", text: "「妳已經回顧了我們的 Source Data。現在，是時候 Commit **『最終 Formula』**了。」" }
         ],
         options: [
             { text: "走向他，緊緊抱住他。", score: 30, next: '123', reaction: "建成輕輕拍著妳的背：「妳的 Hug 是最美的 Data Visualization。」" },
@@ -1658,8 +1658,8 @@ export const main_script_chap1 = [
     {
         id: '123',
         steps: [
-            { name: "林建成", text: "「我們是從這裡開始，用 Excel 函數打破危機的。妳證明了**愛是最好的 Debug Tool**。」" },
-            { name: "林建成", text: "「所有的 Data 都顯示：妳是我生命中唯一一個**『不能被 Filter Out 的 Value』**。」" }
+            { name: "建成", text: "「我們是從這裡開始，用 Excel 函數打破危機的。妳證明了**愛是最好的 Debug Tool**。」" },
+            { name: "建成", text: "「所有的 Data 都顯示：妳是我生命中唯一一個**『不能被 Filter Out 的 Value』**。」" }
         ],
         options: [
             { text: "「我也是，你是我唯一的 Trusted Source。」", score: 25, next: '124', reaction: "建成：「妳的 Reciprocity 讓我們的 Data Flow 趨於完美。」" },
@@ -1671,8 +1671,8 @@ export const main_script_chap1 = [
         id: '124',
         steps: [
             { name: "旁白", text: "建成單膝跪地，打開了那個小盒子。裡面是一枚閃閃發光的戒指。" },
-            { name: "林建成", text: "「這枚戒指，就是我為妳設計的**『不可逆的 Primary Key』**，它將永遠連結我們的兩條 Table。」" },
-            { name: "林建成", text: "「它是一個**永遠不會有 NULL Value** 的承諾。」" }
+            { name: "建成", text: "「這枚戒指，就是我為妳設計的**『不可逆的 Primary Key』**，它將永遠連結我們的兩條 Table。」" },
+            { name: "建成", text: "「它是一個**永遠不會有 NULL Value** 的承諾。」" }
         ],
         options: [
             { text: "「這是 Project X 的 Launch 嗎？」", score: 30, next: '125', reaction: "建成：「沒錯！Project X Launch Successful！」" },
@@ -1683,8 +1683,8 @@ export const main_script_chap1 = [
     {
         id: '125',
         steps: [
-            { name: "林建成", text: "「親愛的 Data Partner，妳願意成為我**『終生的 Inner Join』**，讓我們的 Database 永遠合併嗎？」" },
-            { name: "林建成", text: "「**妳願意 Join 我的 Database 嗎？**」" }
+            { name: "建成", text: "「親愛的 Data Partner，妳願意成為我**『終生的 Inner Join』**，讓我們的 Database 永遠合併嗎？」" },
+            { name: "建成", text: "「**妳願意 Join 我的 Database 嗎？**」" }
         ],
         options: [
             { text: "「我願意！我的 Input 是 YES！」", score: 40, next: '126', reaction: "建成興奮地跳起來：「Query Successful！Transaction Committed！」" },
@@ -1696,8 +1696,8 @@ export const main_script_chap1 = [
         id: '126',
         steps: [
             { name: "旁白", text: "建成小心翼翼地為你戴上戒指，並親吻了你。他終於完成了 Project X 的核心任務。" },
-            { name: "林建成", text: "「我們現在是 Version 2.0。但 Project 還沒有完全 Close。」" },
-            { name: "林建成", text: "「我還有最後一個 Report 要給妳看。」" }
+            { name: "建成", text: "「我們現在是 Version 2.0。但 Project 還沒有完全 Close。」" },
+            { name: "建成", text: "「我還有最後一個 Report 要給妳看。」" }
         ],
         options: [
             { text: "「什麼 Report？」", score: 15, next: '127', reaction: "建成：「一個關於**『愛』**的 Visualization。」" },
@@ -1708,8 +1708,8 @@ export const main_script_chap1 = [
     {
         id: '127',
         steps: [
-            { name: "林建成", text: "「我們現在要去我們的**『情感 Heatmap』**最高點，完成最終的 Data Review。」" },
-            { name: "林建成", text: "「走吧，我的未婚妻。」" }
+            { name: "建成", text: "「我們現在要去我們的**『情感 Heatmap』**最高點，完成最終的 Data Review。」" },
+            { name: "建成", text: "「走吧，我的未婚妻。」" }
         ],
         options: [
             { text: "「好，我們去觀星台！」", score: 20, next: '128', reaction: "建成：「妳的 Prediction Accuracy 總是這麼高！」" },
@@ -1722,8 +1722,8 @@ export const main_script_chap1 = [
         id: '128',
         steps: [
             { name: "旁白", text: "你們回到你們第一次約會的觀星台。夜空下的星光，見證了你們這段從 Excel 開始的戀情。" },
-            { name: "林建成", text: "「看！整個宇宙的 Data 都在這裡。」" },
-            { name: "林建成", text: "「但對我來說，最重要的 Data，永遠只在我的 Report 裡。」" }
+            { name: "建成", text: "「看！整個宇宙的 Data 都在這裡。」" },
+            { name: "建成", text: "「但對我來說，最重要的 Data，永遠只在我的 Report 裡。」" }
         ],
         options: [
             { text: "「你的 Report 永遠是我最好的 Visualization。」", score: 20, next: '129', reaction: "建成：「這是我的榮幸。」" },
@@ -1735,8 +1735,8 @@ export const main_script_chap1 = [
         id: '129',
         steps: [
             { name: "旁白", text: "建成拿出他的筆電，打開了一個新的 Excel 文件。這就是他所說的最後一個 Report。" },
-            { name: "林建成", text: "「這是我的**『最終 Summary Report』**。它不需要任何數字，只需要**形狀**。」" },
-            { name: "林建成", text: "「我希望用 Excel 最純粹的格式，向妳表達我的愛。」" }
+            { name: "建成", text: "「這是我的**『最終 Summary Report』**。它不需要任何數字，只需要**形狀**。」" },
+            { name: "建成", text: "「我希望用 Excel 最純粹的格式，向妳表達我的愛。」" }
         ],
         options: [
             { text: "「我期待你的 Final Output。」", score: 20, next: '130', reaction: "建成：「它會是 MAX Score 的 Output。」" },
@@ -1763,7 +1763,7 @@ export const main_script_chap1 = [
         id: '131',
         steps: [
             { name: "旁白", text: "（這是最後的關鍵時刻...）" },
-            { name: "林建成", text: "林建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。" }
+            { name: "建成", text: "建成拿出一份試算表，上面的儲存格拼成了一個愛心形狀。" }
         ],
         options: [
             { text: "「這是條件式格式設定嗎？好美！」", score: 20, next: 'ending_check', reaction: "建成：「沒錯！是利用 $ROW$ 和 $COLUMN$ 參數算出來的！你竟然懂！」" },
@@ -1778,7 +1778,7 @@ export const main_script_chap1 = [
         id: '131_A', // 非純數字 ID 保留
         steps: [
             { name: "旁白", text: "（這是最後的關鍵時刻...）" },
-            { name: "林建成", text: "林建成拿出一份試算表，上面都是滿滿的神魔之塔隊伍，就和彙整串一樣。" },
+            { name: "建成", text: "建成拿出一份試算表，上面都是滿滿的神魔之塔隊伍，就和彙整串一樣。" },
             { name: "旁白", text: "你看見了sheet欄目有一個特殊的名字，名曰：？？之塔" },
             { name: "旁白", text: "點開一看，那邊只有一行隊伍，但是缺少了隊長戰友，隊員格則是滿滿的建成照片，而優先度那裡也是空白的。" },
             { name: "旁白", text: "經過許久的相處，你早已知道這張試算表對你對他而言到底是什麼。" },
@@ -1813,7 +1813,7 @@ export const main_script_chap1 = [
         id: '131_Silver',
         steps: [
             { name: "旁白", text: "（這是最後的關鍵時刻...）" },
-            { name: "林建成", text: "林建成拿出一份試算表，上面都是滿滿的神魔之塔隊伍，就和彙整串一樣。" },
+            { name: "建成", text: "建成拿出一份試算表，上面都是滿滿的神魔之塔隊伍，就和彙整串一樣。" },
             { name: "旁白", text: "你看見了sheet欄目有一個特殊的名字，名曰：？？之塔" },
             { name: "旁白", text: "點開一看，那邊只有一行隊伍，但是缺少了隊長戰友，隊員格則是滿滿的建成照片，而優先度那裡也是空白的。" },
             { name: "旁白", text: "經過許久的相處，你早已知道這張試算表對你對他而言到底是什麼。" },
